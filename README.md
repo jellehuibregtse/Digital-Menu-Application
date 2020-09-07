@@ -6,6 +6,9 @@ The process in a restaurant is usually the same. Customers get seated, are hand 
 ## Setup
 
 ### PostgreSQL
+#### Windows
+Go to [PostgreSQL website](https://www.postgresql.org/), download and install the `.exe`.
+
 #### MacOS
 ##### Install
 Install PostgreSQL using brew and start it as service.
@@ -29,8 +32,8 @@ sudo /Library/PostgreSQL/<version>/uninstall-postgresql.app/Contents/MacOS/unins
 ```
 Make sure to also remove Postgres as user in System Preferences. The user should be under Users & Groups.
 
-##### Setup
-Add the following to `application.properties`.
+#### Setup
+After having installed PostgreSQL, add the following to `application.properties`.
 ```
 spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
 spring.datasource.username=postgres
