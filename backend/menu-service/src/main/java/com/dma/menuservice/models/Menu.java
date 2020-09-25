@@ -25,8 +25,16 @@ public class Menu {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public long getRestaurantId() {
         return restaurantId;
+    }
+
+    public void setRestaurantId(long restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
     public String getName() {
@@ -38,6 +46,10 @@ public class Menu {
     }
 
     public List<MenuItem> getItems() {
-        return Collections.unmodifiableList(items);
+        return items;
+    }
+
+    public void setItems(List<MenuItem> items) {
+        this.items = items;
     }
 }
