@@ -1,11 +1,23 @@
 package com.dma.menuservice.models;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+@Entity
 public class MenuItem {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    @NotNull
     private String name;
 
-    public MenuItem(String name) {
-        this.name = name;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Menu menu;
+
+    public long getId() {
+        return id;
     }
 
     public String getName() {
@@ -14,5 +26,13 @@ public class MenuItem {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 }

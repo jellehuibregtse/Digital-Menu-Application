@@ -1,50 +1,43 @@
 package com.dma.menuservice.models;
 
-import java.util.ArrayList;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Collections;
 import java.util.List;
 
+@Entity
 public class Menu {
 
-    private String restaurantId;
-    private String menuName;
-    private List<MenuItem> menuItems;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
-    public Menu() {
+    @NotNull
+    private long restaurantId;
+
+    @NotNull
+    private String name;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<MenuItem> items;
+
+    public long getId() {
+        return id;
     }
 
-    public Menu(String restaurantId, String menuName) {
-        this.restaurantId = restaurantId;
-        this.menuName = menuName;
-        this.menuItems = new ArrayList<>();
-    }
-
-    public Menu(String restaurantId, String menuName, List<MenuItem> menuItems) {
-        this.restaurantId = restaurantId;
-        this.menuName = menuName;
-        this.menuItems = menuItems;
-    }
-
-    public String getRestaurantId() {
+    public long getRestaurantId() {
         return restaurantId;
     }
 
-    public void setRestaurantId(String restaurantId) {
-        this.restaurantId = restaurantId;
+    public String getName() {
+        return name;
     }
 
-    public String getMenuName() {
-        return menuName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setMenuName(String menuName) {
-        this.menuName = menuName;
-    }
-
-    public List<MenuItem> getMenuItems() {
-        return menuItems;
-    }
-
-    public void setMenuItems(List<MenuItem> menuItems) {
-        this.menuItems = menuItems;
+    public List<MenuItem> getItems() {
+        return Collections.unmodifiableList(items);
     }
 }
