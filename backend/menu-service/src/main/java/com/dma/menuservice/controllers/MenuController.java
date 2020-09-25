@@ -2,10 +2,7 @@ package com.dma.menuservice.controllers;
 
 import com.dma.menuservice.models.Menu;
 import com.dma.menuservice.repositories.MenuRepository;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,9 +26,9 @@ public class MenuController {
     }
 
     @CrossOrigin
-    @RequestMapping("/get/{menuId}/")
+    @RequestMapping("/get/{menuId}")
     public Menu getMenu(@PathVariable long menuId) {
         var menu = menuRepository.findById(menuId);
-        return menu.orElse(null);
+        return menu.orElse(new Menu());
     }
 }
