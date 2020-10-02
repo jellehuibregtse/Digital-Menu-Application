@@ -1,55 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./App.css";
 import Navbar from "./components/navbar.jsx";
 import Dish from "./components/dish.jsx";
 import Order from "./components/order.jsx";
 
 function App() {
-  const [Dishes, setDishes] = useState([]);
-  const [Orders, setOrders] = useState([]);
-
-  //runs once at runtime, thats what the [] at the end are for.
-  useEffect(() => {
-    // fetch("url")
-    // .then(data =>{
-    //   setDishes(data);
-    // })
-    //setRestaurant()
-  }, []);
-
-  //The Dish/Order Components are designed to take arrays for the dishes/orders props and display them accordingly
   return (
     <div className="main">
       <div className="Navbar">
         <Navbar />
       </div>
       <div className="App">
-        <div className="box1 newDishes">
+        <div className="box1">
           New Dishes
-          <Dish
-            dishes={[
-              {
-                id: 0,
-                numberOfDish: 1,
-                dishName: "Pizza",
-                dishTable: 5,
-              },
-              {
-                id: 1,
-                numberOfDish: 1,
-                dishName: "Pasta",
-                dishTable: 10,
-              },
-              {
-                id: 2,
-                numberOfDish: 3,
-                dishName: "Fish Fingers",
-                dishTable: 3,
-              },
-            ]}
-          />
+          <Dish numberOfDish="1" dishName="Pizza Salami" dishTable="Table 7" />
         </div>
-        <div className="box2 preparingDishes">
+        <div className="box2">
           Preparing Dishes
           <Dish
             numberOfDish="1"
@@ -57,7 +23,7 @@ function App() {
             dishTable="Table 11"
           />
         </div>
-        <div className="box3 completedDishes">
+        <div className="box3">
           Completed Dishes
           <Dish
             numberOfDish="2"
@@ -65,40 +31,9 @@ function App() {
             dishTable="Table 2"
           />
         </div>
-        <div className="box4 orders">
+        <div className="box4">
           Orders
-          <Order
-            orders={[
-              {
-                id: 0,
-                tableNumber: 1,
-                orderNumber: 12,
-                time: 5,
-                items: [
-                  {
-                    name: "Pizza",
-                    numberOfDish: 3,
-                  },
-                ],
-              },
-              {
-                id: 1,
-                tableNumber: 3,
-                orderNumber: 10,
-                time: 5,
-                items: [
-                  {
-                    name: "Fish n Chips",
-                    numberOfDish: 1,
-                  },
-                  {
-                    name: "Mashed Potatoes",
-                    numberOfDish: 3,
-                  },
-                ],
-              },
-            ]}
-          />
+          <Order />
         </div>
       </div>
     </div>

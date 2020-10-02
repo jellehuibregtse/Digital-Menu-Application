@@ -1,22 +1,6 @@
 import React from "react";
 
 const dish = (props) => {
-  //console.log(props.dishes);
-
-  if (props.dishes) {
-    var dishes = props.dishes.map(function (value, i) {
-      return (
-        <tbody>
-          <tr>
-            <th scope="row">{value.numberOfDish}</th>
-            <td>{value.dishName}</td>
-            <td>{value.dishTable}</td>
-          </tr>
-        </tbody>
-      );
-    });
-  }
-
   return (
     <div className="dish">
       <table className="table table-hover table responsive-sm">
@@ -35,8 +19,6 @@ const dish = (props) => {
             <td>{props.dishTable}</td>
           </tr>
         </tbody>
-
-        {dishes}
       </table>
     </div>
   );
