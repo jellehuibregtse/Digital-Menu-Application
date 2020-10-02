@@ -4,7 +4,7 @@ import {  BrowserRouter as Router, Switch, Route, Redirect} from "react-router-d
 import Home from './default/components/Home';
 import NavBar from "./default/components/NavBar";
 
-import restaurant from "./restaurant/Restaurant";
+import Restaurant from "./restaurant/Restaurant";
 import Banner from "./restaurant/components/Banner";
 import OrderMenuCategory from "./restaurant/components/OrderMenuCategory";
 import OrderBar from "./restaurant/components/OrderBar";
@@ -13,6 +13,15 @@ import OrderMenu from "./restaurant/components/OrderMenu";
 import RestaurantHome from './restaurant/components/Home';
 
 class App extends Component {
+
+    menu = [];
+    restaurantName;
+
+    constructor(props) {
+        super(props);
+        Restaurant.getMenu().then(res => this.menu = res);
+    }
+
     render() {
         return (
             <Router>
@@ -29,7 +38,7 @@ class App extends Component {
 
                         {/* customer */}
 
-                            <Route exact strict path={"/" + restaurant.getName()}>
+                            <Route exact strict path={"/" + Restaurant.getName()}>
                                 <>
                                     <NavBar/>
                                     <div className="content">
@@ -39,7 +48,7 @@ class App extends Component {
                                 </>
                             </Route>
 
-                            <Route exact strict path={"/" + restaurant.getName() + "/" + restaurant.getTable()}>
+                            <Route exact strict path={"/" + Restaurant.getName() + "/" + Restaurant.getTable()}>
                                 <>
                                     <NavBar/>
                                     <div className="content">
@@ -49,7 +58,7 @@ class App extends Component {
                                 </>
                             </Route>
 
-                            <Route exact strict path={"/" + restaurant.getName() + "/" + restaurant.getTable() + "/order"}>
+                            <Route exact strict path={"/" + Restaurant.getName() + "/" + Restaurant.getTable() + "/order"}>
                                 <>
                                     <NavBar/>
                                     <div className="content">
@@ -60,10 +69,9 @@ class App extends Component {
                                 </>
                             </Route>
 
-                            {restaurant.getMenu().map(category => {
-                                console.log(category);
+                            {this.menu.map(category => {
                                 return (
-                                    <Route exact strict path={"/" + restaurant.getName() + "/" + restaurant.getTable() + "/order/" + category}>
+                                    <Route exact strict path={"/" + Restaurant.getName() + "/" + Restaurant.getTable() + "/order/" + category}>
                                         <>
                                             <NavBar/>
                                             <div className="content">
@@ -76,12 +84,12 @@ class App extends Component {
                                 )
                             })}
 
-                            <Route path={"/" + restaurant.getName() + "/" + restaurant.getTable() + "/*"}>
-                                <Redirect to={"/" + restaurant.getName() + "/" + restaurant.getTable()}/>
+                            <Route path={"/" + Restaurant.getName() + "/" + Restaurant.getTable() + "/*"}>
+                                <Redirect to={"/" + Restaurant.getName() + "/" + Restaurant.getTable()}/>
                             </Route>
 
-                            <Route path={"/" + restaurant.getName() + "/*"}>
-                                <Redirect to={"/" + restaurant.getName()}/>
+                            <Route path={"/" + Restaurant.getName() + "/*"}>
+                                <Redirect to={"/" + Restaurant.getName()}/>
                             </Route>
 
 
