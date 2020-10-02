@@ -2,6 +2,7 @@ package com.dma.menuservice.controllers;
 
 import com.dma.menuservice.models.Menu;
 import com.dma.menuservice.repositories.MenuRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,15 +20,20 @@ public class MenuController {
         this.menuRepository = menuRepository;
     }
 
-    @RequestMapping("/getAll/{restaurantId}")
-    public List<Menu> getAllMenus(@PathVariable long restaurantId) {
+    @GetMapping("/getAll")
+    public List<Menu> getAllMenus(@RequestParam long restaurantId) {
         var menus = menuRepository.findAll();
         return StreamSupport.stream(menus.spliterator(), false).filter(menu -> menu.getRestaurantId() == restaurantId).collect(Collectors.toList());
     }
 
-    @RequestMapping("/get/{menuId}")
-    public Menu getMenu(@PathVariable long menuId) {
+    @GetMapping("/get")
+    public Menu getMenu(@RequestParam long menuId) {
         var menu = menuRepository.findById(menuId);
         return menu.orElse(new Menu());
+    }
+
+    @PostMapping("/add")
+    public Menu addMenu(@RequestBody Menu menu) {
+        return menuRepository.save(menu);
     }
 }
