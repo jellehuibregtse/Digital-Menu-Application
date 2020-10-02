@@ -1,0 +1,11 @@
+#banner {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#banner img {
+    max-width: 100%;
+    object-fit: scale-down;
+}
