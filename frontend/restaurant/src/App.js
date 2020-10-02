@@ -11,6 +11,7 @@ import OrderBar from "./restaurant/components/OrderBar";
 import Table from "./restaurant/components/Table";
 import OrderMenu from "./restaurant/components/OrderMenu";
 import RestaurantHome from './restaurant/components/Home';
+import CompleteOrder from "./restaurant/components/CompleteOrder";
 
 class App extends Component {
 
@@ -68,6 +69,16 @@ class App extends Component {
                                     </div>
                                 </>
                             </Route>
+
+                        <Route exact strict path={"/" + Restaurant.getName() + "/" + Restaurant.getTable() + "/place-order"}>
+                            <>
+                                <NavBar/>
+                                <div className="content">
+                                    <Banner/>
+                                    <CompleteOrder/>
+                                </div>
+                            </>
+                        </Route>
 
                             {this.menu.map(category => {
                                 return (

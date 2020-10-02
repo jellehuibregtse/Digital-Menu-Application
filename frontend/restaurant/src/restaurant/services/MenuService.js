@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const MENU_SERVICE_URL = 'http://localhost:8081/';
+const MENU_SERVICE_URL = 'http://localhost:8081/api/menu';
 
 class MenuService {
     static async getMenu() {
         let result;
         try {
-            await axios.get(MENU_SERVICE_URL + 'get-menu').then(res => {
+            await axios.post(MENU_SERVICE_URL + 'get-all', 0).then(res => {
                 result = res;
             }).catch(error => {
                 if(typeof error.response.data === 'string') {

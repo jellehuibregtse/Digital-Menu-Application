@@ -14,7 +14,7 @@ class OrderBar extends Component {
                 </a>
                 <div id="order-continue">
                     <a href="/restaurant-name/6">Cancel order</a>
-                    <a href="javascript:void(0)" onClick={() => {OrderService.placeOrder(new Order(0, 0, ["Salmon", "Sauvignon Blanc"], new Date().getDate())).then(res => {console.log(res)})}}>Complete order</a>
+                    <a href="/restaurant-name/6/place-order" onClick={() => {sessionStorage.setItem('order', new Order(0, 0, ["Salmon", "Sauvignon Blanc"], new Date().getDate()))}}>Complete order</a>
                 </div>
             </div>
         );
