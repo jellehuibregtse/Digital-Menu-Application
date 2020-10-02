@@ -1,7 +1,6 @@
 package com.dma.menuservice.services;
 
 import com.dma.menuservice.models.Restaurant;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,6 +14,6 @@ public class RestaurantService {
     }
 
     public Restaurant getRestaurant(long restaurantId) {
-        return restTemplate.getForObject("http://restaurant-service/api/restaurant/?restaurantId="+restaurantId, Restaurant.class);
+        return restTemplate.getForObject("http://restaurant-service/api/restaurant/?restaurantId=" + restaurantId, Restaurant.class);
     }
 }

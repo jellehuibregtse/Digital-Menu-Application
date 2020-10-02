@@ -3,7 +3,6 @@ package com.dma.menuservice.controllers;
 import com.dma.menuservice.models.Menu;
 import com.dma.menuservice.repositories.MenuRepository;
 import com.dma.menuservice.services.RestaurantService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

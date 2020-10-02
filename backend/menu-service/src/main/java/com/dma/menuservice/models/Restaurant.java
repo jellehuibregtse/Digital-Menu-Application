@@ -13,6 +13,17 @@ public class Restaurant {
 
     private ArrayList<Integer> menuIDs;
 
+    public Restaurant() {
+
+    }
+
+    public Restaurant(String name, String colorScheme, String logoURL, ArrayList<Integer> menuIDs) {
+        this.name = name;
+        this.colorScheme = colorScheme;
+        this.logoURL = logoURL;
+        this.menuIDs = menuIDs;
+    }
+
     public long getId() {
         return id;
     }
@@ -50,17 +61,6 @@ public class Restaurant {
     }
 
     public void setMenuIDs(ArrayList<Integer> menuIDs) {
-        this.menuIDs = menuIDs;
-    }
-
-    public Restaurant() {
-
-    }
-
-    public Restaurant(String name, String colorScheme, String logoURL, ArrayList<Integer> menuIDs) {
-        this.name = name;
-        this.colorScheme = colorScheme;
-        this.logoURL = logoURL;
         this.menuIDs = menuIDs;
     }
 }
