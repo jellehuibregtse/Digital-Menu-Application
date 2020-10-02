@@ -15,6 +15,6 @@ public class RestaurantService {
     }
 
     public Restaurant getRestaurant(long restaurantId) {
-        return restTemplate.getForObject("http://restaurant-service/get?restaurantId="+restaurantId, Restaurant.class);
+        return restTemplate.getForObject("http://restaurant-service/api/restaurant/?restaurantId="+restaurantId, Restaurant.class);
     }
 }
