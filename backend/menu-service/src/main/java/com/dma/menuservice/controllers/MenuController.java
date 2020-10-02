@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/menu")
 public class MenuController {
@@ -18,14 +19,12 @@ public class MenuController {
         this.menuRepository = menuRepository;
     }
 
-    @CrossOrigin
     @RequestMapping("/getAll/{restaurantId}")
     public List<Menu> getAllMenus(@PathVariable long restaurantId) {
         var menus = menuRepository.findAll();
         return StreamSupport.stream(menus.spliterator(), false).filter(menu -> menu.getRestaurantId() == restaurantId).collect(Collectors.toList());
     }
 
-    @CrossOrigin
     @RequestMapping("/get/{menuId}")
     public Menu getMenu(@PathVariable long menuId) {
         var menu = menuRepository.findById(menuId);
