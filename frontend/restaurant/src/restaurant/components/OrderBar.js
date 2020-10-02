@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import '../css/orderBar.css';
+import OrderService from "../services/OrderService";
+import Order from "../models/Order";
 
 class OrderBar extends Component {
     render() {
@@ -12,7 +14,7 @@ class OrderBar extends Component {
                 </a>
                 <div id="order-continue">
                     <a href="/restaurant-name/6">Cancel order</a>
-                    <a>Complete order</a>
+                    <a href="javascript:void(0)" onClick={() => {OrderService.placeOrder(new Order(0, 0, ["Salmon", "Sauvignon Blanc"], new Date().getDate())).then(res => {console.log(res)})}}>Complete order</a>
                 </div>
             </div>
         );
