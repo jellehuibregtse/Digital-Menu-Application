@@ -4,23 +4,29 @@ import {  BrowserRouter as Router, Switch, Route, Redirect} from "react-router-d
 import Home from './default/components/Home';
 import NavBar from "./default/components/NavBar";
 
-import Restaurant from "./restaurant/Restaurant";
 import Banner from "./restaurant/components/Banner";
-import OrderMenuCategory from "./restaurant/components/OrderMenuCategory";
-import OrderBar from "./restaurant/components/OrderBar";
+import OrderBar from "./restaurant/components/order/OrderBar";
 import Table from "./restaurant/components/Table";
-import OrderMenu from "./restaurant/components/OrderMenu";
+import Menu from "./restaurant/components/order/Menu";
 import RestaurantHome from './restaurant/components/Home';
-import CompleteOrder from "./restaurant/components/CompleteOrder";
+import CompleteOrder from "./restaurant/components/order/CompleteOrder";
+import MenuCategory from "./restaurant/components/order/MenuCategory";
+import Error from "./restaurant/components/Error";
+
+import MenuService from "./restaurant/services/MenuService";
+
+import session from "./restaurant/models/Session";
+import restaurant from "./restaurant/models/Restaurant";
+import menu from "./restaurant/models/Menu";
 
 class App extends Component {
 
-    menu = [];
-    restaurantName;
+    session = null;
 
-    constructor(props) {
-        super(props);
-        Restaurant.getMenu().then(res => this.menu = res);
+    componentWillMount() {
+        try {
+            this.session = JSON.parse(sessionStorage.getItem('session'));
+        } catch (e) {}
     }
 
     render() {
@@ -37,9 +43,30 @@ class App extends Component {
                             </>
                         </Route>
 
-                        {/* customer */}
+                        <Route exact strict path={"/create/:restaurantId/:tableId"}>
+                                {
+                                    function ({match}) {
+                                        let menus;
+                                        MenuService.getAllMenus(match.params.restaurantId).then(res => {
+                                            try {
+                                                console.log(JSON.parse(res));
+                                                JSON.parse(res).forEach(m => {
+                                                    menus.add(new menu(m.name, m.categories));
+                                                })
 
-                            <Route exact strict path={"/" + Restaurant.getName()}>
+                                                sessionStorage.setItem('session', JSON.stringify(new session(new restaurant(match.params.restaurantId), match.params.tableId, menus)))
+                                                console.log(JSON.parse(sessionStorage.getItem('session')).restaurant.name);
+                                                return(
+                                                    <Redirect to={"/" + JSON.parse(sessionStorage.getItem('session')).restaurant.name + "/" + JSON.parse(sessionStorage.getItem('session')).tableId}/>
+                                                )
+                                            } catch (e) {}
+                                        }).catch(e => {})
+                                    }
+                                }
+                        </Route>
+
+                        {this.session != null?
+                            <Route exact strict path={"/" + this.session.restaurant.name}>
                                 <>
                                     <NavBar/>
                                     <div className="content">
@@ -47,62 +74,71 @@ class App extends Component {
                                         <RestaurantHome/>
                                     </div>
                                 </>
-                            </Route>
+                            </Route> : null}
 
-                            <Route exact strict path={"/" + Restaurant.getName() + "/" + Restaurant.getTable()}>
+                        {this.session != null?
+                            <Route exact strict path={"/" + this.session.restaurant.name + "/" + this.session.tableId}>
                                 <>
                                     <NavBar/>
                                     <div className="content">
                                         <Banner/>
-                                        <Table/>
+                                        <Table session={this.session}/>
                                     </div>
                                 </>
-                            </Route>
+                            </Route> : null}
 
-                            <Route exact strict path={"/" + Restaurant.getName() + "/" + Restaurant.getTable() + "/order"}>
-                                <>
-                                    <NavBar/>
-                                    <div className="content">
-                                        <Banner/>
-                                        <OrderMenu/>
-                                        <OrderBar/>
-                                    </div>
-                                </>
-                            </Route>
+                        {this.session != null?
+                                <Route exact strict path={"/" + this.session.restaurant.name + "/" + this.session.tableId + "/order"}>
+                                    <>
+                                        <NavBar/>
+                                        <div className="content">
+                                            <Banner/>
+                                            <Menu session={this.session} categories={sessionStorage.getItem('menu')}/>
+                                            <OrderBar session={this.session}/>
+                                        </div>
+                                    </>
+                                </Route> : null}
 
-                        <Route exact strict path={"/" + Restaurant.getName() + "/" + Restaurant.getTable() + "/place-order"}>
-                            <>
-                                <NavBar/>
-                                <div className="content">
-                                    <Banner/>
-                                    <CompleteOrder/>
-                                </div>
-                            </>
-                        </Route>
+                        {this.session != null?
+                                <Route exact strict path={"/" + this.session.restaurant.name + "/" + this.session.tableId + "/order/place"}>
+                                    <>
+                                        <NavBar/>
+                                        <div className="content">
+                                            <Banner/>
+                                            <CompleteOrder session={this.session}/>
+                                        </div>
+                                    </>
+                                </Route> : null}
 
-                            {this.menu.map(category => {
+                        {this.session != null && this.session.menus != null?
+                            this.session.menus[0].categories.forEach(cat => {
                                 return (
-                                    <Route exact strict path={"/" + Restaurant.getName() + "/" + Restaurant.getTable() + "/order/" + category}>
+                                    <Route exact strict path={"/" + this.session.restaurant.name + "/" + this.session.tableId + "/order/" + cat.name}>
                                         <>
                                             <NavBar/>
                                             <div className="content">
                                                 <Banner/>
-                                                <OrderMenuCategory/>
+                                                <MenuCategory category={cat.name} dishes={cat.dishes}/>
                                                 <OrderBar/>
                                             </div>
                                         </>
                                     </Route>
                                 )
-                            })}
+                            }) : null}
 
-                            <Route path={"/" + Restaurant.getName() + "/" + Restaurant.getTable() + "/*"}>
-                                <Redirect to={"/" + Restaurant.getName() + "/" + Restaurant.getTable()}/>
-                            </Route>
+                        {this.session != null?
+                            <Route path={"/" + this.session.restaurant.name + "/" + this.session.tableId + "/*"}>
+                                <>
+                                    <Redirect to={"/" + this.session.restaurant.name + "/" + this.session.tableId}/>
+                                </>
+                            </Route> : null}
 
-                            <Route path={"/" + Restaurant.getName() + "/*"}>
-                                <Redirect to={"/" + Restaurant.getName()}/>
-                            </Route>
-
+                        {this.session != null?
+                            <Route path={"/" + this.session.restaurant.name + "/*"}>
+                                <>
+                                    <Redirect to={"/" + this.session.restaurant.name}/>
+                                </>
+                            </Route> : null}
 
                         <Route path="*">
                             <Redirect to="/"/>

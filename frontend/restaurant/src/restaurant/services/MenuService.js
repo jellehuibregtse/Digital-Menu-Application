@@ -3,10 +3,10 @@ import axios from "axios";
 const MENU_SERVICE_URL = 'http://localhost:8081/api/menu';
 
 class MenuService {
-    static async getMenu() {
+    static async getAllMenus(restaurantId) {
         let result;
         try {
-            await axios.post(MENU_SERVICE_URL + 'get-all', 0).then(res => {
+            await axios.post(MENU_SERVICE_URL + 'get-all', restaurantId).then(res => {
                 result = res;
             }).catch(error => {
                 if(typeof error.response.data === 'string') {

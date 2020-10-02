@@ -14,7 +14,7 @@ function loadRestaurantSettings() {
         // navItems.appendChild(a);
 
         // set title and background color
-        document.getElementById("nav-title").textContent = "Restaurant Name";
+        document.getElementById("nav-title").textContent = "RestaurantController Name";
         document.getElementById("nav-bar").style.backgroundColor = "var(--black)";
     }
 }
