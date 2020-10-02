@@ -5,7 +5,6 @@ import com.dma.menuservice.repositories.MenuRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -21,19 +20,55 @@ public class MenuController {
     }
 
     @GetMapping("/getAll")
-    public List<Menu> getAllMenus(@RequestParam long restaurantId) {
+    public ResponseEntity<?> getAllMenus(@RequestParam long restaurantId) {
         var menus = menuRepository.findAll();
-        return StreamSupport.stream(menus.spliterator(), false).filter(menu -> menu.getRestaurantId() == restaurantId).collect(Collectors.toList());
+        var filteredMenus = StreamSupport.stream(menus.spliterator(), false).filter(menu -> menu.getRestaurantId() == restaurantId).collect(Collectors.toList());
+        return ResponseEntity.ok(filteredMenus);
     }
 
     @GetMapping("/get")
-    public Menu getMenu(@RequestParam long menuId) {
+    public ResponseEntity<?> getMenu(@RequestParam long menuId) {
         var menu = menuRepository.findById(menuId);
-        return menu.orElse(new Menu());
+
+        if (menu.isPresent()) {
+            return ResponseEntity.ok(menu.get());
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/add")
-    public Menu addMenu(@RequestBody Menu menu) {
-        return menuRepository.save(menu);
+    public ResponseEntity<?> addMenu(@RequestBody Menu menu) {
+        return ResponseEntity.ok(String.format("Menu, %s has been successfully created!", menu.getName()));
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteMenu(@RequestParam long menuId) {
+        var menu = menuRepository.findById(menuId);
+
+        if (menu.isPresent()) {
+            menuRepository.delete(menu.get());
+            return ResponseEntity.ok(String.format("Menu, %s has been successfully deleted!", menu.get().getName()));
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateMenu(@RequestBody Menu menu) {
+        var menuFromRepository = menuRepository.findById(menu.getId()));
+
+        if (menuFromRepository.isPresent()) {
+            var updatedMenu = menuFromRepository.get();
+            updatedMenu.setRestaurantId(menu.getRestaurantId());
+            updatedMenu.setName(menu.getName());
+            updatedMenu.setItems(menu.getItems());
+
+            menuRepository.save(updatedMenu);
+            return ResponseEntity.ok(String.format("Menu, %s has been successfully updated!", menu.getName()));
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
 }
