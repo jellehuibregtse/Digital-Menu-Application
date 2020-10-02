@@ -1,7 +1,5 @@
 class Order {
 
-    restaurantId;
-    tableId;
     dishes;
     timeOfOrder;
 
