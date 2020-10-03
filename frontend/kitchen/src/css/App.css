@@ -1,0 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+
+#root {
+    height: 100vh;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    height: 50px;
+    max-height: 50px;
+}
+
+.navbar h4 {
+    font-size: 22px;
+    margin: 0;
+}
+
+.orderView {
+    height: 100%;
+    width: 100%;
+    padding-top: 50px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+    text-align: center;
+    background-color: #f0eded;
+}
+
+.column {
+    width: calc(25% - 20px);
+    margin: 20px 0;
+    background-color: white;
+    overflow: auto;
+}
+
+.dish {
+    display: flex;
+}
+
+.table {
+    margin-top: 2vh;
+    width: 80vw;
+    font-size: 18px;
+}

@@ -18,7 +18,6 @@ const App = () => {
                     <Route exact strict path={"/qr"} component={JoinRestaurant}/>
 
                     {session != null? <Switch>
-                        {() => console.log("yees")}
                         <Route exact strict path={"/" + session.restaurant.name + "/" + session.tableId}><Home session={session}/></Route>
                         <Route exact strict path={"/" + session.restaurant.name + "/" + session.tableId + "/order"}><Menu session={session}/></Route>
                         <Route exact strict path={"/" + session.restaurant.name + "/" + session.tableId + "/order/place"}><CompleteOrder session={session}/></Route>
