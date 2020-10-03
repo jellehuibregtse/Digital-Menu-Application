@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import OrderService from "../../services/OrderService";
+import MessagingService from "../../services/MessagingService";
 
 function placeOrder(e, orderStatus) {
     orderStatus.innerText = "Order status: processing";
-    OrderService.placeOrder(sessionStorage.getItem('order')).then(res => {
+    MessagingService.tryPostMessage('place-order', sessionStorage.getItem('order')).then(res => {
         orderStatus.innerText = "Order status: " + res;
         sessionStorage.removeItem('order');
     });

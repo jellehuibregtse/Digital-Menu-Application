@@ -3,9 +3,7 @@ class Order {
     dishes;
     timeOfOrder;
 
-    constructor(table, restaurantId, dishes, timeOfOrder) {
-        this.table = table;
-        this.restaurantId = restaurantId;
+    constructor(dishes, timeOfOrder) {
         this.dishes = dishes;
         this.timeOfOrder = timeOfOrder;
     }

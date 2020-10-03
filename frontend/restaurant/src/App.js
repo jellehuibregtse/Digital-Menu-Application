@@ -13,11 +13,10 @@ import CompleteOrder from "./restaurant/components/order/CompleteOrder";
 import MenuCategory from "./restaurant/components/order/MenuCategory";
 import Error from "./restaurant/components/Error";
 
-import MenuService from "./restaurant/services/MenuService";
-
 import session from "./restaurant/models/Session";
 import restaurant from "./restaurant/models/Restaurant";
 import menu from "./restaurant/models/Menu";
+import MessagingService from "./restaurant/services/MessagingService";
 
 class App extends Component {
 
@@ -44,25 +43,25 @@ class App extends Component {
                         </Route>
 
                         <Route exact strict path={"/create/:restaurantId/:tableId"}>
-                                {
-                                    function ({match}) {
-                                        let menus;
-                                        MenuService.getAllMenus(match.params.restaurantId).then(res => {
-                                            try {
-                                                console.log(JSON.parse(res));
-                                                JSON.parse(res).forEach(m => {
-                                                    menus.add(new menu(m.name, m.categories));
-                                                })
+                            {
+                                function ({match}) {
+                                    let menus;
+                                    MessagingService.tryPostMessage('/menu/getall', match.params.restaurantId).then(res => {
+                                        try {
+                                            console.log(JSON.parse(res));
+                                            JSON.parse(res).forEach(m => {
+                                                menus.add(new menu(m.name, m.categories));
+                                            })
 
-                                                sessionStorage.setItem('session', JSON.stringify(new session(new restaurant(match.params.restaurantId), match.params.tableId, menus)))
-                                                console.log(JSON.parse(sessionStorage.getItem('session')).restaurant.name);
-                                                return(
-                                                    <Redirect to={"/" + JSON.parse(sessionStorage.getItem('session')).restaurant.name + "/" + JSON.parse(sessionStorage.getItem('session')).tableId}/>
-                                                )
-                                            } catch (e) {}
-                                        }).catch(e => {})
-                                    }
+                                            sessionStorage.setItem('session', JSON.stringify(new session(new restaurant(match.params.restaurantId), match.params.tableId, menus)))
+                                            console.log(JSON.parse(sessionStorage.getItem('session')).restaurant.name);
+                                            return(
+                                                <Redirect to={"/" + JSON.parse(sessionStorage.getItem('session')).restaurant.name + "/" + JSON.parse(sessionStorage.getItem('session')).tableId}/>
+                                            )
+                                        } catch (e) {}
+                                    }).catch(e => {})
                                 }
+                            }
                         </Route>
 
                         {this.session != null?
