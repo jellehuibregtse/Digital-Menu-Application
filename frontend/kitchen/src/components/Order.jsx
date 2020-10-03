@@ -1,6 +1,6 @@
 import React from "react";
 
-const order = (props) => {
+const Order = (props) => {
     if (props.orders) {
         var orders = props.orders.map(function (value, i) {
             return (
@@ -39,4 +39,4 @@ const order = (props) => {
     );
 };
 
-export default order;
+export default Order;

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import "./App.css";
-import Navbar from "./components/NavBar.jsx";
-import Dish from "./components/Dish.jsx";
-import Order from "./components/Order.jsx";
+import Navbar from "./components/NavBar";
+import Dish from "./components/Dish";
+import Order from "./components/Order";
 
 function App() {
     const [Dishes, setDishes] = useState([]);
