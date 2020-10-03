@@ -1,10 +1,10 @@
 import axios from "axios";
 
 class MessagingService {
-    static async tryPostMessage(route, message) {
+    static async tryPostMessage(port, route, message) {
         let result = null;
         try {
-            await axios.post('http://localhost:8081/api' + route, message).then(res => {
+            await axios.post('http://localhost:' + port + '/api' + route, message).then(res => {
                 result = res.data;
             }).catch(error => {
                 if(typeof error.response.data === 'string') {
@@ -19,10 +19,10 @@ class MessagingService {
         return result;
     }
 
-    static async tryGetMessage(route) {
+    static async tryGetMessage(port, route, param) {
         let result = null;
         try {
-            await axios.get('http://localhost:8081/api' + route).then(res => {
+            await axios.get('http://localhost:' + port + '/api' + route + param).then(res => {
                 result = res.data;
             }).catch(error => {
                 if(typeof error.response.data === 'string') {
