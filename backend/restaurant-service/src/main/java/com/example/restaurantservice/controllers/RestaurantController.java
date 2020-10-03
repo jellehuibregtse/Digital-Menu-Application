@@ -21,7 +21,7 @@ public class RestaurantController {
 
     //Get all the restaurant with respective menu IDs
     @GetMapping("/getAll")
-    public ResponseEntity<List<Restaurant>> getAllMenus() {
+    public ResponseEntity<List<Restaurant>> getAllRestaurants() {
 
         List<Restaurant> result = repository.findAll();
         return ResponseEntity.ok(result);
