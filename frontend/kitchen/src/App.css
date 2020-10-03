@@ -1,56 +1,59 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
 
 .App {
-  height: 100vh;
-  width: 99vw;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  font-family: "Roboto", sans-serif;
-  font-weight: 500;
-  font-size: 30px;
-  text-align: center;
-  background-color: #f0eded;
+    height: 100vh;
+    width: 99vw;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+    text-align: center;
+    background-color: #f0eded;
 }
 
 .box1 {
-  margin-top: 1vh;
-  margin-bottom: 1vh;
-  width: 24vw;
-  background-color: white;
-  grid-area: box1;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    width: 24vw;
+    background-color: white;
+    grid-area: box1;
 }
+
 .box2 {
-  margin-top: 1vh;
-  margin-bottom: 1vh;
-  width: 24vw;
-  background-color: white;
-  grid-area: box2;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    width: 24vw;
+    background-color: white;
+    grid-area: box2;
 }
+
 .box3 {
-  margin-top: 1vh;
-  margin-bottom: 1vh;
-  width: 24vw;
-  background-color: white;
-  grid-area: box3;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    width: 24vw;
+    background-color: white;
+    grid-area: box3;
 }
+
 .box4 {
-  margin-top: 1vh;
-  margin-bottom: 1vh;
-  width: 24vw;
-  background-color: white;
-  grid-area: box4;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    width: 24vw;
+    background-color: white;
+    grid-area: box4;
 }
 
 .dish {
-  display: flex;
+    display: flex;
 }
 
 .table {
-  margin-top: 2vh;
-  width: 80vw;
-  font-size: 18px;
+    margin-top: 2vh;
+    width: 80vw;
+    font-size: 18px;
 }
