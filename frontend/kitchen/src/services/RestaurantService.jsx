@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const RESTAURANT_SERVICE_URL = "http://localhost:8090/api/order";
+const RESTAURANT_SERVICE_URL = "http://localhost:8083/api/restaurant";
 
 class RestaurantService {
     static async getRestaurant(restaurantId) {
         let result;
         try {
-            await axios.get(RESTAURANT_SERVICE_URL + "get", restaurantId).then(res => {
+            await axios.get(RESTAURANT_SERVICE_URL + "/get" + "?id=" + restaurantId).then(res => {
                 result = res;
             }).catch(error => {
                 if (typeof error.response.data === "string") {
