@@ -13,11 +13,14 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/restaurant")
+@RequestMapping("/restaurant")
 public class RestaurantController {
 
-    @Autowired
-    private RestaurantRepository repository;
+    private final RestaurantRepository repository;
+
+    public RestaurantController(RestaurantRepository repository) {
+        this.repository = repository;
+    }
 
     //Get all the restaurant with respective menu IDs
     @GetMapping("/getAll")
@@ -28,15 +31,15 @@ public class RestaurantController {
     }
 
     //Get a single restaurant with its details by restaurant id
-    @GetMapping("/{id}")
-    public ResponseEntity<Restaurant> getRestaurantById(@PathVariable long id) {
+    @GetMapping("/get")
+    public ResponseEntity<Restaurant> getRestaurantById(@RequestParam long id) {
         Restaurant result = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
         return ResponseEntity.ok(result);
     }
 
     //Update a single restaurant with its details by restaurant id
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateRestaurant(@PathVariable long id, @RequestBody Restaurant restaurant) {
+    @PutMapping("/add")
+    public ResponseEntity<String> updateRestaurant(@RequestParam long id, @RequestBody Restaurant restaurant) {
         Restaurant updatedRestaurant = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
         updatedRestaurant.setName(restaurant.getName());
@@ -50,8 +53,8 @@ public class RestaurantController {
     }
 
     //Delete a single restaurant with its details by restaurant id
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRestaurant(@PathVariable long id) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteRestaurant(@RequestParam long id) {
         Restaurant deletedRestaurant = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
         repository.delete(deletedRestaurant);
         String message = String.format("Restaurant with id: %d has been successfully deleted!", id);
@@ -59,8 +62,8 @@ public class RestaurantController {
     }
 
     //Create a new restaurant with its details
-    @PostMapping("/")
-    public ResponseEntity<String> createNewRestaurant(@RequestBody Restaurant restaurant) {
+    @PostMapping("/add")
+    public ResponseEntity<String> addRestaurant(@RequestBody Restaurant restaurant) {
         try {
             Restaurant createdRestaurant = repository.findByName(restaurant.getName());
             String message = "";

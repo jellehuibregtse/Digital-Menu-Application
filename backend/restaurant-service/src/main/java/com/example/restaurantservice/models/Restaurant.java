@@ -1,28 +1,27 @@
 package com.example.restaurantservice.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "restaurants")
 public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
     private long id;
 
-    @Column(name = "name", unique = true)
+    @NotNull
+    @Column(unique = true)
     private String name;
 
-    @Column(name = "colorScheme")
     private String colorScheme;
 
-    @Column(name="logo")
     private String logoURL;
 
-    @Column(name="menuIDs")
-    private ArrayList<Integer> menuIDs;
+    @ElementCollection
+    private List<Integer> menuIDs;
 
     public long getId() {
         return id;
@@ -56,11 +55,11 @@ public class Restaurant {
         this.logoURL = logoURL;
     }
 
-    public ArrayList<Integer> getMenuIDs() {
+    public List<Integer> getMenuIDs() {
         return menuIDs;
     }
 
-    public void setMenuIDs(ArrayList<Integer> menuIDs) {
+    public void setMenuIDs(List<Integer> menuIDs) {
         this.menuIDs = menuIDs;
     }
 
