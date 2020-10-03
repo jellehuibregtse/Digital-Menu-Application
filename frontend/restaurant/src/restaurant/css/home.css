@@ -5,8 +5,8 @@
 }
 
 #table a {
-    background-color: var(--black);
-    color: var(--white);
+    border: var(--black) solid 2px;
+    color: var(--black);
     margin: 10px;
     padding: 5px 10px;
 }
