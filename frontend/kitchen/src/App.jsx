@@ -8,7 +8,7 @@ function App() {
   const [Dishes, setDishes] = useState([]);
   const [Orders, setOrders] = useState([]);
 
-  //runs once at runtime, thats what the [] at the end are for.
+  //runs once at runtime, that's what the [] at the end are for.
   useEffect(() => {
     // fetch("url")
     // .then(data =>{
