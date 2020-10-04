@@ -8,11 +8,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-public class Order {
+public class OrderM {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @NotNull
+    private OrderStatus status;
 
     @NotNull
     private long restaurantId;
@@ -20,15 +23,20 @@ public class Order {
     @NotNull
     private int tableNumber;
 
-    @NotNull
-    private OrderStatus status;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<MenuItem> items;
+    @ElementCollection
+    private List<Integer> itemIDs;
 
     @NotNull
     @CreatedDate
     private LocalDateTime createdDateTime;
+
+    public OrderM() {
+
+    }
+
+    public OrderM(List<Integer> itemIDs) {
+        this.itemIDs = itemIDs;
+    }
 
     public long getId() {
         return id;
@@ -36,6 +44,22 @@ public class Order {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public List<Integer> getItemIDs() {
+        return itemIDs;
+    }
+
+    public void setItemIDs(List<Integer> itemIDs) {
+        this.itemIDs = itemIDs;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 
     public long getRestaurantId() {
@@ -52,22 +76,6 @@ public class Order {
 
     public void setTableNumber(int tableNumber) {
         this.tableNumber = tableNumber;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(OrderStatus status) {
-        this.status = status;
-    }
-
-    public List<MenuItem> getItems() {
-        return items;
-    }
-
-    public void setItems(List<MenuItem> items) {
-        this.items = items;
     }
 
     public LocalDateTime getCreatedDateTime() {

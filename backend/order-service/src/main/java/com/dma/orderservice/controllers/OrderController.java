@@ -1,8 +1,9 @@
 package com.dma.orderservice.controllers;
 
-import com.dma.orderservice.models.Order;
+import com.dma.orderservice.models.OrderM;
 import com.dma.orderservice.repositories.OrderRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/order")
@@ -11,9 +12,23 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     private final OrderRepository orderRepository;
+    private final SimpMessagingTemplate template;
 
-    public OrderController(OrderRepository orderRepository) {
+    public OrderController(OrderRepository orderRepository, SimpMessagingTemplate template) {
         this.orderRepository = orderRepository;
+        this.template = template;
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<?> getAllOrder(@RequestParam long restaurantId) {
+        var order = orderRepository.findById(restaurantId);
+
+        if (order.isPresent()) {
+            template.convertAndSend("/topic/orders/" + restaurantId, order.get());
+            return ResponseEntity.ok("Order has been send.");
+        }
+
+        return ResponseEntity.badRequest().body("Order could not be found.");
     }
 
     @GetMapping("/get")
@@ -28,7 +43,7 @@ public class OrderController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addOrder(@RequestBody Order order) {
+    public ResponseEntity<?> addOrder(@RequestBody OrderM order) {
         return ResponseEntity.ok(String.format("Order, %s has been successfully created!", order.getId()));
     }
 
@@ -45,13 +60,13 @@ public class OrderController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateOrder(@RequestBody Order order) {
+    public ResponseEntity<?> updateOrder(@RequestBody OrderM order) {
         var orderFromRepository = orderRepository.findById(order.getId());
 
         if (orderFromRepository.isPresent()) {
-            var updatedOrder = orderFromRepository.get();
+            OrderM updatedOrder = orderFromRepository.get();
             updatedOrder.setRestaurantId(order.getRestaurantId());
-            updatedOrder.setItems(order.getItems());
+            updatedOrder.setItemIDs(order.getItemIDs());
             updatedOrder.setStatus(order.getStatus());
             updatedOrder.setTableNumber(order.getTableNumber());
 
