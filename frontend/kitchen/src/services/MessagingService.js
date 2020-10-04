@@ -14,20 +14,21 @@ class MessagingService {
 
     static async tryGetMessage(port, route) {
         let result = null;
-        try {
-            await axios.get('http://localhost:' + port + '/api' + route).then(res => {
-                result = res.data;
-            }).catch(error => {
-                if(typeof error.response.data === 'string') {
-                    let result = error.response.data.match(/\[(.*?)]/)[1];
-                    if(result != null) { throw result } else { throw error.response.data }
-                } else
-                    throw error.response.data.error;
-            });
-        } catch(e) {
-            throw new Error("Internal Server Error");
-        }
+        await axios.get('http://localhost:' + port + '/api' + route).then(res => {
+            result = res.data;
+        }).catch(error => this.throwError(error));
         return result;
+    }
+
+    static throwError(error) {
+        if(error.response != null) {
+            if(typeof error.response.data === 'string') {
+                let result = error.response.data.match(/\[(.*?)]/);
+                if(result !== null) { throw result[1] } else { throw error.response.data }
+            } else
+                throw error.response.data.error;
+        }
+        else { throw error.message }
     }
 }
 

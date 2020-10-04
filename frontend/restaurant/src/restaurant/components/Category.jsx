@@ -8,9 +8,8 @@ const Category = (props) => {
         <>
             <NavBar session={props.session}/>
             <div className="content">
-                <Banner/>
                 <h1>{props.category.name}</h1>
-                <div id="menu-items" className="item-flex"/>
+                <div className="item-flex"/>
                 <OrderBar/>
             </div>
         </>

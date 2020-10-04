@@ -7,16 +7,6 @@
     flex-direction: column;
 }
 
-.navbar {
-    height: 50px;
-    max-height: 50px;
-}
-
-.navbar h4 {
-    font-size: 22px;
-    margin: 0;
-}
-
 .orderView {
     height: 100%;
     width: 100%;
@@ -47,4 +37,9 @@
     margin-top: 2vh;
     width: 80vw;
     font-size: 18px;
+}
+
+.table ul {
+    /*list-style-type: none;*/
+    text-align: left;
 }

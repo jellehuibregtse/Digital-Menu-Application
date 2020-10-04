@@ -12,10 +12,9 @@ const Menu = (props) => {
         <>
             <NavBar session={props.session}/>
             <div className="content">
-                <Banner/>
                 <div id="menu">
                     <h1>{props.session.menu.name}</h1>
-                    <div id="categories" className="item-flex">{categories}</div>
+                    <div className="item-flex">{categories}</div>
                 </div>
                 <OrderBar session={props.session}/>
             </div>

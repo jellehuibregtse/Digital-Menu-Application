@@ -18,7 +18,6 @@ const CompleteOrder = (props) => {
         <>
             <NavBar session={props.session}/>
             <div className="content">
-                <Banner/>
                 <h1>Order Details</h1>
                 <a href="javascript:void(0)" onClick={() => {sendOrder()}}>Send order</a>
                 <p>{orderStatus}</p>

@@ -1,15 +1,16 @@
 import MessagingService from "../services/MessagingService";
-import React from "react";
+import React, { useState } from "react";
 
 const JoinRestaurant = (props) => {
+    const [error, setError] = useState([''])
 
     let restaurantId  = new URLSearchParams(props.location.search).get('restaurantId');
     let tableId = new URLSearchParams(props.location.search).get('tableId');
 
     if(restaurantId && tableId) {
-        MessagingService.tryGetMessage(8081, '/restaurant/get', '?id=' + restaurantId).then(
+        MessagingService.tryGetMessage(8081, '/restaurant/get?id=' + restaurantId).then(
             (restaurant) => {
-                MessagingService.tryGetMessage(8082, '/menu/get', '?menuId=' + restaurant.menuIDs[0]).then(
+                MessagingService.tryGetMessage(8082, '/menu/get?menuId=' + restaurant.menuIDs[0]).then(
                     (menu) => {
                         sessionStorage.setItem('session', JSON.stringify({
                             restaurant: restaurant,
@@ -18,13 +19,15 @@ const JoinRestaurant = (props) => {
                         }));
                         document.location.href = "/";
                     }
-                ).catch((e) => {console.log(e)});
+                ).catch((e) => {setError(e)});
             }
-        ).catch((e) => {console.log(e)});
+        ).catch((e) => {setError(e)});
     }
 
     return(
-        <></>
+        <>
+            <h1>{error}</h1>
+        </>
     )
 }
 
