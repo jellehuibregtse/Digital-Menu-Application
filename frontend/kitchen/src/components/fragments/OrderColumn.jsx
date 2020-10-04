@@ -20,7 +20,7 @@ const OrderColumn = (props) => {
                     <th>{item.id}</th>
                     <td>
                         <ul>
-                            {item.menuItems.map(function (item) {
+                            {item.items.map(function (item) {
                                 return <li>{item.name}</li>;
                             })}
                         </ul>

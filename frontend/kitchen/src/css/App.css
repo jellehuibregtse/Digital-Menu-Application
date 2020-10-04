@@ -40,7 +40,12 @@
     font-size: 18px;
 }
 
+.table * {
+    font-size: 16px;
+}
+
 .table ul {
     /*list-style-type: none;*/
     text-align: left;
+    margin: 0;
 }

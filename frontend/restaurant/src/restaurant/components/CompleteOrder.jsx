@@ -1,31 +1,34 @@
 import React, { useState } from 'react';
 import MessagingService from "../services/MessagingService";
 import NavBar from "./fragments/NavBar";
-import Banner from "./fragments/Banner";
 
 const CompleteOrder = (props) => {
     const [orderStatus, setOrderStatus] = useState('');
+    let items;
+
+    let counter = 0;
+    const order = JSON.parse(sessionStorage.getItem('order')) != null? JSON.parse(sessionStorage.getItem('order'))
+        .map((itemId) => {return props.session.menu.items.find(item => item.id === itemId) })
+        .sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
+        .map((item, i, items) => {counter++; if(typeof items[i + 1] === 'undefined' || item.name !== items[i + 1].name) {
+            item['amount'] = counter;
+            counter = 0
+            return item;
+        }})
+        .filter((item) => typeof item != 'undefined'): [];
 
     function sendOrder() {
-        sessionStorage.setItem('order', JSON.stringify(
-            {
-                restaurantId: 0,
-                tableNumber: 0,
-                status: 0,
-                menuItems: [
-                    {
-                        name: "Test",
-                        status: 0
-                    }
-                ]
-            }
-        ))
-
         setOrderStatus('Order status: processing');
-        MessagingService.tryPostMessage(8083,  '/orders/', JSON.parse(sessionStorage.getItem('order'))).then(res => {
-            setOrderStatus('Order status: send order');
-            sessionStorage.removeItem('order');
-        }).catch(() => setOrderStatus("Order status: couldn't send order"));
+        if(order.length > 0) {
+            MessagingService.tryPostMessage(8083,  '/orders/', {
+                restaurantId: props.session.restaurantId,
+                tableNumber: props.session.tableNumber,
+                items: order.map((item) => { return ({ name: item.name, amount: item.amount })})
+            }).then(() => {
+                setOrderStatus('Order status: send order');
+                sessionStorage.removeItem('order');
+            }).catch(() => setOrderStatus("Order status: couldn't send order"));
+        }
     }
 
     return (
@@ -33,9 +36,12 @@ const CompleteOrder = (props) => {
             <NavBar session={props.session}/>
             <div className="content">
                 <h1>Order Details</h1>
-                <a href="javascript:void(0)" onClick={() => {sendOrder()}}>Send order</a>
+                <div ref={(r) => {items = r}}>
+                    <ul>{order.map(item => {return(<li>{item.name + " (" + item.amount + ")"}</li>)})}</ul>
+                    <a href={(e) => {e.preventDefault()}} onClick={() => {sendOrder()}}>Send order</a>
+                </div>
                 <p>{orderStatus}</p>
-                <a href={"/" + props.session.restaurant.name + "/" + props.session.tableId}>Return to table</a>
+                <a href={"/" + props.session.restaurant.name + "/" + props.session.tableNumber}>Return to table</a>
             </div>
         </>
     )

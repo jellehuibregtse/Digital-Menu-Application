@@ -74,7 +74,7 @@ public class OrderController {
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMenu(@PathVariable long id) {
+    public ResponseEntity<?> deleteOrder(@PathVariable long id) {
         var order = orderRepository.findById(id);
 
         if (order.isPresent()) {
@@ -98,7 +98,7 @@ public class OrderController {
         if (orderFromRepository.isPresent()) {
             CustomerOrder updatedOrder = orderFromRepository.get();
             updatedOrder.setRestaurantId(order.getRestaurantId());
-            updatedOrder.setMenuItems(order.getMenuItems());
+            updatedOrder.setItems(order.getItems());
             updatedOrder.setStatus(order.getStatus());
             updatedOrder.setTableNumber(order.getTableNumber());
 

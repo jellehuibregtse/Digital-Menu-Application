@@ -7,12 +7,13 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 /**
- * The MenuItem entity.
+ * The OrderItem entity.
  *
  * @author Jelle Huibregtse
+ * @author Aron Hemmes
  */
 @Entity
-public class MenuItem {
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,9 +23,12 @@ public class MenuItem {
     private String name;
 
     @NotNull
-    private Status status;
+    private int amount = 1;
 
-    public MenuItem() {
+    @NotNull
+    private Status status = Status.NEW;
+
+    public OrderItem() {
     }
 
     public long getId() {
@@ -49,5 +53,13 @@ public class MenuItem {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }

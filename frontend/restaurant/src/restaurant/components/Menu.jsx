@@ -1,12 +1,14 @@
 import React from 'react';
 import '../css/menu.css';
 import NavBar from "./fragments/NavBar";
-import Banner from "./fragments/Banner";
-import OrderBar from "./fragments/OrderBar";
+import '../css/orderBar.css';
 
 const Menu = (props) => {
-    const categories = [];
-    props.session.menu.items.forEach(item => {categories.add(<a href={"/" + props.session.restaurant.name + "/" + props.session.tableId + "/order/" + item.name}>{item.name}</a>)})
+    const order = JSON.parse(sessionStorage.getItem('order')) != null? JSON.parse(sessionStorage.getItem('order')) : [];
+
+    const categories = props.session.menu.items.map(item => {return (
+        <a href="" onClick={() => {order.push(item.id); sessionStorage.setItem('order', JSON.stringify(order));}}>{item.name}</a>
+    )});
 
     return (
         <>
@@ -16,7 +18,10 @@ const Menu = (props) => {
                     <h1>{props.session.menu.name}</h1>
                     <div className="item-flex">{categories}</div>
                 </div>
-                <OrderBar session={props.session}/>
+                <div id="order-bar">
+                    <a href={"/" + props.session.restaurant.name + "/" + props.session.tableNumber}>Cancel</a>
+                    <a href={order.length > 0? ("/" + props.session.restaurant.name + "/" + props.session.tableNumber + "/order/place") : (e) => {e.preventDefault()}}>Order {order.length > 0? "(" + order.length + ")" : null}</a>
+                </div>
             </div>
         </>
     )

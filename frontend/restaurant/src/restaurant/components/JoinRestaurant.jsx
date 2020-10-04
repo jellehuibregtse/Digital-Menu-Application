@@ -6,7 +6,6 @@ const JoinRestaurant = (props) => {
 
     let restaurantId  = parseInt(new URLSearchParams(props.location.search).get('restaurantId'));
     let tableId = parseInt(new URLSearchParams(props.location.search).get('tableId'));
-    console.log(restaurantId + "t" + tableId);
 
     if(restaurantId >= 0 && tableId >= 0) {
         MessagingService.tryGetMessage(8081, '/restaurants/' + restaurantId).then(
@@ -17,7 +16,7 @@ const JoinRestaurant = (props) => {
                         sessionStorage.setItem('session', JSON.stringify({
                             restaurant: restaurant,
                             menu: menu,
-                            tableId: tableId
+                            tableNumber: tableId
                         }));
                         document.location.href = "/";
                     }

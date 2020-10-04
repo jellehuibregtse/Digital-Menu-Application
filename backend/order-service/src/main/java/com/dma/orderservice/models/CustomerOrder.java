@@ -20,7 +20,7 @@ public class CustomerOrder {
     private long id;
 
     @NotNull
-    private Status status;
+    private Status status = Status.NEW;
 
     @NotNull
     private long restaurantId;
@@ -29,7 +29,7 @@ public class CustomerOrder {
     private int tableNumber;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<MenuItem> menuItems;
+    private List<OrderItem> items;
 
     @NotNull
     private String createdDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_TIME);
@@ -38,11 +38,11 @@ public class CustomerOrder {
 
     }
 
-    public CustomerOrder(@NotNull Status status, @NotNull long restaurantId, @NotNull int tableNumber, List<MenuItem> menuItems) {
+    public CustomerOrder(@NotNull Status status, @NotNull long restaurantId, @NotNull int tableNumber, List<OrderItem> items) {
         this.status = status;
         this.restaurantId = restaurantId;
         this.tableNumber = tableNumber;
-        this.menuItems = menuItems;
+        this.items = items;
     }
 
     public long getId() {
@@ -53,12 +53,12 @@ public class CustomerOrder {
         this.id = id;
     }
 
-    public List<MenuItem> getMenuItems() {
-        return menuItems;
+    public List<OrderItem> getItems() {
+        return items;
     }
 
-    public void setMenuItems(List<MenuItem> itemIDs) {
-        this.menuItems = itemIDs;
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
     }
 
     public Status getStatus() {
