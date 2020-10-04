@@ -7,8 +7,13 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * The order entity (named customer order due to conflict with framework).
+ *
+ * @author Jelle Huibregtse
+ */
 @Entity
-public class OrderM {
+public class CustomerOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,11 +35,11 @@ public class OrderM {
     @CreatedDate
     private LocalDateTime createdDateTime;
 
-    public OrderM() {
+    public CustomerOrder() {
 
     }
 
-    public OrderM(List<Integer> itemIDs) {
+    public CustomerOrder(List<Integer> itemIDs) {
         this.itemIDs = itemIDs;
     }
 
