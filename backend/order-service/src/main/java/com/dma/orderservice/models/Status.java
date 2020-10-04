@@ -1,7 +1,7 @@
 package com.dma.orderservice.models;
 
 /**
- * The order status model.
+ * The order/item status model.
  *
  * @author Jelle Huibregtse
  */

@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
 /**
  * The controller that handles all the mappings for the order service.
  *
@@ -100,7 +98,7 @@ public class OrderController {
         if (orderFromRepository.isPresent()) {
             CustomerOrder updatedOrder = orderFromRepository.get();
             updatedOrder.setRestaurantId(order.getRestaurantId());
-            updatedOrder.setItemIDs(order.getItemIDs());
+            updatedOrder.setMenuItems(order.getMenuItems());
             updatedOrder.setStatus(order.getStatus());
             updatedOrder.setTableNumber(order.getTableNumber());
 

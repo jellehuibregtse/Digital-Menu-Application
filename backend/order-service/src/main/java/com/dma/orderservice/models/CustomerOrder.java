@@ -28,8 +28,8 @@ public class CustomerOrder {
     @NotNull
     private int tableNumber;
 
-    @ElementCollection
-    private List<Integer> itemIDs;
+    @OneToMany
+    private List<MenuItem> menuItems;
 
     @NotNull
     private String createdDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_DATE_TIME);
@@ -38,11 +38,11 @@ public class CustomerOrder {
 
     }
 
-    public CustomerOrder(@NotNull Status status, @NotNull long restaurantId, @NotNull int tableNumber, List<Integer> itemIDs) {
+    public CustomerOrder(@NotNull Status status, @NotNull long restaurantId, @NotNull int tableNumber, List<MenuItem> menuItems) {
         this.status = status;
         this.restaurantId = restaurantId;
         this.tableNumber = tableNumber;
-        this.itemIDs = itemIDs;
+        this.menuItems = menuItems;
     }
 
     public long getId() {
@@ -53,12 +53,12 @@ public class CustomerOrder {
         this.id = id;
     }
 
-    public List<Integer> getItemIDs() {
-        return itemIDs;
+    public List<MenuItem> getMenuItems() {
+        return menuItems;
     }
 
-    public void setItemIDs(List<Integer> itemIDs) {
-        this.itemIDs = itemIDs;
+    public void setMenuItems(List<MenuItem> itemIDs) {
+        this.menuItems = itemIDs;
     }
 
     public Status getStatus() {
