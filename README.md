@@ -13,7 +13,7 @@ The process in a restaurant is usually the same. Customers get seated, are hand 
 * 8761: Discovery server
 * 5432: PostgreSQL
 
-#### Frontend:
+#### Frontend
 * 3001: Restaurant
 * 3002: Kitchen
 
