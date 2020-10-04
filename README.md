@@ -18,7 +18,7 @@ The process in a restaurant is usually the same. Customers get seated, are hand 
 * 3002: Kitchen
 
 ### Mappings
-#### Backend:
+#### Backend
 QR service:
 * POST: `/api/qr-codes/`
 
