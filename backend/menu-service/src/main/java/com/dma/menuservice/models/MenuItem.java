@@ -3,6 +3,11 @@ package com.dma.menuservice.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+/**
+ * The MenuItem entity.
+ *
+ * @author Jelle Huibregtse
+ */
 @Entity
 public class MenuItem {
 
