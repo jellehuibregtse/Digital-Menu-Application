@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
  * The controller that handles all the mappings for the order service.
  *
  * @author Jelle Huibregtse
+ * @author Aron Hemmes
  */
 @RequestMapping("/orders")
 @CrossOrigin

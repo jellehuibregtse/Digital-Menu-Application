@@ -7,6 +7,11 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * The order entity (named customer order due to conflict with framework).
+ *
+ * @author Jelle Huibregtse
+ */
 @Entity
 public class CustomerOrder {
 
