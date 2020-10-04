@@ -1,4 +1,4 @@
-package com.example.restaurantservice;
+package com.dma.restaurantservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

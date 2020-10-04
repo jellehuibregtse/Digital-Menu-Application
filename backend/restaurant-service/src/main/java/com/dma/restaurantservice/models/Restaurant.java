@@ -1,11 +1,15 @@
-package com.example.restaurantservice.models;
+package com.dma.restaurantservice.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
+/**
+ * The restaurant entity.
+ *
+ * @author Jordan Radushev
+ */
 @Entity
 public class Restaurant {
     @Id
@@ -63,9 +67,9 @@ public class Restaurant {
         this.menuIDs = menuIDs;
     }
 
-    public  Restaurant(){
-
+    public Restaurant() {
     }
+
     public Restaurant(String name, String colorScheme, String logoURL, ArrayList<Integer> menuIDs) {
         this.name = name;
         this.colorScheme = colorScheme;
