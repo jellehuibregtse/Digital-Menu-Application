@@ -5,6 +5,9 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,14 +35,16 @@ public class CustomerOrder {
     private List<Integer> itemIDs;
 
     @NotNull
-    @CreatedDate
-    private LocalDateTime createdDateTime;
+    private String createdDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_DATE_TIME);
 
     public CustomerOrder() {
 
     }
 
-    public CustomerOrder(List<Integer> itemIDs) {
+    public CustomerOrder(@NotNull OrderStatus status, @NotNull long restaurantId, @NotNull int tableNumber, List<Integer> itemIDs) {
+        this.status = status;
+        this.restaurantId = restaurantId;
+        this.tableNumber = tableNumber;
         this.itemIDs = itemIDs;
     }
 
@@ -83,11 +88,11 @@ public class CustomerOrder {
         this.tableNumber = tableNumber;
     }
 
-    public LocalDateTime getCreatedDateTime() {
+    public String getCreatedDateTime() {
         return createdDateTime;
     }
 
-    public void setCreatedDateTime(LocalDateTime createdDateTime) {
+    public void setCreatedDateTime(String createdDateTime) {
         this.createdDateTime = createdDateTime;
     }
 }

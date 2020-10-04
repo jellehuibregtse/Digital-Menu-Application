@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 /**
  * The controller that handles all the mappings for the order service.
  *
@@ -33,9 +35,7 @@ public class OrderController {
     @GetMapping("/")
     public ResponseEntity<?> getAllOrder() {
         var orders = orderRepository.findAll();
-
-        template.convertAndSend("/topic/orders/" + "0", orders);
-
+        template.convertAndSend("/topic/orders/" + 0, orders);
         return ResponseEntity.ok(orders);
     }
 
@@ -64,6 +64,8 @@ public class OrderController {
      */
     @PostMapping("/")
     public ResponseEntity<?> createOrder(@RequestBody CustomerOrder order) {
+        orderRepository.save(order);
+        getAllOrder();
         return ResponseEntity.ok(String.format("Order, %s has been successfully created!", order.getId()));
     }
 

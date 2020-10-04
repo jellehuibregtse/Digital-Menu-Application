@@ -6,6 +6,7 @@ import com.dma.restaurantservice.repositories.RestaurantRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +33,8 @@ public class RestaurantController {
      */
     @GetMapping("/")
     public ResponseEntity<List<Restaurant>> getAllRestaurants() {
-        List<Restaurant> result = repository.findAll();
+        List<Restaurant> result = new ArrayList<>();
+        repository.findAll().forEach(result::add);
         return ResponseEntity.ok(result);
     }
 
