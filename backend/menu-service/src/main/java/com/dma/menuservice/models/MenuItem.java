@@ -18,6 +18,9 @@ public class MenuItem {
     @NotNull
     private String name;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Menu menu;
+
     public long getId() {
         return id;
     }
@@ -28,5 +31,13 @@ public class MenuItem {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 }
