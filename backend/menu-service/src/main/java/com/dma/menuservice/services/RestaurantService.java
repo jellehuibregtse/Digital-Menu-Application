@@ -4,6 +4,11 @@ import com.dma.menuservice.models.Restaurant;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * The restaurant service which handles request to the restaurant service.
+ *
+ * @author Jelle Huibregtse
+ */
 @Service
 public class RestaurantService {
 
@@ -13,7 +18,13 @@ public class RestaurantService {
         this.restTemplate = restTemplate;
     }
 
+    /**
+     * Gets a restaurant from the restaurant service by ID.
+     *
+     * @param restaurantId of the restaurant.
+     * @return <code>Restaurant</code> object.
+     */
     public Restaurant getRestaurant(long restaurantId) {
-        return restTemplate.getForObject("http://restaurant-service/api/restaurant/?restaurantId=" + restaurantId, Restaurant.class);
+        return restTemplate.getForObject("http://restaurant-service/api/restaurants/" + restaurantId, Restaurant.class);
     }
 }
