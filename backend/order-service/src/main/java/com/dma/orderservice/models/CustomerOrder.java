@@ -28,7 +28,7 @@ public class CustomerOrder {
     @NotNull
     private int tableNumber;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<MenuItem> menuItems;
 
     @NotNull
