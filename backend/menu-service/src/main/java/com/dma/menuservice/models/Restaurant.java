@@ -2,6 +2,11 @@ package com.dma.menuservice.models;
 
 import java.util.ArrayList;
 
+/**
+ * The restaurant model.
+ *
+ * @author Jelle Huibregtse
+ */
 public class Restaurant {
     private long id;
 
