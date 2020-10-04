@@ -1,4 +1,6 @@
 import axios from "axios";
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
 
 const RESTAURANT_PORT = 8081;
 const ORDER_PORT = 8083;
@@ -18,6 +20,17 @@ class MessagingService {
             result = res.data;
         }).catch(error => this.throwError(error));
         return result;
+    }
+
+    static register(route, onMessage, onClose, onConnect) {
+        let socket = new SockJS('http://localhost:8083/websockets');
+        let stompClient = Stomp.over(socket);
+        stompClient.debug = null;
+        socket.onclose = onClose();
+        stompClient.connect({}, function() {
+            stompClient.subscribe(route, onMessage);
+            onConnect();
+        });
     }
 
     static throwError(error) {

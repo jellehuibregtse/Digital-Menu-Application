@@ -4,8 +4,8 @@ import React, { useState } from "react";
 const JoinRestaurant = (props) => {
     const [error, setError] = useState([''])
 
-    let restaurantId  = new URLSearchParams(props.location.search).get('restaurantId');
-    let tableId = new URLSearchParams(props.location.search).get('tableId');
+    let restaurantId  = parseInt(new URLSearchParams(props.location.search).get('restaurantId'));
+    let tableId = parseInt(new URLSearchParams(props.location.search).get('tableId'));
 
     if(restaurantId && tableId) {
         MessagingService.tryGetMessage(8081, '/restaurant/get?id=' + restaurantId).then(
