@@ -5,7 +5,7 @@ package com.dma.orderservice.models;
  *
  * @author Jelle Huibregtse
  */
-public enum OrderStatus {
+public enum Status {
     NEW,
     PROCESSING,
     COMPLETE

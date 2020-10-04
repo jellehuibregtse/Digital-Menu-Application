@@ -1,13 +1,10 @@
 package com.dma.orderservice.models;
 
-import org.springframework.data.annotation.CreatedDate;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,7 +20,7 @@ public class CustomerOrder {
     private long id;
 
     @NotNull
-    private OrderStatus status;
+    private Status status;
 
     @NotNull
     private long restaurantId;
@@ -41,7 +38,7 @@ public class CustomerOrder {
 
     }
 
-    public CustomerOrder(@NotNull OrderStatus status, @NotNull long restaurantId, @NotNull int tableNumber, List<Integer> itemIDs) {
+    public CustomerOrder(@NotNull Status status, @NotNull long restaurantId, @NotNull int tableNumber, List<Integer> itemIDs) {
         this.status = status;
         this.restaurantId = restaurantId;
         this.tableNumber = tableNumber;
@@ -64,11 +61,11 @@ public class CustomerOrder {
         this.itemIDs = itemIDs;
     }
 
-    public OrderStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(OrderStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
