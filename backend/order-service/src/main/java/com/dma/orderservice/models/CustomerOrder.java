@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-public class OrderM {
+public class CustomerOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,11 +30,11 @@ public class OrderM {
     @CreatedDate
     private LocalDateTime createdDateTime;
 
-    public OrderM() {
+    public CustomerOrder() {
 
     }
 
-    public OrderM(List<Integer> itemIDs) {
+    public CustomerOrder(List<Integer> itemIDs) {
         this.itemIDs = itemIDs;
     }
 
