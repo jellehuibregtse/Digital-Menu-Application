@@ -9,17 +9,20 @@ const CompleteOrder = (props) => {
     function sendOrder() {
         sessionStorage.setItem('order', JSON.stringify(
             {
-                restaurantId: props.session.restaurant.id,
-                tableNumber: props.session.tableId,
+                restaurantId: 0,
+                tableNumber: 0,
                 status: 0,
-                itemIDs: [
-                    0, 1
+                menuItems: [
+                    {
+                        name: "Test",
+                        status: 0
+                    }
                 ]
             }
         ))
 
         setOrderStatus('Order status: processing');
-        MessagingService.tryPostMessage(8083,  '/order/add', JSON.parse(sessionStorage.getItem('order'))).then(res => {
+        MessagingService.tryPostMessage(8083,  '/orders/', JSON.parse(sessionStorage.getItem('order'))).then(res => {
             setOrderStatus('Order status: send order');
             sessionStorage.removeItem('order');
         }).catch(() => setOrderStatus("Order status: couldn't send order"));

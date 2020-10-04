@@ -2,40 +2,36 @@ import React from "react";
 
 const OrderColumn = (props) => {
     if(!(props.columnType >= 0 && props.columnType <= 1)) { return null; }
-    let items;
-
-    if (props.items) {
-        items = props.items.map(function (item) {
-            if(props.columnType === 0) {
-                return (
-                    <tbody>
-                    <tr>
-                        <th>{item.amount}</th>
-                        <td>{item.name}</td>
-                        <td>{item.time}</td>
-                    </tr>
-                    </tbody>
-                );
-            } else {
-                return (
-                    <tbody>
-                    <tr>
-                        <th>{item.number}</th>
-                        <td>
-                            <ul>
-                                {item.items.map(function (item) {
-                                    return <li>{item.name + "  " + item.amount}</li>;
-                                })}
-                            </ul>
-                        </td>
-                        <td>{item.time}</td>
-                        <td>{item.table}</td>
-                    </tr>
-                    </tbody>
-                );
-            }
-        });
-    }
+    const items = props.items.length > 0? props.items.map((item) => {
+        if(props.columnType === 0) {
+            return (
+                <tbody>
+                <tr>
+                    <th>{item.amount}</th>
+                    <td>{item.name}</td>
+                    <td>{item.table}</td>
+                </tr>
+                </tbody>
+            );
+        } else {
+            return (
+                <tbody>
+                <tr>
+                    <th>{item.id}</th>
+                    <td>
+                        <ul>
+                            {item.menuItems.map(function (item) {
+                                return <li>{item.name}</li>;
+                            })}
+                        </ul>
+                    </td>
+                    <td>{item.createdDateTime}</td>
+                    <td>{item.tableNumber}</td>
+                </tr>
+                </tbody>
+            );
+        }
+        }): null;
 
     return (
         <>

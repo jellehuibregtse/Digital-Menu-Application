@@ -6,11 +6,13 @@ const JoinRestaurant = (props) => {
 
     let restaurantId  = parseInt(new URLSearchParams(props.location.search).get('restaurantId'));
     let tableId = parseInt(new URLSearchParams(props.location.search).get('tableId'));
+    console.log(restaurantId + "t" + tableId);
 
-    if(restaurantId && tableId) {
-        MessagingService.tryGetMessage(8081, '/restaurant/get?id=' + restaurantId).then(
+    if(restaurantId >= 0 && tableId >= 0) {
+        MessagingService.tryGetMessage(8081, '/restaurants/' + restaurantId).then(
             (restaurant) => {
-                MessagingService.tryGetMessage(8082, '/menu/get?menuId=' + restaurant.menuIDs[0]).then(
+                console.log(restaurant);
+                MessagingService.tryGetMessage(8082, '/menus/' + restaurant.menuIDs[0]).then(
                     (menu) => {
                         sessionStorage.setItem('session', JSON.stringify({
                             restaurant: restaurant,

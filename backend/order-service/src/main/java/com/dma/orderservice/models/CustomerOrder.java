@@ -32,7 +32,7 @@ public class CustomerOrder {
     private List<MenuItem> menuItems;
 
     @NotNull
-    private String createdDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_DATE_TIME);
+    private String createdDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_TIME);
 
     public CustomerOrder() {
 

@@ -8,7 +8,7 @@ const ORDER_PORT = 8083;
 class MessagingService {
     static async getRestaurant(id) {
         let result = null;
-        await this.tryGetMessage(RESTAURANT_PORT, '/restaurant/get?id=' + id).then(
+        await this.tryGetMessage(RESTAURANT_PORT, '/restaurants/' + id).then(
             (res) => result = res
         ).catch((e) => {throw e})
         return result;
@@ -23,7 +23,7 @@ class MessagingService {
     }
 
     static register(route, onMessage, onClose, onConnect) {
-        let socket = new SockJS('http://localhost:8083/websockets');
+        let socket = new SockJS('http://localhost:' + ORDER_PORT + '/api/websockets');
         let stompClient = Stomp.over(socket);
         stompClient.debug = null;
         socket.onclose = onClose();

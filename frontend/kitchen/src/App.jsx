@@ -9,10 +9,12 @@ function App() {
     const [restaurant, setRestaurant] = useState('');
     const [user, setUser] = useState('user');
 
-    const RESTAURANT_ID = 1;
+    const RESTAURANT_ID = 0;
 
     //runs once at runtime, that's what the [] at the end are for.
     useEffect(() => {
+        MessagingService.register('/topic/orders/' + RESTAURANT_ID, (m) => setOrders(JSON.parse(m.body)), () =>{}, () => {MessagingService.tryGetMessage(8083, '/orders/').then()})
+
         MessagingService.getRestaurant(RESTAURANT_ID).then(res => {
             try {
                 setRestaurant(res);
