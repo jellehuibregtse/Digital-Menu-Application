@@ -1,10 +1,14 @@
 package com.dma.orderservice.controllers;
 
+import com.dma.orderservice.exceptions.ResourceNotFoundException;
 import com.dma.orderservice.models.CustomerOrder;
 import com.dma.orderservice.repositories.OrderRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The controller that handles all the mappings for the order service.
@@ -17,11 +21,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class OrderController {
 
-    private final OrderRepository orderRepository;
+    private final OrderRepository repository;
     private final SimpMessagingTemplate template;
 
-    public OrderController(OrderRepository orderRepository, SimpMessagingTemplate template) {
-        this.orderRepository = orderRepository;
+    public OrderController(OrderRepository repository, SimpMessagingTemplate template) {
+        this.repository = repository;
         this.template = template;
     }
 
@@ -31,10 +35,13 @@ public class OrderController {
      * @return <code>ResponseEntity</code> with a list of orders and HTTP status OK.
      */
     @GetMapping("/")
-    public ResponseEntity<?> getAllOrder() {
-        var orders = orderRepository.findAll();
-        template.convertAndSend("/topic/orders/" + 0, orders);
-        return ResponseEntity.ok(orders);
+    public ResponseEntity<List<CustomerOrder>> getAllOrders() {
+        List<CustomerOrder> result = new ArrayList<>();
+        repository.findAll().forEach(result::add);
+
+        template.convertAndSend("/topic/orders/" + 0, repository.findAll());
+
+        return ResponseEntity.ok(result);
     }
 
     /**
@@ -44,14 +51,9 @@ public class OrderController {
      * @return <code>ResponseEntity</code> with a order and HTTP status OK or message and HTTP status BadRequest.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOrder(@PathVariable long id) {
-        var order = orderRepository.findById(id);
-
-        if (order.isPresent()) {
-            return ResponseEntity.ok(order.get());
-        }
-
-        return ResponseEntity.badRequest().body("Order has not been found.");
+    public ResponseEntity<CustomerOrder> getOrder(@PathVariable long id) {
+        CustomerOrder result = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found."));
+        return ResponseEntity.ok(result);
     }
 
     /**
@@ -61,9 +63,11 @@ public class OrderController {
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
     @PostMapping("/")
-    public ResponseEntity<?> createOrder(@RequestBody CustomerOrder order) {
-        orderRepository.save(order);
-        getAllOrder();
+    public ResponseEntity<String> createOrder(@RequestBody CustomerOrder order) {
+        repository.save(order);
+
+        getAllOrders();
+
         return ResponseEntity.ok(String.format("Order, %s has been successfully created!", order.getId()));
     }
 
@@ -74,15 +78,12 @@ public class OrderController {
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOrder(@PathVariable long id) {
-        var order = orderRepository.findById(id);
+    public ResponseEntity<String> deleteOrder(@PathVariable long id) {
+        var order = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
-        if (order.isPresent()) {
-            orderRepository.delete(order.get());
-            return ResponseEntity.ok(String.format("Order, %s has been successfully deleted!", id));
-        }
+        repository.delete(order);
 
-        return ResponseEntity.badRequest().body("Order has not been found.");
+        return ResponseEntity.ok(String.format("Order, %s has been successfully deleted!", id));
     }
 
     /**
@@ -92,20 +93,15 @@ public class OrderController {
      * @return message and HTTP status OK or HTTP status BadRequest.
      */
     @PutMapping("/")
-    public ResponseEntity<?> updateOrder(@RequestBody CustomerOrder order) {
-        var orderFromRepository = orderRepository.findById(order.getId());
+    public ResponseEntity<String> updateOrder(@RequestBody CustomerOrder order) {
+        CustomerOrder updatedOrder = repository.findById(order.getId()).orElseThrow(() -> new ResourceNotFoundException("Not found."));
 
-        if (orderFromRepository.isPresent()) {
-            CustomerOrder updatedOrder = orderFromRepository.get();
-            updatedOrder.setRestaurantId(order.getRestaurantId());
-            updatedOrder.setItems(order.getItems());
-            updatedOrder.setStatus(order.getStatus());
-            updatedOrder.setTableNumber(order.getTableNumber());
+        updatedOrder.setRestaurantId(order.getRestaurantId());
+        updatedOrder.setItems(order.getItems());
+        updatedOrder.setStatus(order.getStatus());
+        updatedOrder.setTableNumber(order.getTableNumber());
+        repository.save(updatedOrder);
 
-            orderRepository.save(updatedOrder);
-            return ResponseEntity.ok(String.format("Order, %s has been successfully updated!", order.getId()));
-        }
-
-        return ResponseEntity.badRequest().body("Order has not been found.");
+        return ResponseEntity.ok(String.format("Order, %s has been successfully updated!", order.getId()));
     }
 }
