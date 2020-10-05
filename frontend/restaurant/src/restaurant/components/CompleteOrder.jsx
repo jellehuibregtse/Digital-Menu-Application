@@ -24,7 +24,7 @@ const CompleteOrder = (props) => {
     function sendOrder() {
         setOrderStatus('Order status: processing');
         if(order.length > 0) {
-            MessagingService.tryPostMessage(8083,  '/orders/', {
+            MessagingService.tryPostMessage('/orders/', {
                 restaurantId: props.session.restaurantId,
                 tableNumber: props.session.tableNumber,
                 items: order.map((item) => { return ({ name: item.name, amount: item.amount })})
