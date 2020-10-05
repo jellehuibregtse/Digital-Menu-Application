@@ -1,4 +1,4 @@
-package com.dmao.serviceregistry.controllers;
+package com.dma.serviceregistry.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
