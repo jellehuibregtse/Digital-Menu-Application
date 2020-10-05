@@ -8,12 +8,10 @@ const OrderStatus = {
 }
 
 const OrderView = (props) => {
-
-    console.log(props);
-    // getting all menu items from all open orders
+    // Get all menu items from all open orders
     const items = [].concat.apply([], props.orders.map((order) => { return order.items.map((item) => { item.table = order.tableNumber; return item; })}));
 
-    // ordering menu items to the columns
+    // Dividing menu items to assigned columns
     const newItems = items.filter(item => item.status === OrderStatus.NEW);
     const processingItems = items.filter(item => item.status === OrderStatus.PROCESSING);
     const completeItems = items.filter(item => item.status === OrderStatus.COMPLETE);

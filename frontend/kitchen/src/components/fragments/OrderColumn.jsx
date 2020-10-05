@@ -2,6 +2,7 @@ import React from "react";
 
 const OrderColumn = (props) => {
     if(!(props.columnType >= 0 && props.columnType <= 1)) { return null; }
+
     const items = props.items.length > 0? props.items.map((item) => {
         if(props.columnType === 0) {
             return (
