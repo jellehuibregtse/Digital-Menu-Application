@@ -1,1 +1,10 @@
+# Routing and application settings
+#
+# @Author Aron Hemmes
 
+server:
+  port: 8080
+
+spring:
+  application:
+    name: service-registry
