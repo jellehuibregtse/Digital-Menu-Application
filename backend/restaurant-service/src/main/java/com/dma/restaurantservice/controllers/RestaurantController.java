@@ -35,7 +35,7 @@ public class RestaurantController {
     public ResponseEntity<List<Restaurant>> getAllRestaurants() {
         List<Restaurant> result = new ArrayList<>();
         repository.findAll().forEach(result::add);
-        
+
         return ResponseEntity.ok(result);
     }
 

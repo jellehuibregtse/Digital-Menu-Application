@@ -38,6 +38,14 @@ public class RestaurantController {
         }
     }
 
+    @PostMapping("/")
+    public ResponseEntity<?> createRestaurant(@RequestBody Object restaurant) {
+        try {
+            return restTemplate.exchange(URL + "/", HttpMethod.POST, new HttpEntity<>(restaurant), String.class);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @PutMapping("/")
     public ResponseEntity<?> updateRestaurant(@RequestBody Object restaurant) {
@@ -52,15 +60,6 @@ public class RestaurantController {
     public ResponseEntity<?> deleteRestaurant(@PathVariable long id) {
         try {
             return restTemplate.exchange(URL + "/" + id, HttpMethod.DELETE, new HttpEntity<>(id), String.class);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @PostMapping("/")
-    public ResponseEntity<?> createRestaurant(@RequestBody Object restaurant) {
-        try {
-            return restTemplate.exchange(URL + "/", HttpMethod.POST, new HttpEntity<>(restaurant), String.class);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
