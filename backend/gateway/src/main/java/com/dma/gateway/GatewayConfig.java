@@ -4,6 +4,9 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 /**
  * Routing configuration for gateway.
@@ -11,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Aron Hemmes
  */
 @Configuration
-public class RouteConfig {
+public class GatewayConfig {
     @Bean
     public RouteLocator dmaRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
@@ -27,6 +30,13 @@ public class RouteConfig {
                 .route(p -> p
                         .path("/api/qr-codes/**")
                         .uri("lb://qr-service"))
-                        .build();
+                .build();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        return source;
     }
 }
