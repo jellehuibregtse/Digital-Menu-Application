@@ -1,10 +1,14 @@
 package com.dma.menuservice.controllers;
 
+import com.dma.menuservice.exceptions.ResourceNotFoundException;
 import com.dma.menuservice.models.Menu;
 import com.dma.menuservice.repositories.MenuRepository;
 import com.dma.menuservice.services.RestaurantService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The controller that handles all the mappings for the menu service.
@@ -16,12 +20,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/menus")
 public class MenuController {
 
-    private final MenuRepository menuRepository;
+    private final MenuRepository repository;
 
     private final RestaurantService restaurantService;
 
-    public MenuController(MenuRepository menuRepository, RestaurantService restaurantService) {
-        this.menuRepository = menuRepository;
+    public MenuController(MenuRepository repository, RestaurantService restaurantService) {
+        this.repository = repository;
         this.restaurantService = restaurantService;
     }
 
@@ -32,8 +36,10 @@ public class MenuController {
      */
     @GetMapping("/")
     public ResponseEntity<Iterable<Menu>> getAllMenus() {
-        var menus = menuRepository.findAll();
-        return ResponseEntity.ok(menus);
+        List<Menu> result = new ArrayList<>();
+        repository.findAll().forEach(result::add);
+
+        return ResponseEntity.ok(result);
     }
 
     /**
@@ -43,14 +49,9 @@ public class MenuController {
      * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> getMenu(@PathVariable long id) {
-        var menu = menuRepository.findById(id);
-
-        if (menu.isPresent()) {
-            return ResponseEntity.ok(menu.get());
-        }
-
-        return ResponseEntity.badRequest().body("Menu has not been found.");
+    public ResponseEntity<Menu> getMenu(@PathVariable long id) {
+        Menu result = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found."));
+        return ResponseEntity.ok(result);
     }
 
     /**
@@ -61,31 +62,9 @@ public class MenuController {
      */
     @PostMapping("/")
     public ResponseEntity<?> createMenu(@RequestBody Menu menu) {
-        var restaurant = restaurantService.getRestaurant(menu.getRestaurantId());
+        repository.save(menu);
 
-        if (restaurant.getId() == menu.getRestaurantId()) {
-            return ResponseEntity.ok(String.format("Menu, %s has been successfully created!", menu.getName()));
-        }
-
-        return ResponseEntity.badRequest().body("That restaurant does not exist");
-    }
-
-    /**
-     * Delete a menu by ID.
-     *
-     * @param id of the menu.
-     * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
-     */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMenu(@PathVariable long id) {
-        var menu = menuRepository.findById(id);
-
-        if (menu.isPresent()) {
-            menuRepository.delete(menu.get());
-            return ResponseEntity.ok(String.format("Menu, %s has been successfully deleted!", menu.get().getName()));
-        }
-
-        return ResponseEntity.badRequest().body("Menu has not been found.");
+        return ResponseEntity.ok(String.format("Restaurant with name: %s has been successfully created!", menu.getName()));
     }
 
     /**
@@ -96,19 +75,28 @@ public class MenuController {
      */
     @PutMapping("/")
     public ResponseEntity<?> updateMenu(@RequestBody Menu menu) {
-        var menuFromRepository = menuRepository.findById(menu.getId());
+        Menu updatedMenu = repository.findById(menu.getId()).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
-        if (menuFromRepository.isPresent()) {
-            var updatedMenu = menuFromRepository.get();
-            updatedMenu.setRestaurantId(menu.getRestaurantId());
-            updatedMenu.setName(menu.getName());
-            updatedMenu.setItems(menu.getItems());
+        updatedMenu.setRestaurantId(menu.getRestaurantId());
+        updatedMenu.setName(menu.getName());
+        updatedMenu.setItems(menu.getItems());
+        repository.save(updatedMenu);
 
-            menuRepository.save(updatedMenu);
-            return ResponseEntity.ok(String.format("Menu, %s has been successfully updated!", menu.getName()));
-        }
-
-        return ResponseEntity.badRequest().body("Menu has not been found.");
+        return ResponseEntity.ok(String.format("Restaurant with id: %d has been successfully updated!", menu.getId()));
     }
 
+    /**
+     * Delete a menu by ID.
+     *
+     * @param id of the menu.
+     * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteMenu(@PathVariable long id) {
+        Menu result = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
+
+        repository.delete(result);
+
+        return ResponseEntity.ok(String.format("Restaurant with id: %d has been successfully deleted!", id));
+    }
 }
