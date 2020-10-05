@@ -1,23 +1,20 @@
 import React from "react";
 
 const OrderColumn = (props) => {
+    // Check if valid column type
     if(!(props.columnType >= 0 && props.columnType <= 1)) { return null; }
 
+    // Generating dishes and orders according to column type
+    // type 0: dishes
+    // type 1: orders
     const items = props.items.length > 0? props.items.map((item) => {
-        if(props.columnType === 0) {
-            return (
-                <tbody>
+        return (
+            <tbody>
                 <tr>
+                    props.columnType === 0?
                     <th>{item.amount}</th>
                     <td>{item.name}</td>
-                    <td>{item.table}</td>
-                </tr>
-                </tbody>
-            );
-        } else {
-            return (
-                <tbody>
-                <tr>
+                    <td>{item.table}</td> :
                     <th>{item.id}</th>
                     <td>
                         <ul>
@@ -29,10 +26,9 @@ const OrderColumn = (props) => {
                     <td>{item.createdDateTime}</td>
                     <td>{item.tableNumber}</td>
                 </tr>
-                </tbody>
-            );
-        }
-        }): null;
+            </tbody>
+        )
+    }): null;
 
     return (
         <>
@@ -55,7 +51,6 @@ const OrderColumn = (props) => {
                         }
                     </tr>
                 </thead>
-
                 {items}
             </table>
         </>

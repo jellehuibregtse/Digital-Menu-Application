@@ -4,9 +4,11 @@ import NavBar from "./fragments/NavBar";
 import '../css/orderBar.css';
 
 const Menu = (props) => {
+    // Get order from session
     const order = JSON.parse(sessionStorage.getItem('order')) != null? JSON.parse(sessionStorage.getItem('order')) : [];
 
-    const categories = props.session.menu.items.map(item => {return (
+    // Get all menuItems from menu
+    const items = props.session.menu.items.map(item => {return (
         <a href="" onClick={() => {order.push(item.id); sessionStorage.setItem('order', JSON.stringify(order));}}>{item.name}</a>
     )});
 
@@ -16,7 +18,7 @@ const Menu = (props) => {
             <div className="content">
                 <div id="menu">
                     <h1>{props.session.menu.name}</h1>
-                    <div className="item-flex">{categories}</div>
+                    <div className="item-flex">{items}</div>
                 </div>
                 <div id="order-bar">
                     <a href={"/" + props.session.restaurant.name + "/" + props.session.tableNumber}>Cancel</a>

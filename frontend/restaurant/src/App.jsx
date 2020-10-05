@@ -7,6 +7,7 @@ import JoinRestaurant from "./restaurant/components/JoinRestaurant";
 
 const App = () => {
 
+    // Session contains: tableNumber, restaurant and current menu
     const session = JSON.parse(sessionStorage.getItem('session'));
 
     return (

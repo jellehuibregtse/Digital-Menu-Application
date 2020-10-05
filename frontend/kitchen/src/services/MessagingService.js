@@ -2,18 +2,15 @@ import axios from "axios";
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 
+// Hardcoded ports
+// TODO: change all ports to service registry port
+const SERVICE_REGISTRY_PORT = null;
 const RESTAURANT_PORT = 8081;
 const ORDER_PORT = 8083;
 
 class MessagingService {
-    static async getRestaurant(id) {
-        let result = null;
-        await this.tryGetMessage(RESTAURANT_PORT, '/restaurants/' + id).then(
-            (res) => result = res
-        ).catch((e) => {throw e})
-        return result;
-    }
 
+    // Get message from address
     static async tryGetMessage(port, route) {
         let result = null;
         await axios.get('http://localhost:' + port + '/api' + route).then(res => {
@@ -22,6 +19,7 @@ class MessagingService {
         return result;
     }
 
+    // Register to address
     static register(route, onMessage, onClose, onConnect) {
         let socket = new SockJS('http://localhost:' + ORDER_PORT + '/api/websockets');
         let stompClient = Stomp.over(socket);
@@ -33,6 +31,7 @@ class MessagingService {
         });
     }
 
+    // Throw correct error message from error
     static throwError(error) {
         if(error.response != null) {
             if(typeof error.response.data === 'string') {

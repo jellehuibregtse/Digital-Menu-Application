@@ -7,6 +7,8 @@ const Home = (props) => {
 
     sessionStorage.removeItem('order');
 
+    // Hardcoded value
+    // TODO: get orders from order service by tableNumber
     let hasOrdered = true;
 
     return (

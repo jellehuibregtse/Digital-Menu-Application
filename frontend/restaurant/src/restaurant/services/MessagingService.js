@@ -1,6 +1,15 @@
 import axios from "axios";
 
+// Hardcoded ports
+// TODO: change all ports to service registry port
+const SERVICE_REGISTRY_PORT = null;
+const RESTAURANT_PORT = 8081;
+const MENU_PORT = 8082;
+const ORDER_PORT = 8083;
+
 class MessagingService {
+
+    // Post message to address
     static async tryPostMessage(port, route, message) {
         let result = null;
         await axios.post('http://localhost:' + port + '/api' + route, message).then(res => {
@@ -9,6 +18,7 @@ class MessagingService {
         return result;
     }
 
+    // Get message from address
     static async tryGetMessage(port, route) {
         let result = null;
         await axios.get('http://localhost:' + port + '/api' + route).then(res => {
@@ -17,6 +27,7 @@ class MessagingService {
         return result;
     }
 
+    // Throw correct error message from error
     static throwError(error) {
         if(error.response != null) {
             if(typeof error.response.data === 'string') {
