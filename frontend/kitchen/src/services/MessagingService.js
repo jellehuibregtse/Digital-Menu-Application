@@ -9,7 +9,7 @@ class MessagingService {
     // Get message from address
     static async tryGetMessage(route) {
         let result = null;
-        await axios.get('http://localhost:8080/registry' + route).then(res => {
+        await axios.get('http://localhost:8080/api' + route).then(res => {
             result = res.data;
         }).catch(error => this.throwError(error));
         return result;
@@ -17,7 +17,7 @@ class MessagingService {
 
     // Register to address
     static register(route, onMessage, onClose, onConnect) {
-        let socket = new SockJS('http://localhost:8083/api/websockets');
+        let socket = new SockJS('http://localhost:8080/api/websockets');
         let stompClient = Stomp.over(socket);
         stompClient.debug = null;
         socket.onclose = onClose();

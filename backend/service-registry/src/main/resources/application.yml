@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: service-registry
+  cloud:
+    gateway:
+      routes:
+        - id: orderService
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/api/**
+        - id: restaurantService
+          uri: lb://RESTAURANT-SERVICE
+          predicates:
+            - Path=/api/**
