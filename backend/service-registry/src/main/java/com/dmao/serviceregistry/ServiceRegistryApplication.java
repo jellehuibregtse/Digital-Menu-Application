@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.RestTemplate;
 
-@CrossOrigin
 @SpringBootApplication
 public class ServiceRegistryApplication {
 
