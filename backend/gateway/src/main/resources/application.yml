@@ -30,3 +30,7 @@ spring:
           uri: lb://order-service
           predicates:
             - Path=/api/websockets/**
+        - id: qrService
+          uri: lb://qr-service
+          predicates:
+            - Path=/api/qr-codes/**
