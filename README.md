@@ -1,3 +1,4 @@
+[![Board Status](https://dev.azure.com/425108/e1e6d86b-2cb6-45d6-abd6-c59065c50dc4/35bb9676-7d48-412a-a473-802c52cb1f12/_apis/work/boardbadge/322b9be2-8200-46b1-ae29-031fcbe98837)](https://dev.azure.com/425108/e1e6d86b-2cb6-45d6-abd6-c59065c50dc4/_boards/board/t/35bb9676-7d48-412a-a473-802c52cb1f12/Microsoft.EpicCategory)
 # Digital Menu Application
 
 ## Case
