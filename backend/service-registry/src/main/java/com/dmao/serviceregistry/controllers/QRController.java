@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import java.awt.image.BufferedImage;
 
 /**
- * The websocket configuration class.
+ * The controller that handles all mappings for the qr-service.
  *
  * @author Aron Hemmes
  */

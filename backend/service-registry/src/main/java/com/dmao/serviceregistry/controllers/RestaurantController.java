@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * The websocket configuration class.
+ * The controller that handles all mappings for the restaurant-service.
  *
  * @author Aron Hemmes
  */

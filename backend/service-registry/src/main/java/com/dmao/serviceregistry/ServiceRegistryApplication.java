@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * The websocket configuration class.
+ * The entry point for the application.
  *
  * @author Aron Hemmes
  */

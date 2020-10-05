@@ -3,7 +3,7 @@ package com.dmao.serviceregistry.controllers;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * The websocket configuration class.
+ * The controller that handles messaging.
  *
  * @author Aron Hemmes
  */
