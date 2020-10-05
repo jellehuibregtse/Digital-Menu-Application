@@ -35,7 +35,7 @@ public class MenuController {
      * @return <code>ResponseEntity</code> with a list of menus and HTTP status OK.
      */
     @GetMapping("/")
-    public ResponseEntity<Iterable<Menu>> getAllMenus() {
+    public ResponseEntity<List<Menu>> getAllMenus() {
         List<Menu> result = new ArrayList<>();
         repository.findAll().forEach(result::add);
 
@@ -61,7 +61,7 @@ public class MenuController {
      * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
      */
     @PostMapping("/")
-    public ResponseEntity<?> createMenu(@RequestBody Menu menu) {
+    public ResponseEntity<String> createMenu(@RequestBody Menu menu) {
         repository.save(menu);
 
         return ResponseEntity.ok(String.format("Restaurant with name: %s has been successfully created!", menu.getName()));
@@ -74,7 +74,7 @@ public class MenuController {
      * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
      */
     @PutMapping("/")
-    public ResponseEntity<?> updateMenu(@RequestBody Menu menu) {
+    public ResponseEntity<String> updateMenu(@RequestBody Menu menu) {
         Menu updatedMenu = repository.findById(menu.getId()).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
         updatedMenu.setRestaurantId(menu.getRestaurantId());
@@ -92,7 +92,7 @@ public class MenuController {
      * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMenu(@PathVariable long id) {
+    public ResponseEntity<String> deleteMenu(@PathVariable long id) {
         Menu result = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
         repository.delete(result);
