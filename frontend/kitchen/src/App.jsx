@@ -18,10 +18,10 @@ function App() {
         MessagingService.register('/topic/orders/' + RESTAURANT_ID,
             (m) => setOrders(JSON.parse(m.body)),
             () =>{},
-            () => {MessagingService.tryGetMessage('/orders/').then().catch((e) => {alert(e)})})
+            () => {MessagingService.tryGetMessage('/orders/').then().catch((e) => {})})
 
         // Get restaurant settings
-        MessagingService.tryGetMessage('/restaurants/' + RESTAURANT_ID).then(res => { setRestaurant(res) }).catch((e) => {alert(e)});
+        MessagingService.tryGetMessage('/restaurants/' + RESTAURANT_ID).then(res => { setRestaurant(res) }).catch((e) => {});
     }, []);
 
     return (
