@@ -17,11 +17,11 @@ function App() {
         // Subscribe to orders from restaurant
         MessagingService.register('/topic/orders/' + RESTAURANT_ID,
             (m) => setOrders(JSON.parse(m.body)),
-            () =>{alert("Couldn't connect to servers")},
-            () => {MessagingService.tryGetMessage(8083, '/orders/').then().catch((e) => {alert(e)})})
+            () =>{},
+            () => {MessagingService.tryGetMessage('/orders/').then().catch((e) => {alert(e)})})
 
         // Get restaurant settings
-        MessagingService.tryGetMessage(8081, '/restaurants/' + RESTAURANT_ID).then(res => { setRestaurant(res) }).catch((e) => {alert(e)});
+        MessagingService.tryGetMessage('/restaurants/' + RESTAURANT_ID).then(res => { setRestaurant(res) }).catch((e) => {alert(e)});
     }, []);
 
     return (

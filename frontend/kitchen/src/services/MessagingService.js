@@ -2,18 +2,14 @@ import axios from "axios";
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 
-// Hardcoded ports
-// TODO: change all ports to service registry port
-const SERVICE_REGISTRY_PORT = null;
-const RESTAURANT_PORT = 8081;
-const ORDER_PORT = 8083;
+// Service Registry Port: 8080
 
 class MessagingService {
 
     // Get message from address
-    static async tryGetMessage(port, route) {
+    static async tryGetMessage(route) {
         let result = null;
-        await axios.get('http://localhost:' + port + '/api' + route).then(res => {
+        await axios.get('http://localhost:8080/registry' + route).then(res => {
             result = res.data;
         }).catch(error => this.throwError(error));
         return result;
@@ -21,7 +17,7 @@ class MessagingService {
 
     // Register to address
     static register(route, onMessage, onClose, onConnect) {
-        let socket = new SockJS('http://localhost:' + ORDER_PORT + '/api/websockets');
+        let socket = new SockJS('http://localhost:8083/api/websockets');
         let stompClient = Stomp.over(socket);
         stompClient.debug = null;
         socket.onclose = onClose();
