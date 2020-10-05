@@ -11,20 +11,22 @@ const OrderColumn = (props) => {
         return (
             <tbody>
                 <tr>
-                    props.columnType === 0?
-                    <th>{item.amount}</th>
-                    <td>{item.name}</td>
-                    <td>{item.table}</td> :
-                    <th>{item.id}</th>
-                    <td>
-                        <ul>
-                            {item.items.map(function (item) {
-                                return <li>{item.name}</li>;
-                            })}
-                        </ul>
-                    </td>
-                    <td>{item.createdDateTime}</td>
-                    <td>{item.tableNumber}</td>
+                    {props.columnType === 0? <>
+                        <th>{item.amount}</th>
+                        <td>{item.name}</td>
+                        <td>{item.table}</td>
+                    </> : <>
+                        <th>{item.id}</th>
+                        <td>
+                            <ul>
+                                {item.items.map(function (item) {
+                                    return <li>{item.name}</li>;
+                                })}
+                            </ul>
+                        </td>
+                        <td>{item.createdDateTime}</td>
+                        <td>{item.tableNumber}</td>
+                    </>}
                 </tr>
             </tbody>
         )
