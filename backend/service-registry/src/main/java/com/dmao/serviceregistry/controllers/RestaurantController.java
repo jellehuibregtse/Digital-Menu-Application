@@ -7,6 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * The websocket configuration class.
+ *
+ * @author Aron Hemmes
+ */
 @RestController
 @CrossOrigin
 @RequestMapping("/restaurants")

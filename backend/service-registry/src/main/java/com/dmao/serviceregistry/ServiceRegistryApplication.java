@@ -7,9 +7,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * The websocket configuration class.
+ *
+ * @author Aron Hemmes
+ */
 @SpringBootApplication
 public class ServiceRegistryApplication {
-
 
     @Bean
     @LoadBalanced
