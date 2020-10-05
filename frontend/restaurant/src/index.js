@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './default/css/index.css';
+import './restaurant/css/index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 

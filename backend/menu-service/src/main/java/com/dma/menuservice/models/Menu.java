@@ -4,6 +4,11 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+/**
+ * The menu entity.
+ *
+ * @author Jelle Huibregtse
+ */
 @Entity
 public class Menu {
 

@@ -1,24 +1,51 @@
 package com.dma.orderservice.controllers;
 
-import com.dma.orderservice.models.Order;
+import com.dma.orderservice.models.CustomerOrder;
 import com.dma.orderservice.repositories.OrderRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/order")
+/**
+ * The controller that handles all the mappings for the order service.
+ *
+ * @author Jelle Huibregtse
+ * @author Aron Hemmes
+ */
+@RequestMapping("/orders")
 @CrossOrigin
 @RestController
 public class OrderController {
 
     private final OrderRepository orderRepository;
+    private final SimpMessagingTemplate template;
 
-    public OrderController(OrderRepository orderRepository) {
+    public OrderController(OrderRepository orderRepository, SimpMessagingTemplate template) {
         this.orderRepository = orderRepository;
+        this.template = template;
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<?> getOrder(@RequestParam long orderId) {
-        var order = orderRepository.findById(orderId);
+    /**
+     * Get a list of all orders.
+     *
+     * @return <code>ResponseEntity</code> with a list of orders and HTTP status OK.
+     */
+    @GetMapping("/")
+    public ResponseEntity<?> getAllOrder() {
+        var orders = orderRepository.findAll();
+        template.convertAndSend("/topic/orders/" + 0, orders);
+        return ResponseEntity.ok(orders);
+    }
+
+    /**
+     * Get a single order by ID.
+     *
+     * @param id of the order.
+     * @return <code>ResponseEntity</code> with a order and HTTP status OK or message and HTTP status BadRequest.
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getOrder(@PathVariable long id) {
+        var order = orderRepository.findById(id);
 
         if (order.isPresent()) {
             return ResponseEntity.ok(order.get());
@@ -27,29 +54,49 @@ public class OrderController {
         return ResponseEntity.badRequest().body("Order has not been found.");
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addOrder(@RequestBody Order order) {
+    /**
+     * Create a order.
+     *
+     * @param order that needs to be created.
+     * @return <code>ResponseEntity</code> with a message and HTTP status OK.
+     */
+    @PostMapping("/")
+    public ResponseEntity<?> createOrder(@RequestBody CustomerOrder order) {
+        orderRepository.save(order);
+        getAllOrder();
         return ResponseEntity.ok(String.format("Order, %s has been successfully created!", order.getId()));
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteMenu(@RequestParam long orderId) {
-        var order = orderRepository.findById(orderId);
+    /**
+     * Delete a single order.
+     *
+     * @param id of the order.
+     * @return <code>ResponseEntity</code> with a message and HTTP status OK.
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteOrder(@PathVariable long id) {
+        var order = orderRepository.findById(id);
 
         if (order.isPresent()) {
             orderRepository.delete(order.get());
-            return ResponseEntity.ok(String.format("Order, %s has been successfully deleted!", orderId));
+            return ResponseEntity.ok(String.format("Order, %s has been successfully deleted!", id));
         }
 
         return ResponseEntity.badRequest().body("Order has not been found.");
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<?> updateOrder(@RequestBody Order order) {
+    /**
+     * Update a single order.
+     *
+     * @param order that needs to be updated
+     * @return message and HTTP status OK or HTTP status BadRequest.
+     */
+    @PutMapping("/")
+    public ResponseEntity<?> updateOrder(@RequestBody CustomerOrder order) {
         var orderFromRepository = orderRepository.findById(order.getId());
 
         if (orderFromRepository.isPresent()) {
-            var updatedOrder = orderFromRepository.get();
+            CustomerOrder updatedOrder = orderFromRepository.get();
             updatedOrder.setRestaurantId(order.getRestaurantId());
             updatedOrder.setItems(order.getItems());
             updatedOrder.setStatus(order.getStatus());

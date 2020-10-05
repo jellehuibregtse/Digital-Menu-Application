@@ -6,12 +6,14 @@ import com.dma.menuservice.services.RestaurantService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
+/**
+ * The controller that handles all the mappings for the menu service.
+ *
+ * @author Jelle Huibregtse
+ */
 @CrossOrigin
 @RestController
-@RequestMapping("/menu")
+@RequestMapping("/menus")
 public class MenuController {
 
     private final MenuRepository menuRepository;
@@ -23,16 +25,26 @@ public class MenuController {
         this.restaurantService = restaurantService;
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<?> getAllMenus(@RequestParam long restaurantId) {
+    /**
+     * Get a list of all menus.
+     *
+     * @return <code>ResponseEntity</code> with a list of menus and HTTP status OK.
+     */
+    @GetMapping("/")
+    public ResponseEntity<Iterable<Menu>> getAllMenus() {
         var menus = menuRepository.findAll();
-        var filteredMenus = StreamSupport.stream(menus.spliterator(), false).filter(menu -> menu.getRestaurantId() == restaurantId).collect(Collectors.toList());
-        return ResponseEntity.ok(filteredMenus);
+        return ResponseEntity.ok(menus);
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<?> getMenu(@RequestParam long menuId) {
-        var menu = menuRepository.findById(menuId);
+    /**
+     * Get a single men by ID.
+     *
+     * @param id of the menu.
+     * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getMenu(@PathVariable long id) {
+        var menu = menuRepository.findById(id);
 
         if (menu.isPresent()) {
             return ResponseEntity.ok(menu.get());
@@ -41,9 +53,16 @@ public class MenuController {
         return ResponseEntity.badRequest().body("Menu has not been found.");
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addMenu(@RequestBody Menu menu) {
+    /**
+     * Create a menu.
+     *
+     * @param menu that needs to be created.
+     * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
+     */
+    @PostMapping("/")
+    public ResponseEntity<?> createMenu(@RequestBody Menu menu) {
         var restaurant = restaurantService.getRestaurant(menu.getRestaurantId());
+
         if (restaurant.getId() == menu.getRestaurantId()) {
             return ResponseEntity.ok(String.format("Menu, %s has been successfully created!", menu.getName()));
         }
@@ -51,9 +70,15 @@ public class MenuController {
         return ResponseEntity.badRequest().body("That restaurant does not exist");
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteMenu(@RequestParam long menuId) {
-        var menu = menuRepository.findById(menuId);
+    /**
+     * Delete a menu by ID.
+     *
+     * @param id of the menu.
+     * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteMenu(@PathVariable long id) {
+        var menu = menuRepository.findById(id);
 
         if (menu.isPresent()) {
             menuRepository.delete(menu.get());
@@ -63,7 +88,13 @@ public class MenuController {
         return ResponseEntity.badRequest().body("Menu has not been found.");
     }
 
-    @PutMapping("/update")
+    /**
+     * Update a menu.
+     *
+     * @param menu that needs to be updated.
+     * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
+     */
+    @PutMapping("/")
     public ResponseEntity<?> updateMenu(@RequestBody Menu menu) {
         var menuFromRepository = menuRepository.findById(menu.getId());
 

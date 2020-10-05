@@ -1,108 +1,35 @@
-import React, { useEffect, useState } from "react";
-import "./App.css";
-import Navbar from "./components/navbar.jsx";
-import Dish from "./components/dish.jsx";
-import Order from "./components/order.jsx";
+import React, {useEffect, useState} from "react";
+import "./css/App.css";
+import Navbar from "./components/fragments/NavBar";
+import OrderView from "./components/OrderView";
+import MessagingService from "./services/MessagingService";
+
+// Hardcoded restaurant id
+const RESTAURANT_ID = 0;
 
 function App() {
-  const [Dishes, setDishes] = useState([]);
-  const [Orders, setOrders] = useState([]);
+    const [orders, setOrders] = useState([]);
+    const [restaurant, setRestaurant] = useState({});
+    const [user, setUser] = useState({ name: "user"});
 
-  //runs once at runtime, thats what the [] at the end are for.
-  useEffect(() => {
-    // fetch("url")
-    // .then(data =>{
-    //   setDishes(data);
-    // })
-    //setRestaurant()
-  }, []);
+    // Run once at runtime
+    useEffect(() => {
+        // Subscribe to orders from restaurant
+        MessagingService.register('/topic/orders/' + RESTAURANT_ID,
+            (m) => setOrders(JSON.parse(m.body)),
+            () =>{alert("Couldn't connect to servers")},
+            () => {MessagingService.tryGetMessage(8083, '/orders/').then().catch((e) => {alert(e)})})
 
-  //The Dish/Order Components are designed to take arrays for the dishes/orders props and display them accordingly
-  return (
-    <div className="main">
-      <div className="Navbar">
-        <Navbar />
-      </div>
-      <div className="App">
-        <div className="box1 newDishes">
-          New Dishes
-          <Dish
-            dishes={[
-              {
-                id: 0,
-                numberOfDish: 1,
-                dishName: "Pizza",
-                dishTable: 5,
-              },
-              {
-                id: 1,
-                numberOfDish: 1,
-                dishName: "Pasta",
-                dishTable: 10,
-              },
-              {
-                id: 2,
-                numberOfDish: 3,
-                dishName: "Fish Fingers",
-                dishTable: 3,
-              },
-            ]}
-          />
-        </div>
-        <div className="box2 preparingDishes">
-          Preparing Dishes
-          <Dish
-            numberOfDish="1"
-            dishName="Pasta Bolognese"
-            dishTable="Table 11"
-          />
-        </div>
-        <div className="box3 completedDishes">
-          Completed Dishes
-          <Dish
-            numberOfDish="2"
-            dishName="Vanilla Ice Cream"
-            dishTable="Table 2"
-          />
-        </div>
-        <div className="box4 orders">
-          Orders
-          <Order
-            orders={[
-              {
-                id: 0,
-                tableNumber: 1,
-                orderNumber: 12,
-                time: 5,
-                items: [
-                  {
-                    name: "Pizza",
-                    numberOfDish: 3,
-                  },
-                ],
-              },
-              {
-                id: 1,
-                tableNumber: 3,
-                orderNumber: 10,
-                time: 5,
-                items: [
-                  {
-                    name: "Fish n Chips",
-                    numberOfDish: 1,
-                  },
-                  {
-                    name: "Mashed Potatoes",
-                    numberOfDish: 3,
-                  },
-                ],
-              },
-            ]}
-          />
-        </div>
-      </div>
-    </div>
-  );
+        // Get restaurant settings
+        MessagingService.tryGetMessage(8081, '/restaurants/' + RESTAURANT_ID).then(res => { setRestaurant(res) }).catch((e) => {alert(e)});
+    }, []);
+
+    return (
+        <>
+            <Navbar restaurantName={restaurant.name} userName={user.name}/>
+            <OrderView orders={orders}/>
+        </>
+    );
 }
 
 export default App;
