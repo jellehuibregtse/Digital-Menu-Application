@@ -35,6 +35,7 @@ public class RestaurantController {
     public ResponseEntity<List<Restaurant>> getAllRestaurants() {
         List<Restaurant> result = new ArrayList<>();
         repository.findAll().forEach(result::add);
+        
         return ResponseEntity.ok(result);
     }
 
@@ -48,6 +49,19 @@ public class RestaurantController {
     public ResponseEntity<Restaurant> getRestaurant(@PathVariable long id) {
         Restaurant result = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found."));
         return ResponseEntity.ok(result);
+    }
+
+    /**
+     * Create a restaurant.
+     *
+     * @param restaurant that needs to be created.
+     * @return <code>ResponseEntity</code> with a message and HTTP status OK.
+     */
+    @PostMapping("/")
+    public ResponseEntity<String> createRestaurant(@RequestBody Restaurant restaurant) {
+        repository.save(restaurant);
+
+        return ResponseEntity.ok(String.format("Restaurant with name: %s has been successfully created!", restaurant.getName()));
     }
 
     /**
@@ -78,26 +92,9 @@ public class RestaurantController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteRestaurant(@PathVariable long id) {
         Restaurant restaurant = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
+
         repository.delete(restaurant);
 
         return ResponseEntity.ok(String.format("Restaurant with id: %d has been successfully deleted!", id));
-    }
-
-    /**
-     * Create a restaurant.
-     *
-     * @param restaurant that needs to be created.
-     * @return <code>ResponseEntity</code> with a message and HTTP status OK.
-     */
-    @PostMapping("/")
-    public ResponseEntity<String> createRestaurant(@RequestBody Restaurant restaurant) {
-        var createdRestaurant = repository.findByName(restaurant.getName());
-        if (createdRestaurant.isEmpty()) {
-            repository.save(restaurant);
-
-            return ResponseEntity.ok(String.format("Restaurant with name: %s has been successfully created!", restaurant.getName()));
-        }
-
-        throw new ResourceNotFoundException("Name is already taken.");
     }
 }
