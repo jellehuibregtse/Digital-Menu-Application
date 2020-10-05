@@ -7,19 +7,26 @@ server:
 
 spring:
   application:
-    name: service-registry
+    name: gateway
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
       routes:
-        - id: orderService
-          uri: lb://ORDER-SERVICE
-          predicates:
-            - Path=/api/**
         - id: restaurantService
-          uri: lb://RESTAURANT-SERVICE
+          uri: lb://restaurant-service
           predicates:
-            - Path=/api/**
+            - Path=/api/restaurants/**
         - id: menuService
-          uri: lb://MENU-SERVICE
+          uri: lb://menu-service
           predicates:
-            - Path=/api/**
+            - Path=/api/menus/**
+        - id: orderService
+          uri: lb://order-service
+          predicates:
+            - Path=/api/orders/**
+        - id: orderServiceWS
+          uri: lb://order-service
+          predicates:
+            - Path=/api/websockets/**
