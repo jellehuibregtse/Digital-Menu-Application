@@ -10,10 +10,10 @@ const JoinRestaurant = (props) => {
 
     if(restaurantId >= 0 && tableId >= 0) {
         // Get restaurant by id
-        MessagingService.tryGetMessage(8081, '/restaurants/' + restaurantId).then(
+        MessagingService.tryGetMessage('/restaurants/' + restaurantId).then(
             (restaurant) => {
                 // Get menu from restaurant
-                MessagingService.tryGetMessage(8082, '/menus/' + restaurant.menuIDs[0]).then(
+                MessagingService.tryGetMessage('/menus/' + restaurant.menuIDs[0]).then(
                     (menu) => {
                         // Set session to restaurant, menu and tableNumber
                         sessionStorage.setItem('session', JSON.stringify({
