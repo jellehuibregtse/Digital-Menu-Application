@@ -15,7 +15,7 @@ const OrderColumn = (props) => {
                         <th>{item.amount}</th>
                         <td>{item.name}</td>
                         <td>{item.table}</td>
-                    </> : <>
+                    </> : <>{item.items.length > 0? <>
                         <th>{item.id}</th>
                         <td>
                             <ul>
@@ -26,6 +26,7 @@ const OrderColumn = (props) => {
                         </td>
                         <td>{item.createdDateTime}</td>
                         <td>{item.tableNumber}</td>
+                        </> : null}
                     </>}
                 </tr>
             </tbody>

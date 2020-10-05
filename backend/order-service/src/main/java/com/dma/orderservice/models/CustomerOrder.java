@@ -28,6 +28,7 @@ public class CustomerOrder {
     @NotNull
     private int tableNumber;
 
+    @NotNull
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderItem> items;
 
@@ -38,7 +39,7 @@ public class CustomerOrder {
 
     }
 
-    public CustomerOrder(@NotNull Status status, @NotNull long restaurantId, @NotNull int tableNumber, List<OrderItem> items) {
+    public CustomerOrder(@NotNull Status status, @NotNull long restaurantId, @NotNull int tableNumber, @NotNull List<OrderItem> items) {
         this.status = status;
         this.restaurantId = restaurantId;
         this.tableNumber = tableNumber;
