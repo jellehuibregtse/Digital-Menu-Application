@@ -22,8 +22,8 @@ const CompleteOrder = (props) => {
         .filter((item) => typeof item != 'undefined'): [];
 
     function sendOrder() {
-        setOrderStatus('Order status: processing');
         if(order.length > 0) {
+            setOrderStatus('Order status: processing');
             MessagingService.tryPostMessage('/orders/', {
                 restaurantId: props.session.restaurantId,
                 tableNumber: props.session.tableNumber,
@@ -42,7 +42,7 @@ const CompleteOrder = (props) => {
                 <h1>Order Details</h1>
                 <div>
                     <ul>{order.map(item => {return(<li>{item.name + " (" + item.amount + ")"}</li>)})}</ul>
-                    <a href={(e) => {e.preventDefault()}} onClick={() => {sendOrder()}}>Send order</a>
+                    <input type="button" href={(e) => {e.preventDefault()}} onClick={() => {sendOrder()}} value="Send Order"/>
                 </div>
                 <p>{orderStatus}</p>
                 <a href={"/" + props.session.restaurant.name + "/" + props.session.tableNumber}>Return to table</a>
