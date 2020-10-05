@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 // Service Registry Port: 8080
 
 class MessagingService {
@@ -5,25 +7,18 @@ class MessagingService {
     // Post message to address
     static async tryPostMessage(route, message) {
         let result = null;
-        await fetch('http://localhost:8080/api' + route, {
-            method: 'POST',
-            body: message
-        }).then(res => {
-            console.log(res)
-            result = res.data;
-        }).catch(error => this.throwError(error));
+        await axios.post('http://localhost:8080/api' + route, message)
+            .then((res) => result = res.data)
+            .catch(error => this.throwError(error));
         return result;
     }
 
     // Get message from address
     static async tryGetMessage(route) {
         let result = null;
-        await fetch('http://localhost:8080/api' + route, {
-            method: 'GET'
-        }).then((res) => (res.text()))
-        .then((res) => {
-            result = JSON.parse(res.toString());
-        }).catch(error => this.throwError(error));
+        await axios.get('http://localhost:8080/api' + route)
+            .then((res) => result = res.data)
+            .catch(error => this.throwError(error));
         return result;
     }
 
