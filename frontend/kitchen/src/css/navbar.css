@@ -13,6 +13,10 @@
     color: var(--white);
 }
 
+#nav-bar .btn {
+    margin-right: 5px;
+}
+
 #nav-bar div {
     width: 15%;
 }

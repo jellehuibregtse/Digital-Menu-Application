@@ -1,8 +1,8 @@
-package com.dma.discoveryserver;
+package com.dma.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 /**
  * The entry point for the application.
@@ -10,11 +10,11 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
  * @author Aron Hemmes
  */
 @SpringBootApplication
-@EnableEurekaServer
-public class DiscoveryServerApplication {
+@EnableEurekaClient
+public class ApiGatewayApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DiscoveryServerApplication.class, args);
+        SpringApplication.run(ApiGatewayApplication.class, args);
     }
 
 }

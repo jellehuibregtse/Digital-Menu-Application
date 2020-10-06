@@ -49,3 +49,7 @@
     text-align: left;
     margin: 0;
 }
+
+.table li {
+    margin-left: -20px;
+}

@@ -8,7 +8,7 @@ const NavBar = (props) => {
 
             <h4>Hi {props.userName}! Welcome to {props.restaurantName}!</h4>
 
-            <button className="btn btn-primary btn-badge" style={{"margin-right": "5px"}}> Log In</button>
+            <button className="btn btn-primary btn-badge"> Log In</button>
         </nav>
     );
 };

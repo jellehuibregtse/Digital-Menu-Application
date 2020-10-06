@@ -6,6 +6,7 @@ The process in a restaurant is usually the same. Customers get seated, are hand 
 ## Setup
 ### Default ports
 #### Backend
+* 8080: api-gateway
 * 8081: Restaurant service
 * 8082: Menu service
 * 8083: Order service
