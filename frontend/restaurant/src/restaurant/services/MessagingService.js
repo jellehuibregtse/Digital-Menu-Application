@@ -10,12 +10,12 @@ class MessagingService {
         })
             .then((response) => {
                 if (response.ok) {
-                    return response.json();
+                    return response.text();
                 } else {
                     throw new Error(response.statusText);
                 }
             })
-            .then((res) => {result = res})
+            .then((res) => { result = res })
             .catch(error => {throw new Error(error.message)});
         return result
     }
