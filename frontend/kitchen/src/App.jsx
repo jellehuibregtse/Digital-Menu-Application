@@ -10,7 +10,7 @@ const RESTAURANT_ID = 0;
 function App() {
     const [orders, setOrders] = useState([]);
     const [restaurant, setRestaurant] = useState({});
-    const [user, setUser] = useState({ name: "user"});
+    const [user] = useState({ name: "user"});
 
     // Run once at runtime
     useEffect(() => {
@@ -18,10 +18,10 @@ function App() {
         MessagingService.register('/topic/orders/' + RESTAURANT_ID,
             (m) => setOrders(JSON.parse(m.body)),
             () =>{},
-            () => {MessagingService.tryGetMessage('/orders/').then().catch((e) => {})})
+            () => {MessagingService.fetchHandler('GET','/orders/').then().catch((e) => {})})
 
         // Get restaurant settings
-        MessagingService.tryGetMessage('/restaurants/' + RESTAURANT_ID).then(res => { setRestaurant(res) }).catch((e) => {});
+        MessagingService.fetchHandler('GET','/restaurants/' + RESTAURANT_ID).then(res => { setRestaurant(res) }).catch((e) => {});
     }, []);
 
     return (
