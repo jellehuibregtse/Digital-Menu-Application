@@ -18,6 +18,7 @@ public class PasswordConfig {
      * <p>
      * The encoder strength is translated to iterations. For strength x there will be 2^x iterations.
      * The strength can be between 4 and 31, since 32 will cause an overflow error.
+     * Note that a strength of 31 or close thereof will be extremely slow and not usable.
      *
      * @return <code>PasswordEncoder</code> object (which is an interface) that can encode any string.
      */
