@@ -13,7 +13,7 @@ import java.util.Optional;
  * @author Jelle Huibregtse
  */
 @Repository
-public interface UserRepository extends CrudRepository<ApplicationUser, Long> {
+public interface ApplicationUserRepository extends CrudRepository<ApplicationUser, Long> {
 
     Optional<ApplicationUser> findByUsername(String username);
 
