@@ -6,7 +6,11 @@ class MessagingService {
         let result = null;
         await fetch('http://localhost:8080/api' + route, {
             method: method,
-            body: JSON.stringify(message)
+            body: JSON.stringify(message),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
         })
             .then((response) => {
                 if (response.ok) {
