@@ -3,6 +3,9 @@ package com.dma.orderservice.controllers;
 import com.dma.orderservice.exceptions.ResourceNotFoundException;
 import com.dma.orderservice.models.CustomerOrder;
 import com.dma.orderservice.repositories.OrderRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +20,6 @@ import java.util.List;
  * @author Aron Hemmes
  */
 @RequestMapping("/orders")
-@CrossOrigin
 @RestController
 public class OrderController {
 
@@ -57,18 +59,19 @@ public class OrderController {
     }
 
     /**
-     * Create a order.
+     * Create an order.
      *
      * @param order that needs to be created.
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
     @PostMapping("/")
-    public ResponseEntity<String> createOrder(@RequestBody CustomerOrder order) {
-        repository.save(order);
+    public ResponseEntity<?> createOrder(@RequestBody String order) throws JsonProcessingException {
+        CustomerOrder _order = new ObjectMapper().readValue(order, CustomerOrder.class);
+        repository.save(_order);
 
         getAllOrders();
 
-        return ResponseEntity.ok(String.format("Order, %s has been successfully created!", order.getId()));
+        return ResponseEntity.ok(String.format("Order, %s has been successfully created!", _order.getId()));
     }
 
     /**
