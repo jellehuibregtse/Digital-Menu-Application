@@ -3,6 +3,8 @@ package com.dma.authservice.auth;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Set;
 
@@ -11,23 +13,42 @@ import java.util.Set;
  *
  * @author Jelle Huibregtse
  */
+@Entity
 public class ApplicationUser implements UserDetails {
 
-    private final String username;
-    private final String password;
-    private final Set<? extends GrantedAuthority> grantedAuthorities;
-    private final boolean isAccountNonExpired;
-    private final boolean isAccountNonLocked;
-    private final boolean isCredentialsNonExpired;
-    private final boolean isEnabled;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @NotNull
+    private String username;
+    @NotNull
+    private String password;
+    @ElementCollection
+    private Set<GrantedAuthority> grantedAuthorities;
+    @NotNull
+    private boolean isAccountNonExpired;
+    @NotNull
+    private boolean isAccountNonLocked;
+    @NotNull
+    private boolean isCredentialsNonExpired;
+    @NotNull
+    private boolean isEnabled;
 
-    public ApplicationUser(String username,
-                           String password,
-                           Set<? extends GrantedAuthority> grantedAuthorities,
-                           boolean isAccountNonExpired,
-                           boolean isAccountNonLocked,
-                           boolean isCredentialsNonExpired,
-                           boolean isEnabled) {
+    public ApplicationUser() {}
+
+    public ApplicationUser(@NotNull String username,
+                           @NotNull String password,
+                           Set<GrantedAuthority> grantedAuthorities) {
+        this(username, password, grantedAuthorities, true, true, true, true);
+    }
+
+    public ApplicationUser(@NotNull String username,
+                           @NotNull String password,
+                           Set<GrantedAuthority> grantedAuthorities,
+                           @NotNull boolean isAccountNonExpired,
+                           @NotNull boolean isAccountNonLocked,
+                           @NotNull boolean isCredentialsNonExpired,
+                           @NotNull boolean isEnabled) {
         this.username = username;
         this.password = password;
         this.grantedAuthorities = grantedAuthorities;
@@ -38,7 +59,7 @@ public class ApplicationUser implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<GrantedAuthority> getAuthorities() {
         return grantedAuthorities;
     }
 
