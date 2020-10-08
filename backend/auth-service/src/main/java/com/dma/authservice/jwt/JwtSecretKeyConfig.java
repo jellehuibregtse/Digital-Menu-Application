@@ -7,6 +7,11 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.crypto.SecretKey;
 
+/**
+ * Configuration file for the JWT secret key.
+ *
+ * @author Jelle Huibregtse
+ */
 @Configuration
 public class JwtSecretKeyConfig {
 

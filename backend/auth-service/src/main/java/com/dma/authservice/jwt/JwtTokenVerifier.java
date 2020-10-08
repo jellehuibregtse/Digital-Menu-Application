@@ -22,6 +22,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * The filter that will check each request for the JWT token. Then it checks if the token is valid.
+ *
+ * @author Jelle Huibregtse
+ */
 public class JwtTokenVerifier extends OncePerRequestFilter {
 
     private final SecretKey secretKey;

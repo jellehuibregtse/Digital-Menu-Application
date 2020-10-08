@@ -7,6 +7,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/**
+ * A service that loads user data from the repository.
+ *
+ * @author Jelle Huibregtse
+ */
 @Service
 public class ApplicationUserService implements UserDetailsService {
 
