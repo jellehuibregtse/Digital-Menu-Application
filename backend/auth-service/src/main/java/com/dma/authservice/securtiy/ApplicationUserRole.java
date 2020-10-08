@@ -8,6 +8,11 @@ import java.util.stream.Collectors;
 
 import static com.dma.authservice.securtiy.ApplicationUserPermission.*;
 
+/**
+ * User roles which can be defined here.
+ *
+ * @author Jelle Huibregtse
+ */
 public enum ApplicationUserRole {
     ADMIN(Sets.newHashSet(MENU_READ, MENU_WRITE, COLOR_SCHEME_READ, COLOR_SCHEME_WRITE, LOGO_READ, LOGO_WRITE));
 

@@ -1,5 +1,10 @@
 package com.dma.authservice.securtiy;
 
+/**
+ * User permissions which can be used for roles.
+ *
+ * @author Jelle Huibregtse
+ */
 public enum ApplicationUserPermission {
     MENU_READ("menu:read"),
     MENU_WRITE("menu:write"),
