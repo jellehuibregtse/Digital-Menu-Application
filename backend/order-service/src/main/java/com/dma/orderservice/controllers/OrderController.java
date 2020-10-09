@@ -65,13 +65,12 @@ public class OrderController {
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
     @PostMapping("/")
-    public ResponseEntity<?> createOrder(@RequestBody String order) throws JsonProcessingException {
-        CustomerOrder _order = new ObjectMapper().readValue(order, CustomerOrder.class);
-        repository.save(_order);
+    public ResponseEntity<?> createOrder(@RequestBody CustomerOrder order) {
+        repository.save(order);
 
         getAllOrders();
 
-        return ResponseEntity.ok(String.format("Order, %s has been successfully created!", _order.getId()));
+        return ResponseEntity.ok(String.format("Order, %s has been successfully created!", order.getId()));
     }
 
     /**
