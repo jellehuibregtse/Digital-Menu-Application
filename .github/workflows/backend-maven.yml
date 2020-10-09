@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  QR service:
+  QR-service:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,7 +25,7 @@ jobs:
         working-directory: ./backend/QR-service
         run: mvn test
   
-  Restaurant service:
+  restaurant-service:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -42,7 +42,7 @@ jobs:
         working-directory: ./backend/restaurant-service
         run: mvn test
   
-  Menu service:
+  menu-service:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -59,7 +59,7 @@ jobs:
         working-directory: ./backend/menu-service
         run: mvn test
       
-  Order service:
+  order-service:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -76,7 +76,7 @@ jobs:
         working-directory: ./backend/order-service
         run: mvn test
   
-  Discovery server:
+  discovery-server:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -93,7 +93,7 @@ jobs:
         working-directory: ./backend/discovery-server
         run: mvn test
 
-  Gateway:
+  gateway:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
