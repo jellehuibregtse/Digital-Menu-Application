@@ -18,8 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.crypto.SecretKey;
 
-import static com.dma.authservice.securtiy.ApplicationUserRole.ADMIN;
-
 /**
  * The security configuration for the authentication service.
  *
@@ -56,10 +54,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
             .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtAuthenticationFilter.class)
             .authorizeRequests()
-            .antMatchers("/", "index", "/css/*", "/js/*")
+            .antMatchers("/", "index", "/css/*", "/js/*", "/api/authenticate/**")
             .permitAll()
             .antMatchers("/api/admin/**")
-            .hasRole(ADMIN.name())
+            .hasRole(ApplicationUserRole.ADMIN.name())
             .anyRequest()
             .authenticated();
     }

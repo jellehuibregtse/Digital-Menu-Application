@@ -1,5 +1,6 @@
 package com.dma.authservice.services;
 
+import com.dma.authservice.auth.ApplicationUser;
 import com.dma.authservice.repository.ApplicationUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
