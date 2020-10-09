@@ -8,18 +8,11 @@ class MessagingService {
             method: method,
             body: JSON.stringify(message),
             headers: {
-                'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
         })
-            .then((response) => {
-                if (response.ok) {
-                    return response.text();
-                } else {
-                    throw new Error(response.statusText);
-                }
-            })
-            .then((res) => { result = res })
+            .then((response) => {if (response.ok) { return response.text() } else { throw new Error(response.statusText) }})
+            .then((res) => {try {result = typeof JSON.parse(res) === "object" && JSON.parse(res) !== null? JSON.parse(res) : res} catch (e) {result = res}})
             .catch(error => {throw new Error(error.message)});
         return result
     }
