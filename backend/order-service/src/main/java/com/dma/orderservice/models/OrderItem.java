@@ -30,7 +30,12 @@ public class OrderItem {
     @NotNull
     private Status status = Status.NEW;
 
-    public OrderItem() {
+    public OrderItem() {}
+
+    public OrderItem(@NotNull String name, @NotNull @Min(1) int amount, @NotNull Status status) {
+        this.name = name;
+        this.amount = amount;
+        this.status = status;
     }
 
     public long getId() {
