@@ -2,63 +2,62 @@ package com.dma.authservice.controllers;
 
 import com.dma.authservice.auth.ApplicationUser;
 import com.dma.authservice.repository.ApplicationUserRepository;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
+/**
+ * The controller that handles all the mappings for the user service.
+ *
+ * @author Jelle Huibregtse
+ * @author Aron Hemmes
+ */
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/users")
 public class UserController {
 
+    private final PasswordEncoder passwordEncoder;
     private final ApplicationUserRepository applicationUserRepository;
 
     @Autowired
-    public UserController(ApplicationUserRepository applicationUserRepository) {
+    public UserController(PasswordEncoder passwordEncoder, ApplicationUserRepository applicationUserRepository) {
+        this.passwordEncoder = passwordEncoder;
         this.applicationUserRepository = applicationUserRepository;
-    }
-
-    /**
-     * Get a list of all users.
-     *
-     * @return <code>ResponseEntity</code> with a list of users and HTTP status OK.
-     */
-    @GetMapping
-    public ResponseEntity<List<ApplicationUser>> getAllApplicationUsers() {
-        List<ApplicationUser> result = new ArrayList<>();
-        applicationUserRepository.findAll().forEach(result::add);
-
-        return ResponseEntity.ok(result);
     }
 
     /**
      * Get a single user by username.
      *
-     * @param id of the applicationUser.
+     * @param user with password and username that needs to be found.
      * @return <code>ResponseEntity</code> with a user and HTTP status OK.
      */
-    @GetMapping("/{id}")
-    public ResponseEntity<ApplicationUser> getApplicationUser(@PathVariable long id) {
-        ApplicationUser result =
-                applicationUserRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found."));
-        return ResponseEntity.ok(result);
+    @PostMapping("/login")
+    public ResponseEntity<ApplicationUser> getApplicationUser(@RequestBody ApplicationUser user) throws Exception {
+        ApplicationUser result = applicationUserRepository.findByUsername(user.getUsername()).orElseThrow(() -> new ResourceNotFoundException("Not found."));
+        if(passwordEncoder.matches(user.getPassword(), result.getPassword()))
+            return ResponseEntity.ok(result);
+        else
+            throw new Exception("Password is incorrect.");
     }
 
     /**
      * Create a user.
      *
-     * @param applicationUser that needs to be created.
+     * @param user that needs to be created.
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
-    @PostMapping
-    public ResponseEntity<String> createApplicationUser(@RequestBody ApplicationUser applicationUser) {
-        applicationUserRepository.save(applicationUser);
+    @PostMapping("/register")
+    public ResponseEntity<String> createApplicationUser(@RequestBody ApplicationUser user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        return ResponseEntity.ok(String.format("User with username: %s has been successfully created!",
-                                               applicationUser.getUsername()));
+        applicationUserRepository.save(user);
+
+        return ResponseEntity.ok(String.format("User with username: %s has been successfully created!", user.getUsername()));
     }
 
 
@@ -68,11 +67,10 @@ public class UserController {
      * @param applicationUser that needs to be updated
      * @return message and HTTP status OK.
      */
-    @PutMapping
+    @PutMapping("/")
     public ResponseEntity<String> updateApplicationUser(@RequestBody ApplicationUser applicationUser) {
-        ApplicationUser updatedApplicationUser = applicationUserRepository.findById(applicationUser.getId())
-                                                                          .orElseThrow(() -> new ResourceNotFoundException(
-                                                                                  "Not found."));
+        ApplicationUser updatedApplicationUser = applicationUserRepository.findById(applicationUser.getId()).orElseThrow(() -> new ResourceNotFoundException("Not found."));
+
         updatedApplicationUser.setPassword(applicationUser.getPassword());
         updatedApplicationUser.setUsername(applicationUser.getUsername());
         updatedApplicationUser.setGrantedAuthorities(applicationUser.getGrantedAuthorities());
@@ -82,8 +80,7 @@ public class UserController {
         updatedApplicationUser.setEnabled(applicationUser.isEnabled());
         applicationUserRepository.save(updatedApplicationUser);
 
-        return ResponseEntity.ok(String.format("User with id: %d has been successfully updated!",
-                                               applicationUser.getId()));
+        return ResponseEntity.ok(String.format("User with id: %d has been successfully updated!", applicationUser.getId()));
     }
 
     /**
@@ -92,10 +89,9 @@ public class UserController {
      * @param id of the applicationUser.
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteApplicationUser(@PathVariable long id) {
-        ApplicationUser applicationUser =
-                applicationUserRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found."));
+        ApplicationUser applicationUser = applicationUserRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found."));
 
         applicationUserRepository.delete(applicationUser);
 
