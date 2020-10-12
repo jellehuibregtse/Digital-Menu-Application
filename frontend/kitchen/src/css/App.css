@@ -1,55 +1,44 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
 
 #root {
-    height: 100vh;
-    max-height: 100vh;
-    display: flex;
-    flex-direction: column;
+  height: 100vh;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f0eded;
 }
-
-.orderView {
-    height: 100%;
-    width: 100%;
-    padding-top: 50px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    font-family: "Roboto", sans-serif;
-    font-weight: 500;
-    font-size: 30px;
-    text-align: center;
-    background-color: #f0eded;
+.container {
+  height: 100vh;
+  max-height: 100vh;
 }
-
 .column {
-    width: calc(25% - 20px);
-    max-height: calc(100% - 40px);
-    margin: 20px 0;
-    background-color: white;
-    overflow: auto;
+  width: calc(25% - 20px);
+  max-height: calc(100% - 40px);
+  margin: 20px 0;
+  background-color: white;
+  overflow: auto;
 }
 
 .dish {
-    display: flex;
+  display: flex;
 }
 
 .table {
-    margin-top: 2vh;
-    width: 80vw;
-    font-size: 18px;
+  margin-top: 2vh;
+  width: 80vw;
+  font-size: 18px;
 }
 
 .table * {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .table ul {
-    /*list-style-type: none;*/
-    text-align: left;
-    margin: 0;
+  /*list-style-type: none;*/
+  text-align: left;
+  margin: 0;
 }
 
 .table li {
-    margin-left: -20px;
+  margin-left: -20px;
 }
