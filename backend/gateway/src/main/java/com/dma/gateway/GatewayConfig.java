@@ -32,6 +32,9 @@ public class GatewayConfig {
                 .route(p -> p
                         .path("/api/qr-codes/**")
                         .uri("lb://qr-service"))
+                .route(p -> p
+                        .path("/api/users/**")
+                        .uri("lb://auth-service"))
                 .build();
     }
 
