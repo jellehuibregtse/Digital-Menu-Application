@@ -1,4 +1,4 @@
-package com.dma.authservice.securtiy;
+package com.dma.authservice.security;
 
 import com.dma.authservice.jwt.JwtAuthenticationFilter;
 import com.dma.authservice.jwt.JwtConfig;
@@ -54,12 +54,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
             .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtAuthenticationFilter.class)
             .authorizeRequests()
-            .antMatchers("/", "index", "/css/*", "/js/*", "/api/authenticate/**")
-            .permitAll()
-            .antMatchers("/api/admin/**")
-            .hasRole(ApplicationUserRole.ADMIN.name())
+//            .antMatchers("/", "index", "/css/*", "/js/*", "/api/authenticate/**")
+//            .permitAll()
+//            .antMatchers("/api/admin/**")
+//            .hasRole(ApplicationUserRole.ADMIN.name())
             .anyRequest()
-            .authenticated();
+            .permitAll();
     }
 
     @Override

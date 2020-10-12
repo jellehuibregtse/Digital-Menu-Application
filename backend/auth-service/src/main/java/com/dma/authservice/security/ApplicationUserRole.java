@@ -1,4 +1,4 @@
-package com.dma.authservice.securtiy;
+package com.dma.authservice.security;
 
 import com.google.common.collect.Sets;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -6,7 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.dma.authservice.securtiy.ApplicationUserPermission.*;
+import static com.dma.authservice.security.ApplicationUserPermission.*;
 
 /**
  * User roles which can be defined here.

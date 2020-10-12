@@ -1,4 +1,4 @@
-package com.dma.authservice.securtiy;
+package com.dma.authservice.security;
 
 /**
  * User permissions which can be used for roles.
