@@ -33,27 +33,35 @@ const OrderView = (props) => {
     <div className="container-fluid">
       <div className="row">
         <div className="col-md-3 col-sm-6">
+          
           <OrderColumn name={"New Dishes"} columnType={0} items={newItems} />{" "}
+          
         </div>
 
         <div className="col-md-3 col-sm-6">
+          
           <OrderColumn
             name={"Preparing Dishes"}
             columnType={0}
             items={processingItems}
           />
+          
         </div>
 
         <div className="col-md-3 col-sm-6">
+          
           <OrderColumn
             name={"Completed Dishes"}
             columnType={0}
             items={completeItems}
           />
+          
         </div>
 
         <div className="col-md-3 col-sm-6">
+          
           <OrderColumn name={"Orders"} columnType={1} items={props.orders} />
+          
         </div>
       </div>
     </div>

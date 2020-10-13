@@ -19,10 +19,6 @@
   overflow: auto;
 }
 
-.dish {
-  display: flex;
-}
-
 .table {
   margin-top: 2vh;
   width: 80vw;
@@ -40,5 +36,5 @@
 }
 
 .table li {
-  margin-left: -20px;
+  /* margin-left: -20px; */
 }

@@ -24,14 +24,8 @@ const OrderColumn = (props) => {
   const items =
     props.items.length > 0
       ? props.items.map((item) => {
-          console.log(item);
-          return (
-            <div>
-              <tbody
-                onClick={() => {
-                  handlePopup();
-                }}
-              >
+          //console.log(item);
+          return (  
                 <tr>
                   {props.columnType === 0 ? (
                     <>
@@ -57,17 +51,7 @@ const OrderColumn = (props) => {
                       ) : null}
                     </>
                   )}
-                </tr>
-              </tbody>
-
-              <Modal show={popShow} onHide={handleClose}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Heading</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Body</Modal.Body>
-                <Modal.Footer>Footer</Modal.Footer>
-              </Modal>
-            </div>
+                </tr>        
           );
         })
       : null;
@@ -94,7 +78,17 @@ const OrderColumn = (props) => {
             )}
           </tr>
         </thead>
+        <tbody onClick={handlePopup}>
         {items}
+
+        </tbody>
+        <Modal show={popShow} onHide={handleClose} onRequestClose={handleClose} id="modal">
+                <Modal.Header closeButton>
+                  <Modal.Title>Heading</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Body</Modal.Body>
+                <Modal.Footer>Footer</Modal.Footer>
+              </Modal>
       </table>
     </>
   );
