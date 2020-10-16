@@ -61,7 +61,7 @@ public class RestaurantController {
     public ResponseEntity<String> createRestaurant(@RequestBody Restaurant restaurant) {
         repository.save(restaurant);
 
-        return ResponseEntity.ok(String.format("Restaurant with name: %s has been successfully created!", restaurant.getName()));
+        return ResponseEntity.ok(String.format("Restaurant with name: %s has been successfully created!",restaurant.getName()));
     }
 
 
