@@ -1,11 +1,11 @@
 package com.dma.orderservice.service;
 
-import com.dma.orderservice.exceptions.ResourceNotFoundException;
 import com.dma.orderservice.model.CustomerOrder;
 import com.dma.orderservice.repository.OrderRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -67,6 +67,7 @@ public class OrderService implements IOrderService {
     }
 
     protected void sendMessage(CustomerOrder order) throws Exception {
-        template.convertAndSend("/topic/orders/" + order.getRestaurantId(), new ObjectMapper().writeValueAsString(order));
+        template.convertAndSend("/topic/orders/" + order.getRestaurantId(),
+                                new ObjectMapper().writeValueAsString(order));
     }
 }
