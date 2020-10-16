@@ -7,7 +7,7 @@ const CompleteOrder = (props) => {
 
     // Get menu items in order
     let counter = 0;
-    const order = JSON.parse(sessionStorage.getItem('order')) != null? JSON.parse(sessionStorage.getItem('order'))
+    const [order, setOrder] = useState(JSON.parse(sessionStorage.getItem('order')) != null? JSON.parse(sessionStorage.getItem('order'))
         // Convert menu item IDs to actual menu items
         .map((itemId) => {return props.session.menu.items.find(item => item.id === itemId) })
         // Sort menu items by name
@@ -19,18 +19,19 @@ const CompleteOrder = (props) => {
             return item;
         }})
         // Remove undefined dishes
-        .filter((item) => typeof item != 'undefined'): [];
+        .filter((item) => typeof item != 'undefined'): []);
 
     function sendOrder() {
         if(order.length > 0) {
             setOrderStatus('Order status: processing');
-            MessagingService.tryPostMessage('/orders/', {
+            MessagingService.fetchHandler('POST','/orders/', {
                 restaurantId: props.session.restaurantId,
                 tableNumber: props.session.tableNumber,
                 items: order.map((item) => { return ({ name: item.name, amount: item.amount })})
             }).then(() => {
                 setOrderStatus('Order status: send order');
                 sessionStorage.removeItem('order');
+                setOrder([]);
             }).catch(() => setOrderStatus("Order status: couldn't send order"));
         }
     }

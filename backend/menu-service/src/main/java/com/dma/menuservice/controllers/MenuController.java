@@ -15,7 +15,6 @@ import java.util.List;
  *
  * @author Jelle Huibregtse
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/menus")
 public class MenuController {

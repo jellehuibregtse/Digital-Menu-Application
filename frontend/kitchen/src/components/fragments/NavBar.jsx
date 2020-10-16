@@ -4,7 +4,9 @@ import '../../css/navbar.css';
 const NavBar = (props) => {
     return (
         <nav id="nav-bar">
-            <a className="navbar-brand" href="#">Orders</a>
+            <div>
+                {/*<a className="navbar-brand" href="#">Orders</a>*/}
+            </div>
 
             <h4>Hi {props.userName}! Welcome to {props.restaurantName}!</h4>
 

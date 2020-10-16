@@ -15,7 +15,6 @@ import java.util.List;
  * @author Jordan Radushev
  * @author Jelle Huibregtse
  */
-@CrossOrigin
 @RestController
 @RequestMapping(value = "/restaurants")
 public class RestaurantController {

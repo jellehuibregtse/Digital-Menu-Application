@@ -13,7 +13,6 @@ import java.awt.image.BufferedImage;
  *
  * @author Jelle Huibregtse
  */
-@CrossOrigin
 @RestController
 @RequestMapping(value = "/qr-codes")
 public class QRCodeController {
