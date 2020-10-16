@@ -1,6 +1,6 @@
-package com.dma.orderservice.repositories;
+package com.dma.orderservice.repository;
 
-import com.dma.orderservice.models.CustomerOrder;
+import com.dma.orderservice.model.CustomerOrder;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderRepository extends CrudRepository<CustomerOrder, Long> {
 
+    Iterable<CustomerOrder> findAllByRestaurantId(long restaurantId);
 }

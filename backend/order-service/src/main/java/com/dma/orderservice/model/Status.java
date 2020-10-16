@@ -1,4 +1,4 @@
-package com.dma.orderservice.models;
+package com.dma.orderservice.model;
 
 /**
  * The order/item status model.
@@ -6,7 +6,5 @@ package com.dma.orderservice.models;
  * @author Jelle Huibregtse
  */
 public enum Status {
-    NEW,
-    PROCESSING,
-    COMPLETE
+    NEW, PROCESSING, COMPLETE
 }

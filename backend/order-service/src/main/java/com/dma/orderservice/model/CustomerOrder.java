@@ -1,4 +1,4 @@
-package com.dma.orderservice.models;
+package com.dma.orderservice.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The order entity (named customer order due to conflict with framework).
@@ -33,17 +34,38 @@ public class CustomerOrder {
     private List<OrderItem> items;
 
     @NotNull
-    private String createdDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_TIME);
+    private String createdDateTime =
+            LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_TIME);
 
-    public CustomerOrder() {
+    public CustomerOrder() {}
 
-    }
-
-    public CustomerOrder(@NotNull Status status, @NotNull long restaurantId, @NotNull int tableNumber, @NotNull List<OrderItem> items) {
+    public CustomerOrder(@NotNull Status status,
+                         @NotNull long restaurantId,
+                         @NotNull int tableNumber,
+                         @NotNull List<OrderItem> items) {
         this.status = status;
         this.restaurantId = restaurantId;
         this.tableNumber = tableNumber;
         this.items = items;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        var order = (CustomerOrder) obj;
+        return Objects.equals(this.status, order.status)
+               && Objects.equals(this.restaurantId, order.restaurantId)
+               && Objects.equals(this.tableNumber, order.tableNumber)
+               && Objects.equals(this.items, order.items);
     }
 
     public long getId() {
