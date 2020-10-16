@@ -1,8 +1,8 @@
-package com.dma.orderservice.controllers;
+package com.dma.orderservice.controller;
 
 import com.dma.orderservice.exceptions.ResourceNotFoundException;
-import com.dma.orderservice.models.CustomerOrder;
-import com.dma.orderservice.repositories.OrderRepository;
+import com.dma.orderservice.model.CustomerOrder;
+import com.dma.orderservice.repository.OrderRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;

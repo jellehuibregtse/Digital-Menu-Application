@@ -1,6 +1,6 @@
 package com.dma.orderservice;
 
-import com.dma.orderservice.controllers.OrderController;
+import com.dma.orderservice.controller.OrderController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

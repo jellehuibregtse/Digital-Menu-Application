@@ -1,9 +1,9 @@
 package com.dma.orderservice;
 
-import com.dma.orderservice.models.CustomerOrder;
-import com.dma.orderservice.models.OrderItem;
-import com.dma.orderservice.models.Status;
-import com.dma.orderservice.repositories.OrderRepository;
+import com.dma.orderservice.model.CustomerOrder;
+import com.dma.orderservice.model.OrderItem;
+import com.dma.orderservice.model.Status;
+import com.dma.orderservice.repository.OrderRepository;
 import com.google.common.collect.Lists;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;

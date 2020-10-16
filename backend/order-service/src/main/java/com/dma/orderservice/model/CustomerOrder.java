@@ -1,4 +1,4 @@
-package com.dma.orderservice.models;
+package com.dma.orderservice.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
