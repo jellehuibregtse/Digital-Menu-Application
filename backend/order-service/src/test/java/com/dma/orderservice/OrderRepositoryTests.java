@@ -8,6 +8,8 @@ import com.google.common.collect.Lists;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -47,12 +49,12 @@ public class OrderRepositoryTests {
     }
 
     @Test
-    public void amountOfOrdersInDatabase() {
+    public void amountOfOrdersInDatabase_isThree() {
         Assert.assertEquals(3, Lists.newArrayList(orderRepository.findAll()).size());
     }
 
     @Test
-    public void getOrdersFromDatabase() {
+    public void getThreeOrdersFromDatabase_returnsAllThreeOrders() {
         var orders = Lists.newArrayList(orderRepository.findAllByRestaurantId(1L));
         var orderOne = orders.get(0);
         var orderTwo = orders.get(1);
@@ -64,22 +66,16 @@ public class OrderRepositoryTests {
         Assert.assertEquals(orderThree, this.orderThree);
     }
 
-    @Test
-    public void orderWithIdFourDoesNotExistInDatabase() {
-        var orderFour = orderRepository.findById(4L);
+    @ParameterizedTest
+    @ValueSource(longs = {-1, 4, Long.MIN_VALUE, Long.MAX_VALUE})
+    public void getNonExistentOrderFromDatabase_returnsEmptyOptional(long id) {
+        var orderFour = orderRepository.findById(id);
 
         Assert.assertFalse(orderFour.isPresent());
     }
 
     @Test
-    public void orderWithNegativeIdDoesNotExistInDatabase() {
-        var orderFour = orderRepository.findById(-1L);
-
-        Assert.assertFalse(orderFour.isPresent());
-    }
-
-    @Test
-    public void addingOrderToDatabaseIsSuccessful() {
+    public void addOrderToDatabase_canRetrieveThatCardFromDatabase() {
         var order = new CustomerOrder(Status.NEW, 1L, 1, Lists.newArrayList());
 
         orderRepository.save(order);
@@ -87,7 +83,20 @@ public class OrderRepositoryTests {
         var orderFromDatabase = orderRepository.findById(order.getId());
         Assert.assertTrue(orderFromDatabase.isPresent());
         Assert.assertEquals(order, orderFromDatabase.get());
+    }
 
+    @Test
+    public void removeAllOrdersFromDatabase_amountOfOrdersInDatabase_IsZero() {
+        orderRepository.deleteAll();
+
+        Assert.assertEquals(0, Lists.newArrayList(orderRepository.findAll()).size());
+    }
+
+    @Test
+    public void removeOneOrderFromDatabase_amountOfOrdersInDatabase_IsTwo() {
+        orderRepository.deleteById((Long) entityManager.getId(orderOne));
+
+        Assert.assertEquals(2, Lists.newArrayList(orderRepository.findAll()).size());
     }
 
     private void persistAll(Collection<?> entities) {
