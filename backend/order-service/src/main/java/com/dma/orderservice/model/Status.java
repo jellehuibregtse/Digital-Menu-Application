@@ -1,4 +1,4 @@
-package com.dma.orderservice.models;
+package com.dma.orderservice.model;
 
 /**
  * The order/item status model.
