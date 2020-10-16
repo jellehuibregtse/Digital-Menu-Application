@@ -1,13 +1,14 @@
 package com.dma.orderservice;
 
 import com.dma.orderservice.controller.OrderController;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class OrderServiceApplicationTests {
 
     @Autowired
@@ -15,6 +16,6 @@ public class OrderServiceApplicationTests {
 
     @Test
     public void contextLoads() {
-        assertThat(orderController).isNotNull();
+        Assert.assertNotNull(orderController);
     }
 }
