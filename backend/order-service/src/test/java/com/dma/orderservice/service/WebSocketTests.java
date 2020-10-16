@@ -1,8 +1,8 @@
 package com.dma.orderservice.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.dma.orderservice.model.CustomerOrder;
 import com.dma.orderservice.model.Status;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.messaging.converter.StringMessageConverter;
-import org.springframework.messaging.simp.stomp.StompFrameHandler;
-import org.springframework.messaging.simp.stomp.StompHeaders;
-import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.messaging.simp.stomp.*;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
@@ -25,6 +22,11 @@ import java.util.function.Consumer;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * Repository Unit tests.
+ *
+ * @author Aron Hemmes
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class WebSocketTests {
 
@@ -42,7 +44,7 @@ public class WebSocketTests {
     void setup() throws Exception {
         client = new WebSocketStompClient(new StandardWebSocketClient());
         client.setMessageConverter(new StringMessageConverter());
-        String URL = String.format("ws://localhost:%d/websockets", port);
+        String URL = String.format("ws://localhost:%d/api/websockets", port);
         session = client.connect(URL, new StompSessionHandlerAdapter() {}).get(1, SECONDS);
     }
 

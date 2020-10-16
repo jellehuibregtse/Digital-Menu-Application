@@ -3,6 +3,7 @@ package com.dma.orderservice.service;
 import com.dma.orderservice.exceptions.ResourceNotFoundException;
 import com.dma.orderservice.model.CustomerOrder;
 import com.dma.orderservice.repository.OrderRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public ResponseEntity<String> addOrder(CustomerOrder order) {
+    public ResponseEntity<String> addOrder(CustomerOrder order) throws Exception {
         repository.save(order);
 
         sendMessage(order);
@@ -65,7 +66,7 @@ public class OrderService implements IOrderService {
         return ResponseEntity.ok(String.format("Order, %s has been successfully deleted!", id));
     }
 
-    public void sendMessage(CustomerOrder order) {
-        template.convertAndSend("/topic/orders/" + order.getRestaurantId(), order);
+    protected void sendMessage(CustomerOrder order) throws Exception {
+        template.convertAndSend("/topic/orders/" + order.getRestaurantId(), new ObjectMapper().writeValueAsString(order));
     }
 }

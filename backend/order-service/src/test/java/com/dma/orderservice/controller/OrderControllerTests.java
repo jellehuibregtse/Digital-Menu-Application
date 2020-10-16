@@ -54,7 +54,7 @@ public class OrderControllerTests {
     private SimpMessagingTemplate template;
 
     @BeforeEach
-    public void setup() {
+    public void setup() throws Exception {
         var orderOne = new CustomerOrder(Status.NEW, 1L, 1, Lists.newArrayList());
         var orderTwo = new CustomerOrder(Status.COMPLETE, 1L, 2, Lists.newArrayList());
 
@@ -182,7 +182,7 @@ public class OrderControllerTests {
         return new ObjectMapper().writeValueAsString(object);
     }
 
-    private void saveAll(Iterable<CustomerOrder> orders) {
+    private void saveAll(Iterable<CustomerOrder> orders) throws Exception {
         for (var order : orders) {
             orderService.addOrder(order);
         }

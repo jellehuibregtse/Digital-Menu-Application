@@ -53,7 +53,7 @@ public class OrderController {
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
     @PostMapping
-    public ResponseEntity<?> createOrder(@RequestBody CustomerOrder order) {
+    public ResponseEntity<?> createOrder(@RequestBody CustomerOrder order) throws Exception {
         return orderService.addOrder(order);
     }
 
