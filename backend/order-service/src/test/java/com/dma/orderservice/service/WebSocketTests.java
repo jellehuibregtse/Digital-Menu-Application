@@ -1,8 +1,8 @@
 package com.dma.orderservice.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.dma.orderservice.model.CustomerOrder;
 import com.dma.orderservice.model.Status;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
@@ -12,7 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.messaging.converter.StringMessageConverter;
-import org.springframework.messaging.simp.stomp.*;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
@@ -28,15 +32,14 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * @author Aron Hemmes
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 public class WebSocketTests {
 
+    private final CustomerOrder order = new CustomerOrder(Status.NEW, 1L, 1, Lists.newArrayList());
     @LocalServerPort
     private Integer port;
-
     @Autowired
     private OrderService orderService;
-
-    private final CustomerOrder order = new CustomerOrder(Status.NEW, 1L, 1, Lists.newArrayList());
     private WebSocketStompClient client;
     private StompSession session;
 

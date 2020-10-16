@@ -3,7 +3,6 @@ package com.dma.orderservice.repository;
 import com.dma.orderservice.model.CustomerOrder;
 import com.dma.orderservice.model.OrderItem;
 import com.dma.orderservice.model.Status;
-import com.dma.orderservice.repository.OrderRepository;
 import com.google.common.collect.Lists;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;

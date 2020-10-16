@@ -2,7 +2,6 @@ package com.dma.orderservice.controller;
 
 import com.dma.orderservice.model.CustomerOrder;
 import com.dma.orderservice.model.Status;
-import com.dma.orderservice.service.IOrderService;
 import com.dma.orderservice.service.OrderService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,9 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Matchers;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,7 +25,6 @@ import java.util.Arrays;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -111,8 +106,8 @@ public class OrderControllerTests {
     @Test
     public void addOrderWithEmptyBody_returnsStatus400() throws Exception {
         this.mockMvc.perform(post("/orders/").contentType(APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+                    .andDo(print())
+                    .andExpect(status().isBadRequest());
     }
 
     @ParameterizedTest
@@ -121,16 +116,16 @@ public class OrderControllerTests {
         var order = new CustomerOrder(Status.COMPLETE, 1L, 10, Lists.newArrayList());
 
         this.mockMvc.perform(put("/orders/" + id).contentType(APPLICATION_JSON).content(toJsonString(order)))
-                .andDo(print())
-                .andExpect(status().isNotFound());
+                    .andDo(print())
+                    .andExpect(status().isNotFound());
     }
 
     @ParameterizedTest
     @ValueSource(ints = {1, 2})
     public void updatedOrderWithEmptyBody_returnsStatus400(int id) throws Exception {
         this.mockMvc.perform(put("/orders/" + id).contentType(APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+                    .andDo(print())
+                    .andExpect(status().isBadRequest());
     }
 
     @ParameterizedTest
@@ -139,9 +134,9 @@ public class OrderControllerTests {
         var updatedOrder = new CustomerOrder(Status.COMPLETE, 3L, 10, Lists.newArrayList());
 
         this.mockMvc.perform(put("/orders/" + id).contentType(APPLICATION_JSON).content(toJsonString(updatedOrder)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(endsWith("has been successfully updated!")));
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(endsWith("has been successfully updated!")));
     }
 
     @ParameterizedTest
@@ -150,9 +145,9 @@ public class OrderControllerTests {
         updateOrder_returnsStatus200_andMessage(id);
 
         this.mockMvc.perform(get("/orders/" + id))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
                     .andExpect(jsonPath("$.id", is(id)))
                     .andExpect(jsonPath("$.status", is("COMPLETE")))
                     .andExpect(jsonPath("$.restaurantId", is(3)))
@@ -164,9 +159,9 @@ public class OrderControllerTests {
     @ValueSource(ints = {1, 2})
     public void deleteOrder_returnsStatus200_andMessage(int id) throws Exception {
         this.mockMvc.perform(delete("/orders/" + id))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(endsWith("has been successfully deleted!")));
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(endsWith("has been successfully deleted!")));
     }
 
     @ParameterizedTest
