@@ -1,4 +1,4 @@
-package com.dma.orderservice;
+package com.dma.orderservice.repository;
 
 import com.dma.orderservice.model.CustomerOrder;
 import com.dma.orderservice.model.OrderItem;

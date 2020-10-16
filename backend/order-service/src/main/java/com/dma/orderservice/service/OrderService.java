@@ -25,8 +25,6 @@ public class OrderService implements IOrderService {
 
     @Override
     public ResponseEntity<List<CustomerOrder>> findAllOrders(long restaurantId) {
-        sendMessage(restaurantId);
-
         return ResponseEntity.ok(Lists.newArrayList(repository.findAllByRestaurantId(restaurantId)));
     }
 
@@ -40,7 +38,7 @@ public class OrderService implements IOrderService {
     public ResponseEntity<String> addOrder(CustomerOrder order) {
         repository.save(order);
 
-        sendMessage(order.getRestaurantId());
+        sendMessage(order);
 
         return ResponseEntity.ok(String.format("Order, %s has been successfully created!", order.getId()));
     }
@@ -67,7 +65,7 @@ public class OrderService implements IOrderService {
         return ResponseEntity.ok(String.format("Order, %s has been successfully deleted!", id));
     }
 
-    private void sendMessage(long restaurantId) {
-        template.convertAndSend("/topic/orders/" + restaurantId, repository.findAll());
+    public void sendMessage(CustomerOrder order) {
+        template.convertAndSend("/topic/orders/" + order.getRestaurantId(), order);
     }
 }

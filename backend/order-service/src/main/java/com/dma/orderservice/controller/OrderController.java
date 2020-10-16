@@ -25,7 +25,6 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-
     /**
      * Get a list of all orders.
      *
