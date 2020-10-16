@@ -15,6 +15,11 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Collection;
 
+/**
+ * Repository Unit tests.
+ *
+ * @author Jelle Huibregtse
+ */
 @DataJpaTest
 @ActiveProfiles("test")
 public class OrderRepositoryTests {
@@ -25,17 +30,14 @@ public class OrderRepositoryTests {
     @Autowired
     private TestEntityManager entityManager;
 
-    private OrderItem steak;
-    private OrderItem salmon;
-
     private CustomerOrder orderOne;
     private CustomerOrder orderTwo;
     private CustomerOrder orderThree;
 
     @BeforeEach
     public void setup() {
-        steak = new OrderItem("Steak", 1, Status.NEW);
-        salmon = new OrderItem("Salmon", 2, Status.COMPLETE);
+        OrderItem steak = new OrderItem("Steak", 1, Status.NEW);
+        OrderItem salmon = new OrderItem("Salmon", 2, Status.COMPLETE);
 
         orderOne = new CustomerOrder(Status.NEW, 1L, 1, Lists.newArrayList(steak, salmon));
         orderTwo = new CustomerOrder(Status.PROCESSING, 1L, 1, Lists.newArrayList());
