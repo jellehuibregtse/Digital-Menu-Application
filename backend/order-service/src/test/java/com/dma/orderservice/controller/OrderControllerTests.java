@@ -50,9 +50,6 @@ public class OrderControllerTests {
     @Autowired
     private OrderService orderService;
 
-    @MockBean
-    private SimpMessagingTemplate template;
-
     @BeforeEach
     public void setup() throws Exception {
         var orderOne = new CustomerOrder(Status.NEW, 1L, 1, Lists.newArrayList());
