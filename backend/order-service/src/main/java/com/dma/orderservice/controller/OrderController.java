@@ -1,13 +1,11 @@
 package com.dma.orderservice.controller;
 
-import com.dma.orderservice.exceptions.ResourceNotFoundException;
 import com.dma.orderservice.model.CustomerOrder;
-import com.dma.orderservice.repository.OrderRepository;
+import com.dma.orderservice.service.IOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,13 +18,13 @@ import java.util.List;
 @RestController
 public class OrderController {
 
-    private final OrderRepository repository;
-    private final SimpMessagingTemplate template;
+    private final IOrderService orderService;
 
-    public OrderController(OrderRepository repository, SimpMessagingTemplate template) {
-        this.repository = repository;
-        this.template = template;
+    @Autowired
+    public OrderController(IOrderService orderService) {
+        this.orderService = orderService;
     }
+
 
     /**
      * Get a list of all orders.
@@ -35,12 +33,7 @@ public class OrderController {
      */
     @GetMapping("restaurant/{restaurantId}")
     public ResponseEntity<List<CustomerOrder>> getAllOrders(@PathVariable long restaurantId) {
-        List<CustomerOrder> result = new ArrayList<>();
-        repository.findAllByRestaurantId(restaurantId).forEach(result::add);
-
-        sendMessage(restaurantId);
-
-        return ResponseEntity.ok(result);
+        return orderService.findAllOrders(restaurantId);
     }
 
     /**
@@ -51,8 +44,7 @@ public class OrderController {
      */
     @GetMapping("{id}")
     public ResponseEntity<CustomerOrder> getOrder(@PathVariable long id) {
-        CustomerOrder result = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found."));
-        return ResponseEntity.ok(result);
+        return orderService.findOrder(id);
     }
 
     /**
@@ -63,11 +55,7 @@ public class OrderController {
      */
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody CustomerOrder order) {
-        repository.save(order);
-
-        sendMessage(order.getRestaurantId());
-
-        return ResponseEntity.ok(String.format("Order, %s has been successfully created!", order.getId()));
+        return orderService.addOrder(order);
     }
 
     /**
@@ -78,11 +66,7 @@ public class OrderController {
      */
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteOrder(@PathVariable long id) {
-        var order = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
-
-        repository.delete(order);
-
-        return ResponseEntity.ok(String.format("Order, %s has been successfully deleted!", id));
+        return orderService.deleteOrder(id);
     }
 
     /**
@@ -91,21 +75,8 @@ public class OrderController {
      * @param order that needs to be updated
      * @return message and HTTP status OK or HTTP status BadRequest.
      */
-    @PutMapping
-    public ResponseEntity<String> updateOrder(@RequestBody CustomerOrder order) {
-        CustomerOrder updatedOrder =
-                repository.findById(order.getId()).orElseThrow(() -> new ResourceNotFoundException("Not found."));
-
-        updatedOrder.setRestaurantId(order.getRestaurantId());
-        updatedOrder.setItems(order.getItems());
-        updatedOrder.setStatus(order.getStatus());
-        updatedOrder.setTableNumber(order.getTableNumber());
-        repository.save(updatedOrder);
-
-        return ResponseEntity.ok(String.format("Order, %s has been successfully updated!", order.getId()));
-    }
-
-    private void sendMessage(long restaurantId) {
-        template.convertAndSend("/topic/orders/" + restaurantId, repository.findAll());
+    @PutMapping("{id}")
+    public ResponseEntity<String> updateOrder(@RequestBody CustomerOrder order, @PathVariable long id) {
+        return orderService.updateOrder(order, id);
     }
 }
