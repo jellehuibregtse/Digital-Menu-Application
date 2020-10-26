@@ -1,4 +1,4 @@
-package com.dma.menuservice;
+package com.dma.menuservice.repository;
 
 import com.dma.menuservice.model.Menu;
 import com.dma.menuservice.model.MenuItem;

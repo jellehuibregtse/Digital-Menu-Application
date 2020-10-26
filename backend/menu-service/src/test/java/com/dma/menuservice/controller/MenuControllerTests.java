@@ -1,4 +1,4 @@
-package com.dma.menuservice;
+package com.dma.menuservice.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
