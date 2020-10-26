@@ -1,6 +1,6 @@
-import OrderColumn from "./fragments/oldOrderColumn";
+import OrderColumn from "./OrderColumn";
 import React from "react";
-import "../css/ordercolumn.css";
+import "../css/orderview.css";
 import { Droppable } from "react-beautiful-dnd";
 
 const OrderStatus = {
@@ -31,19 +31,39 @@ const OrderView = (props) => {
   );
 
   return (
+    // <div className="container-fluid">
+    //   <div className="row">
+    //     <div className="col-md-3 col-sm-6">
+    //       <Droppable droppableId={"0"}>
+    //         {(provided) => (
+    //           <OrderColumn
+    //             innerRef={provided.innerRef}
+    //             {...provided.droppableProps}
+    //             key={0}
+    //             id={0}
+    //             name={"New Dishes"}
+    //             columnType={0}
+    //             items={newItems}
+    //           >
+    //             {" "}
+    //             {provided.placeholder}{" "}
+    //           </OrderColumn>
+    //         )}
+    //       </Droppable>
+    //     </div>
+
     <div className="container-fluid">
       <div className="row">
         <div className="col-md-3 col-sm-6">
           <Droppable droppableId={"0"}>
             {(provided) => (
               <OrderColumn
-                innerRef={provided.innerRef}
-                {...provided.droppableProps}
                 key={0}
                 id={0}
-                name={"New Dishes"}
-                columnType={0}
+                name="New Dishes"
                 items={newItems}
+                innerRef={provided.innerRef}
+                {...provided.droppableProps}
               >
                 {" "}
                 {provided.placeholder}{" "}

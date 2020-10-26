@@ -1,22 +1,18 @@
-.container-fluid {
-  height: 100%;
+.main {
+  margin: 0;
+  padding: 0;
   width: 100%;
-  padding-top: 50px;
-  font-family: "Roboto", sans-serif;
-  font-weight: 500;
+  border: 2px #fff solid;
+}
+
+.main h4 {
   font-size: 30px;
-  text-align: center;
-  background-color: #586;
+  margin-top: 30px;
 }
 
-#title-column {
-  margin-top: 3%;
-}
-
-#modal {
-  margin-top: 10%;
-}
-
-.table {
-  background-color: #fff;
+.main .items {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 }

@@ -3,8 +3,7 @@ import "./css/App.css";
 import Navbar from "./components/fragments/NavBar";
 import OrderView from "./components/OrderView";
 import MessagingService from "./services/MessagingService";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import CustomCard from "./components/fragments/Card";
+import { DragDropContext } from "react-beautiful-dnd";
 
 // Hardcoded restaurant id
 const RESTAURANT_ID = 0;
@@ -42,7 +41,6 @@ function App() {
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
-        <CustomCard></CustomCard>
         <Navbar restaurantName={restaurant.name} userName={user.name} />
         <OrderView orders={orders} />
       </DragDropContext>
