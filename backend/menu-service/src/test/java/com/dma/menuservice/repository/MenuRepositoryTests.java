@@ -3,15 +3,16 @@ package com.dma.menuservice.repository;
 import com.dma.menuservice.model.Menu;
 import com.dma.menuservice.model.MenuItem;
 import com.dma.menuservice.model.Restaurant;
-import com.dma.menuservice.repository.MenuRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -24,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 
 @DataJpaTest
+@ActiveProfiles("test")
 public class MenuRepositoryTests {
 
     @Autowired
@@ -33,7 +35,6 @@ public class MenuRepositoryTests {
     private TestEntityManager entityManager;
 
     private Menu testMenu;
-    private List<MenuItem> testItems;
 
     /**
      * Initialize persistent data in the entity manager
@@ -53,7 +54,7 @@ public class MenuRepositoryTests {
         testMenu = new Menu();
         testMenu.setName("TestMenu");
         testMenu.setRestaurantId(testRestaurant.getId());
-        testItems = Arrays.asList(testItemOne, testItemTwo);
+        List<MenuItem> testItems = Arrays.asList(testItemOne, testItemTwo);
         testMenu.setItems(testItems);
 
         entityManager.persist(testMenu);
@@ -61,9 +62,6 @@ public class MenuRepositoryTests {
 
     }
 
-    /**
-     * Get a single menu
-     */
     @Test
     public void should_get_single_menu() {
         Long id = (Long) entityManager.getId(testMenu);
@@ -75,20 +73,14 @@ public class MenuRepositoryTests {
 
     }
 
-    /**
-     * Cannot get non-existing menu
-     */
     @Test
     public void should_not_get_non_existing_menu() {
         Assertions.assertThrows(NoSuchElementException.class, () -> {
-            Menu foundMenu = repository.findById(3L).get();
+            repository.findById(3L).get();
         });
 
     }
 
-    /**
-     * Create new menu
-     */
     @Test
     public void should_create_new_menu() {
         MenuItem testItemThree = new MenuItem();
@@ -97,7 +89,7 @@ public class MenuRepositoryTests {
         Menu newMenu = new Menu();
         newMenu.setRestaurantId(2L);
         newMenu.setName("TestMenuTwo");
-        newMenu.setItems(Arrays.asList(testItemThree));
+        newMenu.setItems(Collections.singletonList(testItemThree));
 
         repository.save(newMenu);
 
@@ -109,9 +101,6 @@ public class MenuRepositoryTests {
 
     }
 
-    /**
-     * Update menu
-     */
     @Test
     public void should_update_menu() {
         Long id = (Long) entityManager.getId(testMenu);
@@ -120,7 +109,7 @@ public class MenuRepositoryTests {
         MenuItem testItemThree = new MenuItem();
         testItemThree.setName("Fanta 330ml");
 
-        foundMenu.setItems(Arrays.asList(testItemThree));
+        foundMenu.setItems(Collections.singletonList(testItemThree));
         foundMenu.setName("UpdatedTestRestaurant");
 
         Menu updatedMenu = entityManager.find(Menu.class, foundMenu.getId());
@@ -130,9 +119,6 @@ public class MenuRepositoryTests {
 
     }
 
-    /**
-     * Delete menu
-     */
     @Test
     public void should_delete_menu() {
         Long id = (Long) entityManager.getId(testMenu);

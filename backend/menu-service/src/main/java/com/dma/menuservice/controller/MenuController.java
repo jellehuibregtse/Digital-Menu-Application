@@ -73,10 +73,10 @@ public class MenuController {
      * @param menu that needs to be updated.
      * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
      */
-    @PutMapping
-    public ResponseEntity<String> updateMenu(@RequestBody Menu menu) {
+    @PutMapping("{id}")
+    public ResponseEntity<String> updateMenu(@RequestBody Menu menu, @PathVariable long id) {
         Menu updatedMenu =
-                repository.findById(menu.getId()).orElseThrow(() -> new ResourceNotFoundException("not found"));
+                repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
         updatedMenu.setRestaurantId(menu.getRestaurantId());
         updatedMenu.setName(menu.getName());
