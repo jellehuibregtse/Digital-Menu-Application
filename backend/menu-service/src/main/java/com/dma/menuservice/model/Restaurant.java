@@ -1,4 +1,4 @@
-package com.dma.menuservice.models;
+package com.dma.menuservice.model;
 
 import java.util.ArrayList;
 

@@ -1,9 +1,9 @@
-package com.dma.menuservice.controllers;
+package com.dma.menuservice.controller;
 
 
-import com.dma.menuservice.models.Menu;
-import com.dma.menuservice.repositories.MenuRepository;
-import com.dma.menuservice.services.RestaurantService;
+import com.dma.menuservice.model.Menu;
+import com.dma.menuservice.repository.MenuRepository;
+import com.dma.menuservice.service.RestaurantService;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

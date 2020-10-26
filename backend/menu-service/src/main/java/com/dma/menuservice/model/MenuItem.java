@@ -1,4 +1,4 @@
-package com.dma.menuservice.models;
+package com.dma.menuservice.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

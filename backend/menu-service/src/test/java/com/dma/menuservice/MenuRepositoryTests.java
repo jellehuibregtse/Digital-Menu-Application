@@ -1,9 +1,9 @@
 package com.dma.menuservice;
 
-import com.dma.menuservice.models.Menu;
-import com.dma.menuservice.models.MenuItem;
-import com.dma.menuservice.models.Restaurant;
-import com.dma.menuservice.repositories.MenuRepository;
+import com.dma.menuservice.model.Menu;
+import com.dma.menuservice.model.MenuItem;
+import com.dma.menuservice.model.Restaurant;
+import com.dma.menuservice.repository.MenuRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
