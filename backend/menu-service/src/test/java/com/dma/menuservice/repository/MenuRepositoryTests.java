@@ -3,6 +3,8 @@ package com.dma.menuservice.repository;
 import com.dma.menuservice.model.Menu;
 import com.dma.menuservice.model.MenuItem;
 import com.dma.menuservice.model.Restaurant;
+import com.google.common.collect.Lists;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,8 +60,6 @@ public class MenuRepositoryTests {
         testMenu.setItems(testItems);
 
         entityManager.persist(testMenu);
-
-
     }
 
     @Test
@@ -78,7 +78,6 @@ public class MenuRepositoryTests {
         Assertions.assertThrows(NoSuchElementException.class, () -> {
             repository.findById(3L).get();
         });
-
     }
 
     @Test
@@ -116,16 +115,5 @@ public class MenuRepositoryTests {
 
         assertThat(updatedMenu.getItems().contains(testItemThree)).isTrue();
         assertThat(updatedMenu.getItems().size()).isNotEqualTo(2);
-
     }
-
-    @Test
-    public void should_delete_menu() {
-        Long id = (Long) entityManager.getId(testMenu);
-        Menu foundMenu = repository.findById(id).get();
-        repository.delete(foundMenu);
-
-        assertThat(repository.findAll()).hasSize(0);
-    }
-
 }
