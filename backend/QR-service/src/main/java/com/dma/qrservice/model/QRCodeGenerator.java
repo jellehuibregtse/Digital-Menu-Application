@@ -1,5 +1,6 @@
 package com.dma.qrservice.model;
 
+import com.google.common.base.Strings;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import net.glxn.qrgen.javase.QRCode;
 
@@ -23,6 +24,9 @@ public class QRCodeGenerator {
      * @throws Exception when creation fails.
      */
     public static BufferedImage generateQRCodeImage(String text) throws Exception {
+        if (Strings.isNullOrEmpty(text))
+            return null;
+
         ByteArrayOutputStream byteArrayOutputStream = QRCode.from(text).withErrorCorrection(ErrorCorrectionLevel.Q)
                 .withSize(250, 250)
                 .stream();
