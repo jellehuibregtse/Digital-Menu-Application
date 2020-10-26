@@ -1,0 +1,26 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.card {
+  width: 200px;
+  height: 100px;
+  margin-top: 10vh;
+  border-radius: 30px;
+}
+.card .content {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 20px 0;
+  bottom: 10px;
+  flex-direction: column;
+}
+
+.card .content h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}

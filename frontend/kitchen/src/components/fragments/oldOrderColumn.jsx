@@ -1,5 +1,8 @@
 import { Modal } from "react-bootstrap";
 import React, { useState } from "react";
+import TableRowDishes from "./TableRowDishes";
+import TableRowOrders from "./TableRowOrders";
+import "../../css/ordercolumn.css";
 
 const OrderColumn = (props) => {
   const [popShow, setPopShow] = useState(false);
@@ -12,6 +15,7 @@ const OrderColumn = (props) => {
     setPopShow(true);
   };
 
+  console.log(props);
   // Check if valid column type
   if (!(props.columnType >= 0 && props.columnType <= 1)) {
     return null;
@@ -23,35 +27,38 @@ const OrderColumn = (props) => {
 
   const items =
     props.items.length > 0
-      ? props.items.map((item) => {
+      ? props.items.map((item, index) => {
           //console.log(item);
-          return (  
-                <tr>
-                  {props.columnType === 0 ? (
+          return (
+            <React.Fragment>
+              {props.columnType === 0 ? (
+                <>
+                  <TableRowDishes
+                    key={item.id.toString()}
+                    index={index}
+                    id={item.id.toString()}
+                    amount={item.amount}
+                    name={item.name}
+                    table={item.table}
+                  />
+                </>
+              ) : (
+                <>
+                  {item.items.length > 0 ? (
                     <>
-                      <th>{item.amount}</th>
-                      <td>{item.name}</td>
-                      <td>{item.table}</td>
+                      <TableRowOrders
+                        key={item.id.toString()}
+                        index={index}
+                        id={item.id.toString()}
+                        items={item.items}
+                        createdDateTime={item.createdDateTime}
+                        tableNumber={item.tableNumber}
+                      />
                     </>
-                  ) : (
-                    <>
-                      {item.items.length > 0 ? (
-                        <>
-                          <th>{item.id}</th>
-                          <td>
-                            <ul>
-                              {item.items.map(function (item) {
-                                return <li>{item.name}</li>;
-                              })}
-                            </ul>
-                          </td>
-                          <td>{item.createdDateTime}</td>
-                          <td>{item.tableNumber}</td>
-                        </>
-                      ) : null}
-                    </>
-                  )}
-                </tr>        
+                  ) : null}
+                </>
+              )}
+            </React.Fragment>
           );
         })
       : null;
@@ -59,7 +66,7 @@ const OrderColumn = (props) => {
   return (
     <>
       <h5 id="title-column">{props.name}</h5>
-      <table className="table table-hover">
+      <table className="table table-hover" {...props} ref={props.innerRef}>
         <thead className="thead-dark">
           <tr>
             {props.columnType === 0 ? (
@@ -78,18 +85,16 @@ const OrderColumn = (props) => {
             )}
           </tr>
         </thead>
-        <tbody onClick={handlePopup}>
-        {items}
+        <tbody onClick={handlePopup}>{items}</tbody>
+      </table>
 
-        </tbody>
-        <Modal show={popShow} onHide={handleClose} onRequestClose={handleClose} id="modal">
+      {/* <Modal show={popShow} onHide={handleClose} onRequestClose={handleClose} id="modal">
                 <Modal.Header closeButton>
                   <Modal.Title>Heading</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Body</Modal.Body>
                 <Modal.Footer>Footer</Modal.Footer>
-              </Modal>
-      </table>
+              </Modal> */}
     </>
   );
 };

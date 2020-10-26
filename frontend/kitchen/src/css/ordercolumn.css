@@ -6,7 +6,7 @@
   font-weight: 500;
   font-size: 30px;
   text-align: center;
-  background-color: white;
+  background-color: #586;
 }
 
 #title-column {
@@ -15,4 +15,8 @@
 
 #modal {
   margin-top: 10%;
+}
+
+.table {
+  background-color: #fff;
 }
