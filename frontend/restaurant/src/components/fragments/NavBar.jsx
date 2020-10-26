@@ -1,16 +1,27 @@
 import React from 'react';
+import {ArrowBack, Menu} from '@material-ui/icons';
+import {Button, IconButton, Toolbar, Typography} from "@material-ui/core";
+import AppBar from "@material-ui/core/AppBar";
 import '../../css/navbar.css';
 
-const NavBar = (props) => {
-    const navItems = [];
-
+export default (props) => {
+    const { icons, session } = props;
     return (
-        <div id="nav-bar">
-            <div><img src={props.session.restaurant.logoURL}/></div>
-            <h4>Welcome to {props.session.restaurant.name}!</h4>
-            <div id="nav-items">{navItems}</div>
-        </div>
+        <>
+            <AppBar position="fixed" className="navBar">
+                <Toolbar color="primary">
+                    {typeof icons != 'undefined'? <>
+                            {icons.includes("ArrowBack")? <IconButton edge="start" aria-label="back" href={"/" + props.session.restaurant.name + "/" + props.session.tableNumber}><ArrowBack/></IconButton> : null}
+                            {icons.includes("Menu")? <IconButton edge="start" aria-label="menu"><Menu/></IconButton> : null}
+                        </>
+                        : null
+                    }
+                    <Typography variant="h6">
+                        Welcome to {session.restaurant.name}!
+                    </Typography>
+                </Toolbar>
+            </AppBar>
+            <Toolbar />
+        </>
     )
 }
-
-export default NavBar;

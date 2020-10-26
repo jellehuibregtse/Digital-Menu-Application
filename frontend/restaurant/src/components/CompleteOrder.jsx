@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MessagingService from "../services/MessagingService";
-import NavBar from "./fragments/NavBar";
+import {Button} from "@material-ui/core";
 
 const CompleteOrder = (props) => {
     const [orderStatus, setOrderStatus] = useState('');
@@ -38,16 +38,13 @@ const CompleteOrder = (props) => {
 
     return (
         <>
-            <NavBar session={props.session}/>
-            <div className="content">
-                <h1>Order Details</h1>
-                <div>
-                    <ul>{order.map(item => {return(<li>{item.name + " (" + item.amount + ")"}</li>)})}</ul>
-                    <input type="button" href={(e) => {e.preventDefault()}} onClick={() => {sendOrder()}} value="Send Order"/>
-                </div>
-                <p>{orderStatus}</p>
-                <a href={"/" + props.session.restaurant.name + "/" + props.session.tableNumber}>Return to table</a>
+            <h1>Order Details</h1>
+            <div>
+                <ul>{order.map(item => {return(<li>{item.name + " (" + item.amount + ")"}</li>)})}</ul>
+                <Button onClick={() => sendOrder()}>Send Order</Button>
             </div>
+            <p>{orderStatus}</p>
+            <a href={"/" + props.session.restaurant.name + "/" + props.session.tableNumber}>Return to table</a>
         </>
     )
 }

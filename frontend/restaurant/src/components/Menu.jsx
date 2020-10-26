@@ -1,30 +1,29 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../css/menu.css';
-import NavBar from "./fragments/NavBar";
 import '../css/orderBar.css';
+import {Button} from "@material-ui/core";
 
 const Menu = (props) => {
     // Get order from session
-    const order = JSON.parse(sessionStorage.getItem('order')) != null? JSON.parse(sessionStorage.getItem('order')) : [];
+    const [order, setOrder] = useState(JSON.parse(sessionStorage.getItem('order')) != null? JSON.parse(sessionStorage.getItem('order')) : []);
 
     // Get all menuItems from menu
-    const items = props.session.menu.items.map(item => {return (
-        <a href="" onClick={() => {order.push(item.id); sessionStorage.setItem('order', JSON.stringify(order));}}>{item.name}</a>
-    )});
+    const items = typeof props.session.menu !== 'undefined'? props.session.menu.items.map(item => {return (
+        <Button onClick={() => {
+            let o = JSON.parse(sessionStorage.getItem('order')) != null? JSON.parse(sessionStorage.getItem('order')) : [];
+            o.push(item.id);
+            sessionStorage.setItem('order', JSON.stringify(o));
+            setOrder(o);
+        }}>{item.name}</Button>
+    )}) : null;
 
     return (
         <>
-            <NavBar session={props.session}/>
-            <div className="content">
-                <div id="menu">
-                    <h1>{props.session.menu.name}</h1>
-                    <div className="item-flex">{items}</div>
-                </div>
-                <div id="order-bar">
-                    <a href={"/" + props.session.restaurant.name + "/" + props.session.tableNumber}>Cancel</a>
-                    <a href={order.length > 0? ("/" + props.session.restaurant.name + "/" + props.session.tableNumber + "/order/place") : (e) => {e.preventDefault()}}>Order {order.length > 0? "(" + order.length + ")" : null}</a>
-                </div>
+            <div id="menu">
+                <h1>{typeof props.session.menu !== 'undefined'? props.session.menu.name : null}</h1>
+                <div className="item-flex">{items}</div>
             </div>
+            {order.length > 0? <div className="complete-order"><a href={"/" + props.session.restaurant.name + "/" + props.session.tableNumber + "/order/place"}>Order ({order.length})</a></div> : null}
         </>
     )
 }
