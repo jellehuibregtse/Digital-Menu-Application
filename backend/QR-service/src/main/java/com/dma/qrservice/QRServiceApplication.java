@@ -15,12 +15,12 @@ import java.awt.image.BufferedImage;
 @EnableEurekaClient
 public class QRServiceApplication {
 
+    public static void main(String[] args) {
+        SpringApplication.run(QRServiceApplication.class, args);
+    }
+
     @Bean
     public HttpMessageConverter<BufferedImage> createImageHttpMessageConverter() {
         return new BufferedImageHttpMessageConverter();
-    }
-
-    public static void main(String[] args) {
-        SpringApplication.run(QRServiceApplication.class, args);
     }
 }
