@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
-import Home from "./restaurant/components/Home";
-import Menu from "./restaurant/components/Menu";
-import CompleteOrder from "./restaurant/components/CompleteOrder";
-import JoinRestaurant from "./restaurant/components/JoinRestaurant";
+import Home from "./components/Home";
+import Menu from "./components/Menu";
+import CompleteOrder from "./components/CompleteOrder";
+import JoinRestaurant from "./components/JoinRestaurant";
 
 const App = () => {
 
