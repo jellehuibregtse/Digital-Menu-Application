@@ -8,6 +8,7 @@ import java.util.ArrayList;
  * @author Jelle Huibregtse
  */
 public class Restaurant {
+
     private long id;
 
     private String name;

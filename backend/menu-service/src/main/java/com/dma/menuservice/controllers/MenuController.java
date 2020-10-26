@@ -74,7 +74,8 @@ public class MenuController {
      */
     @PutMapping("/")
     public ResponseEntity<String> updateMenu(@RequestBody Menu menu) {
-        Menu updatedMenu = repository.findById(menu.getId()).orElseThrow(() -> new ResourceNotFoundException("not found"));
+        Menu updatedMenu =
+                repository.findById(menu.getId()).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
         updatedMenu.setRestaurantId(menu.getRestaurantId());
         updatedMenu.setName(menu.getName());

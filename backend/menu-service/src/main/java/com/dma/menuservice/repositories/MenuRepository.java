@@ -11,5 +11,6 @@ import java.util.Optional;
  * @author Jelle Huibregtse
  */
 public interface MenuRepository extends CrudRepository<Menu, Long> {
+
     Optional<Menu> findByName(String name);
 }

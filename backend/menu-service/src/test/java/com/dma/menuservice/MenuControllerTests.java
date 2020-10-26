@@ -24,7 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class MenuControllerTests {
 
-    private static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
+    private static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
+                                                                         MediaType.APPLICATION_JSON.getSubtype(),
+                                                                         StandardCharsets.UTF_8);
     private static final String BASE_URL = "/menu";
 
     @Autowired
@@ -32,14 +34,12 @@ class MenuControllerTests {
 
     @Test
     public void getMenuTest() throws Exception {
-        this.mvc.perform(MockMvcRequestBuilders.get(BASE_URL + "/get?menuId=1"))
-                .andExpect(status().isOk());
+        this.mvc.perform(MockMvcRequestBuilders.get(BASE_URL + "/get?menuId=1")).andExpect(status().isOk());
     }
 
     @Test
     public void getAllMenusTest() throws Exception {
-        this.mvc.perform(MockMvcRequestBuilders.get(BASE_URL + "/getAll?restaurantId=1"))
-                .andExpect(status().isOk());
+        this.mvc.perform(MockMvcRequestBuilders.get(BASE_URL + "/getAll?restaurantId=1")).andExpect(status().isOk());
     }
 
 //    @Test
