@@ -3,8 +3,6 @@ package com.dma.menuservice.repository;
 import com.dma.menuservice.model.Menu;
 import com.dma.menuservice.model.MenuItem;
 import com.dma.menuservice.model.Restaurant;
-import com.google.common.collect.Lists;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +14,6 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -65,19 +62,19 @@ public class MenuRepositoryTests {
     @Test
     public void should_get_single_menu() {
         Long id = (Long) entityManager.getId(testMenu);
-        Menu foundMenu = repository.findById(id).get();
+        var menu = repository.findById(id);
 
-        assertThat(foundMenu.getName()).isEqualTo("TestMenu");
-        assertThat(foundMenu.getRestaurantId()).isEqualTo(1L);
-        assertThat(foundMenu.getItems().size()).isEqualTo(2);
-
+        Assertions.assertTrue(menu.isPresent());
+        assertThat(menu.get().getName()).isEqualTo("TestMenu");
+        assertThat(menu.get().getRestaurantId()).isEqualTo(1L);
+        assertThat(menu.get().getItems().size()).isEqualTo(2);
     }
 
     @Test
     public void should_not_get_non_existing_menu() {
-        Assertions.assertThrows(NoSuchElementException.class, () -> {
-            repository.findById(3L).get();
-        });
+        var menu = repository.findById(3L);
+
+        Assertions.assertFalse(menu.isPresent());
     }
 
     @Test
@@ -93,17 +90,21 @@ public class MenuRepositoryTests {
         repository.save(newMenu);
 
         Long id = (Long) entityManager.getId(newMenu);
-        Menu foundMenu = repository.findById(id).get();
+        var menu = repository.findById(id);
 
-        assertThat(foundMenu.getName()).isEqualTo(newMenu.getName());
-        assertThat(foundMenu.getItems().size()).isEqualTo(1);
-
+        Assertions.assertTrue(menu.isPresent());
+        assertThat(menu.get().getName()).isEqualTo(newMenu.getName());
+        assertThat(menu.get().getItems().size()).isEqualTo(1);
     }
 
     @Test
     public void should_update_menu() {
         Long id = (Long) entityManager.getId(testMenu);
-        Menu foundMenu = repository.findById(id).get();
+        var menu = repository.findById(id);
+
+        Assertions.assertTrue(menu.isPresent());
+
+        var foundMenu = menu.get();
 
         MenuItem testItemThree = new MenuItem();
         testItemThree.setName("Fanta 330ml");
