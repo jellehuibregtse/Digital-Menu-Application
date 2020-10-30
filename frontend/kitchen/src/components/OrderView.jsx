@@ -31,26 +31,6 @@ const OrderView = (props) => {
   );
 
   return (
-    // <div className="container-fluid">
-    //   <div className="row">
-    //     <div className="col-md-3 col-sm-6">
-    //       <Droppable droppableId={"0"}>
-    //         {(provided) => (
-    //           <OrderColumn
-    //             innerRef={provided.innerRef}
-    //             {...provided.droppableProps}
-    //             key={0}
-    //             id={0}
-    //             name={"New Dishes"}
-    //             columnType={0}
-    //             items={newItems}
-    //           >
-    //             {" "}
-    //             {provided.placeholder}{" "}
-    //           </OrderColumn>
-    //         )}
-    //       </Droppable>
-    //     </div>
 
     <div className="container-fluid">
       <div className="row">
@@ -73,34 +53,50 @@ const OrderView = (props) => {
         </div>
 
         <div className="col-md-3 col-sm-6">
-          <OrderColumn
-            key={2}
-            id={1}
-            name={"Preparing Dishes"}
-            columnType={0}
-            items={processingItems}
-          />
+          <Droppable droppableId={"1"}>
+            {(provided) => (
+                <OrderColumn
+                    key={0}
+                    id={0}
+                    name="Preparing Dishes"
+                    items={processingItems}
+                    innerRef={provided.innerRef}
+                    {...provided.droppableProps}
+                >
+                  {" "}
+                  {provided.placeholder}{" "}
+                </OrderColumn>
+            )}
+          </Droppable>
         </div>
 
         <div className="col-md-3 col-sm-6">
-          <OrderColumn
-            id={2}
-            key={3}
-            name={"Completed Dishes"}
-            columnType={0}
-            items={completeItems}
-          />
+          <Droppable droppableId={"2"}>
+            {(provided) => (
+                <OrderColumn
+                    key={0}
+                    id={0}
+                    name="Completed Dishes"
+                    items={completeItems}
+                    innerRef={provided.innerRef}
+                    {...provided.droppableProps}
+                >
+                  {" "}
+                  {provided.placeholder}{" "}
+                </OrderColumn>
+            )}
+          </Droppable>
         </div>
 
-        <div className="col-md-3 col-sm-6">
-          <OrderColumn
-            key={4}
-            id={3}
-            name={"Orders"}
-            columnType={1}
-            items={props.orders}
-          />
-        </div>
+        {/*<div className="col-md-3 col-sm-6">*/}
+        {/*  <OrderColumn*/}
+        {/*    key={4}*/}
+        {/*    id={3}*/}
+        {/*    name={"Orders"}*/}
+        {/*    columnType={1}*/}
+        {/*    items={props.orders}*/}
+        {/*  />*/}
+        {/*</div>*/}
       </div>
     </div>
   );
