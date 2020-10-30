@@ -3,12 +3,14 @@ import Card from "./fragments/Card";
 import "../css/ordercolumn.css";
 
 const OrderCol = (props) => {
+  //console.log(props.items);
+  
   const items = props.items.map((item, index) => {
     return (
       <React.Fragment>
         <Card
-          id={item.id.toString()}
-          key={item.id.toString()}
+          id={index.toString()}
+          key={index.toString()}
           index={index}
           name={item.name}
           amount={item.amount}
