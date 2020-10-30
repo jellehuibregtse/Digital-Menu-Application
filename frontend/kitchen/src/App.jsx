@@ -21,13 +21,12 @@ function App() {
       (m) => setOrders(JSON.parse(m.body)),
       () => {},
       () => {
-        MessagingService.fetchHandler("GET", "/orders/")
+        MessagingService.fetchHandler("GET", "/orders")
           .then()
           .catch((e) => {});
       }
     );
 
-    
     // Get restaurant settings
     MessagingService.fetchHandler("GET", "/restaurants/" + RESTAURANT_ID)
       .then((res) => {
@@ -36,106 +35,57 @@ function App() {
       .catch((e) => {});
   }, []);
 
-  // Get all menu items from all open orders
-  const items = [].concat.apply(
-    [],
-    orders.map((order) => {
-      return order.items.map((item) => {
-        item.table = order.tableNumber;
-        return item;
-      });
-    })
-  );
-
   const OrderStatus = {
-  NEW: "NEW",
-  PROCESSING: "PROCESSING",
-  COMPLETE: "COMPLETE",
-};
+    NEW: "NEW",
+    PROCESSING: "PROCESSING",
+    COMPLETE: "COMPLETE",
+  };
 
+  // Get all menu items from all open orders
+  const items = [].concat.apply([],orders.map((order) => { return order.items.map((item, index) => { item.index = index; item.parentId = order.id; item.table = order.tableNumber; return item; }); }));
   let newItems = items.filter((item) => item.status === OrderStatus.NEW);
-  let processingItems = items.filter(
-    (item) => item.status === OrderStatus.PROCESSING
-  );
-  let completeItems = items.filter(
-    (item) => item.status === OrderStatus.COMPLETE
-  );
+  let processingItems = items.filter((item) => item.status === OrderStatus.PROCESSING);
+  let completeItems = items.filter((item) => item.status === OrderStatus.COMPLETE);
 
-  console.log(items);
   const onDragEnd = (result) => {
-    //console.log("drag");
     const {destination, source, draggableId} = result;
 
     if(!destination)
-    return;
+      return;
+    
+    // if(source.droppableId === 'orders' || destination.droppableId === 'orders')
+    //   return;
 
-    if(destination.droppableId === source.droppableId
-      &&
-      destination.index === source.index
-      )
+    if(destination.droppableId === source.droppableId && destination.index === source.index)
       return;
 
-    let startItems = [];
-    let finalItems = [];
-    if(source.droppableId === 'newDishes')
-    {startItems = Array.from(newItems);}
-    if(source.droppableId === 'prepDishes')
-    startItems = Array.from(processingItems);
+    const order = orders.find((order) => order.id === items[draggableId].parentId);
 
-    if(source.droppableId === 'compDishes')
-    startItems = Array.from(completeItems);
+    if(destination.droppableId === 'newDishes') {
+      order.items[items[draggableId].index].status = OrderStatus.NEW;
+      console.log(order);
+      MessagingService.fetchHandler("PUT", "/orders", order).then().catch((e) => {});
+    }
 
-    if(destination.droppableId === 'newDishes')
-    finalItems = Array.from(newItems);
+    if(destination.droppableId === 'processingDishes') {
+      order.items[items[draggableId].index].status = OrderStatus.PROCESSING;
+      console.log(order);
+      MessagingService.fetchHandler("PUT", "/orders", order).then().catch((e) => {});
+    }
 
-    if(destination.droppableId === 'prepDishes')
-    finalItems = Array.from(processingItems);
-
-    if(destination.droppableId === 'compDishes')
-    finalItems = Array.from(completeItems);
-
-
-
-    let dropelement = startItems.splice(source.index,1);
-    finalItems.splice(destination.index,0,dropelement[0]);
-
-
-    if(source.droppableId === 'newDishes')
-    newItems = Array.from(startItems);
-
-    if(source.droppableId === 'prepDishes')
-    processingItems = Array.from(startItems);
-
-    if(source.droppableId === 'compDishes')
-    completeItems = Array.from(startItems);
-
-    if(destination.droppableId === 'newDishes')
-    {newItems = Array.from(finalItems);}
-    //console.log(newItems);}
-
-    if(destination.droppableId === 'prepDishes')
-    {processingItems = Array.from(finalItems);}
-    //console.log(processingItems);
-
-    if(destination.droppableId === 'compDishes')
-    {completeItems = Array.from(finalItems);}
-    //console.log(finalItems);
-    
-
-    //console.log(result)
-    
+    if(destination.droppableId === 'completeDishes') {
+      order.items[items[draggableId].index].status = OrderStatus.COMPLETE;
+      console.log(order);
+      MessagingService.fetchHandler("PUT", "/orders", order).then().catch((e) => {});
+    }
   };
+
+
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Navbar restaurantName={restaurant.name} userName={user.name} />
-        <OrderView 
-        orders={orders}
-        newItems = {newItems}
-        processingItems = {processingItems}
-        completeItems = {completeItems}
-        
-        />
+        <Navbar restaurantName={restaurant.name} userName={user.name}/>
+        <OrderView orders={orders} newItems = {newItems} processingItems = {processingItems} completeItems = {completeItems}/>
       </DragDropContext>
     </>
   );

@@ -9,11 +9,7 @@ const OrderView = (props) => {
   
   // Dividing menu items to assigned columns
 
-  //const {newItems,processingItems,completeItems} = props;
-
-  const [newItems] = useState(props.newItems);
-  const [processingItems] = useState(props.processingItems);
-  const [completeItems] = useState(props.completeItems);
+  const {newItems,processingItems,completeItems} = props;
   
   return (
     <div className="container-fluid">
@@ -37,7 +33,7 @@ const OrderView = (props) => {
         </div>
 
         <div className="col-md-3 col-sm-6">
-          <Droppable droppableId={"prepDishes"}>
+          <Droppable droppableId={"processingDishes"}>
             {(provided) => (
                 <OrderColumn
                     key={2}
@@ -55,7 +51,7 @@ const OrderView = (props) => {
         </div>
 
         <div className="col-md-3 col-sm-6">
-          <Droppable droppableId={"compDishes"}>
+          <Droppable droppableId={"completeDishes"}>
             {(provided) => (
                 <OrderColumn
                     key={3}
