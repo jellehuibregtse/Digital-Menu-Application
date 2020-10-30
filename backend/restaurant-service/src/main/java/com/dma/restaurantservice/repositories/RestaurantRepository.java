@@ -13,6 +13,8 @@ import java.util.Optional;
  */
 @Repository
 public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
+
     Optional<Restaurant> findByName(String name);
+
     void deleteByName(String name);
 }

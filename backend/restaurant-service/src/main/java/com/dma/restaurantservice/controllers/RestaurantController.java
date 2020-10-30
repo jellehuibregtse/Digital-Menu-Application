@@ -1,8 +1,8 @@
 package com.dma.restaurantservice.controllers;
 
-import com.dma.restaurantservice.exceptions.ResourceNotFoundException;
 import com.dma.restaurantservice.models.Restaurant;
 import com.dma.restaurantservice.repositories.RestaurantRepository;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,9 +61,9 @@ public class RestaurantController {
     public ResponseEntity<String> createRestaurant(@RequestBody Restaurant restaurant) {
         repository.save(restaurant);
 
-        return ResponseEntity.ok(String.format("Restaurant with name: %s has been successfully created!",restaurant.getName()));
+        return ResponseEntity.ok(String.format("Restaurant with name: %s has been successfully created!",
+                                               restaurant.getName()));
     }
-
 
     /**
      * Update a single restaurant.
@@ -73,7 +73,8 @@ public class RestaurantController {
      */
     @PutMapping("/")
     public ResponseEntity<String> updateRestaurant(@RequestBody Restaurant restaurant) {
-        Restaurant updatedRestaurant = repository.findById(restaurant.getId()).orElseThrow(() -> new ResourceNotFoundException("not found"));
+        Restaurant updatedRestaurant =
+                repository.findById(restaurant.getId()).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
         updatedRestaurant.setName(restaurant.getName());
         updatedRestaurant.setColorScheme(restaurant.getColorScheme());
@@ -81,7 +82,8 @@ public class RestaurantController {
         updatedRestaurant.setMenuIDs(restaurant.getMenuIDs());
         repository.save(updatedRestaurant);
 
-        return ResponseEntity.ok(String.format("Restaurant with id: %d has been successfully updated!", restaurant.getId()));
+        return ResponseEntity.ok(String.format("Restaurant with id: %d has been successfully updated!",
+                                               restaurant.getId()));
     }
 
     /**

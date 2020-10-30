@@ -1,26 +1,18 @@
 package com.dma.restaurantservice;
 
-import com.dma.restaurantservice.controllers.RestaurantController;
-import com.dma.restaurantservice.exceptions.ResourceNotFoundException;
 import com.dma.restaurantservice.models.Restaurant;
 import com.dma.restaurantservice.repositories.RestaurantRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -39,7 +31,6 @@ public class RestaurantRepositoryTests {
 
     /**
      * Initialize persistent data in the entity manager
-     *
      */
     @BeforeEach
     public void init() {
@@ -52,13 +43,11 @@ public class RestaurantRepositoryTests {
 
     /**
      * Get all restaurants
-     *
      */
     @Test
     public void should_get_all_restaurants() {
-        List<Restaurant> restaurants = (List<Restaurant>) repository.findAll();
-        assertThat(repository.findAll())
-                .hasSize(2);
+        repository.findAll();
+        assertThat(repository.findAll()).hasSize(2);
 
         assertThat(((List<Restaurant>) repository.findAll()).stream().count()).isEqualTo(2L);
 
@@ -66,51 +55,40 @@ public class RestaurantRepositoryTests {
 
     /**
      * Get a single restaurant
-     *
      */
     @Test
     public void should_get_single_restaurant() {
-
         Restaurant foundRestaurant1 = repository.findByName("Test1").get();
-        assertThat(foundRestaurant1.getName())
-                .isEqualTo("Test1");
+        assertThat(foundRestaurant1.getName()).isEqualTo("Test1");
 
         Restaurant foundRestaurant2 = repository.findByName("Test2").get();
-        assertThat(foundRestaurant2.getName())
-                .isEqualTo("Test2");
-
-
+        assertThat(foundRestaurant2.getName()).isEqualTo("Test2");
     }
 
     /**
      * Cannot get non-existing restaurant
-     *
      */
     @Test()
-    public void should_not_get_unknown_restaurant(){
-        Assertions.assertThrows(NoSuchElementException.class,()->{
-            Restaurant foundRestaurant1 = repository.findByName("WrongName").get();
+    public void should_not_get_unknown_restaurant() {
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            repository.findByName("WrongName").get();
         });
     }
 
     /**
      * Save new restaurant
-     *
      */
     @Test
     public void should_save_new_restaurant() {
-        Restaurant savedRestaurant = repository
-                .save(new Restaurant("Test3", "test_theme", "test_url", new ArrayList<>()));
+        Restaurant savedRestaurant =
+                repository.save(new Restaurant("Test3", "test_theme", "test_url", new ArrayList<>()));
 
-        assertThat(savedRestaurant.getName())
-                .isEqualTo("Test3");
+        assertThat(savedRestaurant.getName()).isEqualTo("Test3");
     }
-
 
 
     /**
      * Update restaurant details
-     *
      */
     @Test
     public void should_update_restaurant() {
@@ -119,29 +97,26 @@ public class RestaurantRepositoryTests {
 
         Restaurant updatedRestaurant = repository.save(foundRestaurant);
 
-        assertThat(foundRestaurant.getName())
-                .isEqualTo(updatedRestaurant.getName());
+        assertThat(foundRestaurant.getName()).isEqualTo(updatedRestaurant.getName());
 
     }
 
     /**
      * Cannot update non-existing restaurant
-     *
      */
     @Test()
     public void should_not_update_unknown_restaurant() {
-        Assertions.assertThrows(NoSuchElementException.class,()-> {
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
             Restaurant foundRestaurant = repository.findByName("WrongName").get();
             foundRestaurant.setName("UpdatedTest1");
 
             repository.save(foundRestaurant);
-            Restaurant updatedRestaurant = repository.findByName("UpdatedTest1").get();
+            repository.findByName("UpdatedTest1").get();
         });
     }
 
     /**
      * Delete restaurant
-     *
      */
     @Test
     public void should_delete_restaurant() {
@@ -153,7 +128,6 @@ public class RestaurantRepositoryTests {
 
     /**
      * Delete all restaurants
-     *
      */
     @Test
     public void should_delete_all_restaurants() {
@@ -165,11 +139,10 @@ public class RestaurantRepositoryTests {
 
     /**
      * Cannot delete non-existing restaurant
-     *
      */
     @Test
     public void should_not_delete_unknown_restaurant() {
-        Assertions.assertThrows(NoSuchElementException.class,()-> {
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
             Restaurant foundRestaurant = repository.findByName("WrongName").get();
             repository.delete(foundRestaurant);
         });
