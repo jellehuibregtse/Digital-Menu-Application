@@ -24,7 +24,7 @@ public class QRCodeController {
      * @return an <code>BufferedImage</code> with a HTTP status of 200.
      * @throws Exception when creation fails.
      */
-    @PostMapping(value = "/", produces = MediaType.IMAGE_PNG_VALUE)
+    @PostMapping(produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<BufferedImage> generateQRCode(@RequestBody String text) throws Exception {
         return new ResponseEntity<>(QRCodeGenerator.generateQRCodeImage(text), HttpStatus.OK);
     }

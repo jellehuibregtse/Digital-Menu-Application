@@ -33,7 +33,7 @@ public class MenuController {
      *
      * @return <code>ResponseEntity</code> with a list of menus and HTTP status OK.
      */
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Menu>> getAllMenus() {
         List<Menu> result = new ArrayList<>();
         repository.findAll().forEach(result::add);
@@ -59,7 +59,7 @@ public class MenuController {
      * @param menu that needs to be created.
      * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
      */
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<String> createMenu(@RequestBody Menu menu) {
         repository.save(menu);
 
@@ -72,7 +72,7 @@ public class MenuController {
      * @param menu that needs to be updated.
      * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
      */
-    @PutMapping("/")
+    @PutMapping
     public ResponseEntity<String> updateMenu(@RequestBody Menu menu) {
         Menu updatedMenu = repository.findById(menu.getId()).orElseThrow(() -> new ResourceNotFoundException("not found"));
 

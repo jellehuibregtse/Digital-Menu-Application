@@ -36,7 +36,7 @@ public class OrderController {
      *
      * @return <code>ResponseEntity</code> with a list of orders and HTTP status OK.
      */
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<CustomerOrder>> getAllOrders() {
         List<CustomerOrder> result = new ArrayList<>();
         repository.findAll().forEach(result::add);
@@ -64,7 +64,7 @@ public class OrderController {
      * @param order that needs to be created.
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody CustomerOrder order) {
         repository.save(order);
 
@@ -85,6 +85,8 @@ public class OrderController {
 
         repository.delete(order);
 
+        getAllOrders();
+
         return ResponseEntity.ok(String.format("Order, %s has been successfully deleted!", id));
     }
 
@@ -94,7 +96,7 @@ public class OrderController {
      * @param order that needs to be updated
      * @return message and HTTP status OK or HTTP status BadRequest.
      */
-    @PutMapping("/")
+    @PutMapping
     public ResponseEntity<String> updateOrder(@RequestBody CustomerOrder order) {
         CustomerOrder updatedOrder = repository.findById(order.getId()).orElseThrow(() -> new ResourceNotFoundException("Not found."));
 
@@ -103,6 +105,8 @@ public class OrderController {
         updatedOrder.setStatus(order.getStatus());
         updatedOrder.setTableNumber(order.getTableNumber());
         repository.save(updatedOrder);
+
+        getAllOrders();
 
         return ResponseEntity.ok(String.format("Order, %s has been successfully updated!", order.getId()));
     }
