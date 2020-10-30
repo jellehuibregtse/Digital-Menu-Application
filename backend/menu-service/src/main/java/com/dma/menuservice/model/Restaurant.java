@@ -1,4 +1,4 @@
-package com.dma.menuservice.models;
+package com.dma.menuservice.model;
 
 import java.util.ArrayList;
 
@@ -8,6 +8,7 @@ import java.util.ArrayList;
  * @author Jelle Huibregtse
  */
 public class Restaurant {
+
     private long id;
 
     private String name;

@@ -1,4 +1,4 @@
-package com.dma.menuservice.models;
+package com.dma.menuservice.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,6 +24,14 @@ public class Menu {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<MenuItem> items;
+
+    public Menu() {}
+
+    public Menu(@NotNull long restaurantId, @NotNull String name, List<MenuItem> items) {
+        this.restaurantId = restaurantId;
+        this.name = name;
+        this.items = items;
+    }
 
     public long getId() {
         return id;

@@ -1,9 +1,10 @@
-package com.dma.menuservice.controllers;
+package com.dma.menuservice.controller;
 
-import com.dma.menuservice.exceptions.ResourceNotFoundException;
-import com.dma.menuservice.models.Menu;
-import com.dma.menuservice.repositories.MenuRepository;
-import com.dma.menuservice.services.RestaurantService;
+
+import com.dma.menuservice.model.Menu;
+import com.dma.menuservice.repository.MenuRepository;
+import com.dma.menuservice.service.RestaurantService;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,7 @@ public class MenuController {
      *
      * @return <code>ResponseEntity</code> with a list of menus and HTTP status OK.
      */
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Menu>> getAllMenus() {
         List<Menu> result = new ArrayList<>();
         repository.findAll().forEach(result::add);
@@ -47,7 +48,7 @@ public class MenuController {
      * @param id of the menu.
      * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
      */
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Menu> getMenu(@PathVariable long id) {
         Menu result = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found."));
         return ResponseEntity.ok(result);
@@ -59,7 +60,7 @@ public class MenuController {
      * @param menu that needs to be created.
      * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
      */
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<String> createMenu(@RequestBody Menu menu) {
         repository.save(menu);
 
@@ -72,9 +73,10 @@ public class MenuController {
      * @param menu that needs to be updated.
      * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
      */
-    @PutMapping("/")
-    public ResponseEntity<String> updateMenu(@RequestBody Menu menu) {
-        Menu updatedMenu = repository.findById(menu.getId()).orElseThrow(() -> new ResourceNotFoundException("not found"));
+    @PutMapping("{id}")
+    public ResponseEntity<String> updateMenu(@RequestBody Menu menu, @PathVariable long id) {
+        Menu updatedMenu =
+                repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
         updatedMenu.setRestaurantId(menu.getRestaurantId());
         updatedMenu.setName(menu.getName());
@@ -90,7 +92,7 @@ public class MenuController {
      * @param id of the menu.
      * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<String> deleteMenu(@PathVariable long id) {
         Menu result = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
 

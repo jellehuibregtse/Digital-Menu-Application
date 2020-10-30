@@ -1,6 +1,6 @@
-package com.dma.menuservice.services;
+package com.dma.menuservice.service;
 
-import com.dma.menuservice.models.Restaurant;
+import com.dma.menuservice.model.Restaurant;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
