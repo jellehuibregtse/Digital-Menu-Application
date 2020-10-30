@@ -2,6 +2,7 @@ package com.dma.orderservice.controllers;
 
 import com.dma.orderservice.exceptions.ResourceNotFoundException;
 import com.dma.orderservice.models.CustomerOrder;
+import com.dma.orderservice.models.Status;
 import com.dma.orderservice.repositories.OrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -104,6 +105,11 @@ public class OrderController {
         updatedOrder.setItems(order.getItems());
         updatedOrder.setStatus(order.getStatus());
         updatedOrder.setTableNumber(order.getTableNumber());
+
+        if(order.getItems().stream().allMatch((item) -> item.getStatus() == Status.COMPLETE)) {
+            order.setStatus(Status.COMPLETE);
+        }
+
         repository.save(updatedOrder);
 
         getAllOrders();

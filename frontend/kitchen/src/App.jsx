@@ -18,7 +18,7 @@ function App() {
     // Subscribe to orders from restaurant
     MessagingService.register(
       "/topic/orders/" + RESTAURANT_ID,
-      (m) => setOrders(JSON.parse(m.body)),
+      (m) => {setOrders(JSON.parse(m.body))},
       () => {},
       () => {
         MessagingService.fetchHandler("GET", "/orders")
@@ -59,23 +59,20 @@ function App() {
     if(destination.droppableId === source.droppableId && destination.index === source.index)
       return;
 
-    const order = orders.find((order) => order.id === items[draggableId].parentId);
+    const order = orders.find((order) => order.id === items.find((item) => item.id.toString() === draggableId).parentId);
 
     if(destination.droppableId === 'newDishes') {
-      order.items[items[draggableId].index].status = OrderStatus.NEW;
-      console.log(order);
+      order.items[items.find((item) => item.id.toString() === draggableId).index].status = OrderStatus.NEW;
       MessagingService.fetchHandler("PUT", "/orders", order).then().catch((e) => {});
     }
 
     if(destination.droppableId === 'processingDishes') {
-      order.items[items[draggableId].index].status = OrderStatus.PROCESSING;
-      console.log(order);
+      order.items[items.find((item) => item.id.toString() === draggableId).index].status = OrderStatus.PROCESSING;
       MessagingService.fetchHandler("PUT", "/orders", order).then().catch((e) => {});
     }
 
     if(destination.droppableId === 'completeDishes') {
-      order.items[items[draggableId].index].status = OrderStatus.COMPLETE;
-      console.log(order);
+      order.items[items.find((item) => item.id.toString() === draggableId).index].status = OrderStatus.COMPLETE;
       MessagingService.fetchHandler("PUT", "/orders", order).then().catch((e) => {});
     }
   };
