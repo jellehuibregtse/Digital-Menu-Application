@@ -10,7 +10,6 @@ const OrderItem = (props) => {
     const[state,dispatch] = useStateValue();
 
     const onClickHandler = (e) => {
-       // console.log()
         let deletedItem = e.target.parentNode.getAttribute("item");
         console.log(deletedItem)
         dispatch({

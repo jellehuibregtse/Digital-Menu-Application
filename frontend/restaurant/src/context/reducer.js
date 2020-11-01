@@ -41,16 +41,15 @@ export const initialState = {
 
     }
 }
-// const setOrderWithItemQuantities = (array) =>{
 
-//     return array;
-// }
 const reducer = (state, action) => {
     switch (action.type) {
         case "Add to cart":
+
+            let updatedOrder = [...state.order, action.item];
             return {
                 ...state,
-                order: [...state.order, action.item]
+                order: updatedOrder
             }
 
 
@@ -61,8 +60,12 @@ const reducer = (state, action) => {
             return {
                  ...state
             }
-
-
+            
+        case "Clear cart":
+            state.order = [];
+            return{
+                ...state,
+            }
         default:
             return state;
     }

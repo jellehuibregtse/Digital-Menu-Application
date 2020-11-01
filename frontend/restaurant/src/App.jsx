@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import Home from "./components/Home";
 import Menu from "./components/Menu";
@@ -9,26 +9,10 @@ import Banner from "./components/fragments/Banner";
 import { Container } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { grey } from "@material-ui/core/colors";
+import { useStateValue } from './context/stateProvider';
 
 const App = () => {
-    // Session contains: tableNumber, restaurant and current menu
-    const [session] = useState(JSON.parse(sessionStorage.getItem('session')) != null ? JSON.parse(sessionStorage.getItem('session')) :
-        {
-            restaurant: {
-                name: "test"
-            }, tableNumber: 0,
-            menu: {
-                id: 0,
-                name: "Test Menu",
-                items: [
-                    { id: 0, name: "test item 1", price: 9.99 }, 
-                    { id: 1, name: "test item 2", price: 11.99 },
-                    { id: 2, name: "test item 3", price: 19.00 },
-                    { id: 3, name: "test item 4", price: 5.59 },
-                    { id: 4, name: "test item 5", price: 9.00 },
-                    { id: 5, name: "test item 6", price: 1.99 }]
-            }
-        });
+    const [state] = useStateValue();
 
     const theme = createMuiTheme({
         palette: {
@@ -53,31 +37,31 @@ const App = () => {
                 <Container className="app">
                     <Switch>
                         <Route exact strict path={"/qr"} component={JoinRestaurant} />
-                        {session != null ? <Switch>
-                            <Route exact strict path={"/" + session.restaurant.name + "/" + session.tableNumber}>
-                                <NavBar session={session} />
-                                <Banner session={session} />
+                        {state.menu != null ? <Switch>
+                            <Route exact strict path={"/" + state.restaurant.name + "/" + state.tableNumber}>
+                                <NavBar />
+                                <Banner />
                                 <Container>
-                                    <Home session={session} />
+                                    <Home />
                                 </Container>
                             </Route>
-                            <Route exact strict path={"/" + session.restaurant.name + "/" + session.tableNumber + "/order"}>
-                                <NavBar session={session} icons={["ArrowBack"]} />
-                                <Banner session={session} />
+                            <Route exact strict path={"/" + state.restaurant.name + "/" + state.tableNumber + "/order"}>
+                                <NavBar />
+                                <Banner />
                                 <Container>
-                                    <Menu session={session} />
+                                    <Menu />
                                 </Container>
                             </Route>
-                            <Route exact strict path={"/" + session.restaurant.name + "/" + session.tableNumber + "/order/place"}>
-                                <NavBar session={session} icons={["ArrowBack"]} />
-                                <Banner session={session} />
+                            <Route exact strict path={"/" + state.restaurant.name + "/" + state.tableNumber + "/order/place"}>
+                                <NavBar />
+                                <Banner />
                                 <Container>
-                                    <CompleteOrder session={session} />
+                                    <CompleteOrder />
                                 </Container>
                             </Route>
 
                             <Route path="*">
-                                <Redirect to={"/" + session.restaurant.name + "/" + session.tableNumber} />
+                                <Redirect to={"/" + state.restaurant.name + "/" + state.tableNumber} />
                             </Route>
                         </Switch> : null}
 
@@ -88,5 +72,4 @@ const App = () => {
         </Router>
     );
 }
-
 export default App;

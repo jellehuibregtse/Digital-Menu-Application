@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-//import { ArrowBack, Menu } from '@material-ui/icons';
-import { Button, IconButton, Toolbar, Typography } from "@material-ui/core";
+import React from 'react';
+import { Toolbar, Typography } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import '../../css/navbar.css';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
@@ -33,13 +32,12 @@ const useStyles = makeStyles(theme => ({
 
 
 }))
-const NavBar = (props) => {
+const NavBar = () => {
     const classes = useStyles();
 
     const [initialState] = useStateValue();
 
-    //console.log(initialState)
-    //console.log(window.location.href.toLowerCase().includes("place"))
+    //Shows order cart in the navigation when you are in the menu page
     let shoppingCartLink =
         <Link to={"/" + initialState.restaurant.name + "/" + initialState.tableNumber + "/order/place"}
             className={classes.buttonColor}>
@@ -47,6 +45,8 @@ const NavBar = (props) => {
                 <ShoppingCartIcon fontSize="large" className={classes.root} />
             </Badge>
         </Link>
+    
+    //Shows menu link in the navigation when you are in order page
     let menuLink =
         <Link to={"/" + initialState.restaurant.name + "/" + initialState.tableNumber}
             className={classes.buttonColor}>
@@ -65,9 +65,6 @@ const NavBar = (props) => {
                             Welcome to {initialState.restaurant.name}!
                         </Typography>
                     </div>
-                    {/* <div>
-                        <Button color="secondary">Something wrong with the food?</Button>
-                    </div> */}
                     <Typography className={classes.shopingCart}>
                         {link}
                     </Typography>
