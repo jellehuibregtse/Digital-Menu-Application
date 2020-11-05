@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The JwtConfig.
+ * The JwtConfig which reads from the application properties.
  *
  * @author Jelle Huibregtse
  */
 @Configuration
 public class JwtConfig {
 
-    @Value("${security.jwt.uri:/auth/**}")
+    @Value("${security.jwt.uri:/api/auth-service/auth/**}")
     private String uri;
 
     @Value("${security.jwt.header:Authorization}")
