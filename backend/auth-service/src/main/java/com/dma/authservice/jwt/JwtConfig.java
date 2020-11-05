@@ -1,45 +1,70 @@
 package com.dma.authservice.jwt;
 
 import com.google.common.net.HttpHeaders;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * The JwtConfig which reads from the application properties.
+ * The JwtConfig.
  *
  * @author Jelle Huibregtse
  */
-@ConfigurationProperties(prefix = "application.jwt")
+@Configuration
 public class JwtConfig {
 
-    private String secretKey;
-    private String tokenPrefix;
-    private Integer tokenExpirationAfterDays;
+    @Value("${security.jwt.uri:/auth/**}")
+    private String uri;
 
-    public String getSecretKey() {
-        return secretKey;
+    @Value("${security.jwt.header:Authorization}")
+    private String header;
+
+    @Value("${security.jwt.prefix:Bearer }")
+    private String prefix;
+
+    @Value("${security.jwt.experiationInDays:#{10}}")
+    private int expiration;
+
+    @Value("${security.jwt.secret:JwtSecretKey}")
+    private String secret;
+
+    public String getUri() {
+        return uri;
     }
 
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
-    public String getTokenPrefix() {
-        return tokenPrefix;
+    public String getHeader() {
+        return header;
     }
 
-    public void setTokenPrefix(String tokenPrefix) {
-        this.tokenPrefix = tokenPrefix;
+    public void setHeader(String header) {
+        this.header = header;
     }
 
-    public Integer getTokenExpirationAfterDays() {
-        return tokenExpirationAfterDays;
+    public String getPrefix() {
+        return prefix;
     }
 
-    public void setTokenExpirationAfterDays(Integer tokenExpirationAfterDays) {
-        this.tokenExpirationAfterDays = tokenExpirationAfterDays;
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 
-    public String getAuthorizationHeader() {
-        return HttpHeaders.AUTHORIZATION;
+    public int getExpiration() {
+        return expiration;
+    }
+
+    public void setExpiration(int expiration) {
+        this.expiration = expiration;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
     }
 }

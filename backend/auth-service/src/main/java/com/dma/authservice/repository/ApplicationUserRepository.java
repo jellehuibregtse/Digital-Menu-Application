@@ -1,8 +1,7 @@
 package com.dma.authservice.repository;
 
-import com.dma.authservice.auth.ApplicationUser;
+import com.dma.authservice.model.ApplicationUser;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -13,10 +12,7 @@ import java.util.Optional;
  * @author Jelle Huibregtse
  */
 @Repository
-public interface ApplicationUserRepository extends CrudRepository<ApplicationUser, Long> {
+public interface ApplicationUserRepository extends JpaRepository<ApplicationUser, Long> {
 
     Optional<ApplicationUser> findByUsername(String username);
-
-    @Override
-    Optional<ApplicationUser> findById(Long id);
 }

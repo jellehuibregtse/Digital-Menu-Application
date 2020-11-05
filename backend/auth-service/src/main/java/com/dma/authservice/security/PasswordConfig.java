@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class PasswordConfig {
 
     /**
-     * You can auto wire this bean to use throughout the service.
+     * You can autowire this bean to use throughout the service.
      * <p>
      * The encoder strength is translated to iterations. For strength x there will be 2^x iterations.
      * The strength can be between 4 and 31, since 32 will cause an overflow error.
