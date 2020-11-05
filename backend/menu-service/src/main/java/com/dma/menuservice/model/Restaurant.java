@@ -1,39 +1,26 @@
-package com.dma.restaurantservice.models;
+package com.dma.menuservice.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
- * The restaurant entity.
+ * The restaurant model.
  *
- * @author Jordan Radushev
+ * @author Jelle Huibregtse
  */
-@Entity
 public class Restaurant {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @NotNull
-    @Column(unique = true)
     private String name;
-
-    @NotNull
-    @Min(1)
-    private int tableCount = 10;
 
     private String colorScheme;
 
     private String logoURL;
 
-    @ElementCollection
-    private List<Integer> menuIDs;
+    private ArrayList<Integer> menuIDs;
 
     public Restaurant() {
+
     }
 
     public Restaurant(String name, String colorScheme, String logoURL, ArrayList<Integer> menuIDs) {
@@ -75,19 +62,11 @@ public class Restaurant {
         this.logoURL = logoURL;
     }
 
-    public List<Integer> getMenuIDs() {
+    public ArrayList<Integer> getMenuIDs() {
         return menuIDs;
     }
 
-    public void setMenuIDs(List<Integer> menuIDs) {
+    public void setMenuIDs(ArrayList<Integer> menuIDs) {
         this.menuIDs = menuIDs;
-    }
-
-    public int getTableCount() {
-        return tableCount;
-    }
-
-    public void setTableCount(int tableCount) {
-        this.tableCount = tableCount;
     }
 }
