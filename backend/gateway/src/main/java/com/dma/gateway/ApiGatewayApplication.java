@@ -9,7 +9,7 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
  * The entry point for the application.
  *
  * @author Aron Hemmes
- * @author Jelle Huibregtse 
+ * @author Jelle Huibregtse
  */
 @EnableZuulProxy
 @SpringBootApplication
