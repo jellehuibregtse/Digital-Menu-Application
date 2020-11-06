@@ -63,7 +63,7 @@ const OrderView = (props) => {
         </div>
 
         <div className="col-md-3 col-sm-6">
-          <Droppable droppableId={"completeDishes"}>
+          <Droppable droppableId={"orders"}>
             {(provided) => (
                 <OrderColumn
                     key={4}

@@ -61,6 +61,9 @@ function App() {
 
     const order = orders.find((order) => order.id === items.find((item) => item.id.toString() === draggableId).parentId);
 
+    console.log(destination.droppableId);
+    console.log(result);
+
     if(destination.droppableId === 'newDishes') {
       order.items[items.find((item) => item.id.toString() === draggableId).index].status = OrderStatus.NEW;
       MessagingService.fetchHandler("PUT", "/orders", order).then().catch((e) => {});
