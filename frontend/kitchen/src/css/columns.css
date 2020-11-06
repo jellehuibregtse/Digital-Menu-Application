@@ -2,12 +2,10 @@
   margin: 0;
   padding: 0;
   width: 100%;
-  border: 2px #fff solid;
-}
-
-.main h4 {
+  border: 2px #96d6cf solid;
+  font-family: 'Oswald', sans-serif;
   font-size: 30px;
-  margin-top: 30px;
+  font-weight: bold;
 }
 
 .main .items {

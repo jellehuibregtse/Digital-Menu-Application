@@ -1,13 +1,12 @@
 .container-fluid {
-  height: 100%;
   width: 100%;
   padding-top: 50px;
   font-family: "Roboto", sans-serif;
   font-weight: 500;
   font-size: 30px;
   text-align: center;
-  background-color: #656569;
   margin-top: 5vh;
+  background-color: #10455b;
 }
 
 #title-column {

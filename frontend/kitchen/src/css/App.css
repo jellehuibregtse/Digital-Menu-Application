@@ -2,42 +2,13 @@
 
 #root {
   height: 100vh;
-  max-height: 100vh;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  background-color: #f0eded;
-}
-.container {
-  height: 100vh;
-  max-height: 100vh;
-}
-.column {
-  width: calc(25% - 20px);
-  max-height: calc(100% - 40px);
-  margin: 20px 0;
-  background-color: white;
-  overflow: auto;
+  background-color: #10455b;
 }
 
-.table {
-  margin-top: 2vh;
-  width: 80vw;
-  font-size: 18px;
-}
 
-.table * {
-  font-size: 16px;
-}
 
-.table ul {
-  /*list-style-type: none;*/
-  text-align: left;
-  margin: 0;
-}
-
-.table li {
-  /* margin-left: -20px; */
-}

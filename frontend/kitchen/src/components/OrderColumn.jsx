@@ -1,14 +1,31 @@
 import React from "react";
 import Card from "./fragments/Card";
-import "../css/ordercolumn.css";
+import styled from 'styled-components'
+import '../css/columns.css'
+
+const Style= styled.div`
+    font-family: 'Oswald', sans-serif;
+    font-weight: bold;
+    margin-top: 2vh;
+    min-height: 50px;
+    
+`
+const Background = styled.div`
+
+    background-color: #f9f3ed;
+`
 
 const OrderColumn = (props) => {
 
   return (
+    <Background>
     <div className="main" {...props} ref={props.innerRef}>
+      <Style>
       <h4> {props.name}</h4>
+      </Style>
       <div className="items"/>
     </div>
+    </Background>
   );
 };
 
