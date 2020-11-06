@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import "./css/App.css";
 import Navbar from "./components/fragments/NavBar";
 import OrderView from "./components/OrderView";
+import LoginPage from "./components/LoginPage";
 import MessagingService from "./services/MessagingService";
 import { DragDropContext } from "react-beautiful-dnd";
+import {BrowserRouter as Router,Switch,Route} from "react-router-dom";
+
 
 // Hardcoded restaurant id
 const RESTAURANT_ID = 0;
 
-function App() {
+const App = () =>{
   const [orders, setOrders] = useState([]);
   const [restaurant, setRestaurant] = useState({});
   const [user] = useState({ name: "user" });
@@ -83,10 +86,16 @@ function App() {
 
   return (
     <>
+      <Router>
       <DragDropContext onDragEnd={onDragEnd}>
         <Navbar restaurantName={restaurant.name} userName={user.name}/>
-        <OrderView orders={orders} newItems = {newItems} processingItems = {processingItems} completeItems = {completeItems}/>
+        <Switch>
+          <Route path="/" exact render={(props) => (<OrderView orders={orders} newItems = {newItems} processingItems = {processingItems} completeItems = {completeItems}/>)}/>
+          <Route path="/login" render={(props) => (<LoginPage />)}/>
+        </Switch>
+        
       </DragDropContext>
+      </Router>
     </>
   );
 }
