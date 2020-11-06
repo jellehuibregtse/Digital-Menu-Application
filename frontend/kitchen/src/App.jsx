@@ -31,7 +31,7 @@ const App = () =>{
     );
 
     // Get restaurant settings
-    MessagingService.fetchHandler("GET", "/restaurants/" + RESTAURANT_ID)
+    MessagingService.fetchHandler("GET", "/restaurant-service/restaurants/" + RESTAURANT_ID)
       .then((res) => {
         setRestaurant(res);
       })
@@ -55,17 +55,14 @@ const App = () =>{
 
     if(!destination)
       return;
-    
-    // if(source.droppableId === 'orders' || destination.droppableId === 'orders')
-    //   return;
+
+    if(source.droppableId === 'orders')
+      return;
 
     if(destination.droppableId === source.droppableId && destination.index === source.index)
       return;
 
     const order = orders.find((order) => order.id === items.find((item) => item.id.toString() === draggableId).parentId);
-
-    console.log(destination.droppableId);
-    console.log(result);
 
     if(destination.droppableId === 'newDishes') {
       order.items[items.find((item) => item.id.toString() === draggableId).index].status = OrderStatus.NEW;

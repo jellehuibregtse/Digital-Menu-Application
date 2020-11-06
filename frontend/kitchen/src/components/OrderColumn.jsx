@@ -17,6 +17,21 @@ const Background = styled.div`
 
 const OrderColumn = (props) => {
 
+    const items = props.items.map((item, index) => {
+        return (
+            <React.Fragment>
+                <OrderCard
+                    id={item.id.toString()}
+                    key={item.id.toString()}
+                    index={index}
+                    items={item.items}
+                    createdDateTime={item.createdDateTime}
+                    table={item.tableNumber}
+                />
+            </React.Fragment>
+        );
+    });
+
   return (
     <Background>
     <div className="main" {...props} ref={props.innerRef}>

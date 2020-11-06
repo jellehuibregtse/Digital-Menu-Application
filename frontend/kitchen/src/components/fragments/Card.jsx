@@ -27,9 +27,9 @@ const Card = (props) => {
          
          
           <div className="content">
-            <p>
+            <h1>
               {props.name} x {props.amount}
-            </p>
+            </h1>
             <h2> Table number : {props.table}</h2>
           </div>
           
