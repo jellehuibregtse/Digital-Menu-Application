@@ -5,30 +5,9 @@
 .item-flex {
     display: flex;
     flex-flow: wrap;
-    align-content: space-between;
+    align-content: space-between !important;
     width: 80%;
     padding: 0 10%;
-}
-
-.item-flex a {
-    margin: 0 2vw 4vw 2vw;
-    width: calc(33.3% - 4vw - 4px);
-    padding: calc(100vw / 24) 0;
-    border: solid 2px var(--black);
-    text-align: center;
-    font-weight: 600;
-    color: var(--black);
-}
-
-@media screen and (max-width: 550px) {
-    .item-flex a {
-        width: calc(50% - 4vw - 4px);
-        padding: calc(12vw) 0;
-    }
-}
-
-.item-flex a:hover {
-    background-color: #00000010;
 }
 
 h1 {

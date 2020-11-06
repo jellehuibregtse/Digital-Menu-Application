@@ -1,18 +1,14 @@
-:root {
-  --color1: #343a40;
-  --white: #ededf1;
-  --black: #29292c;
-  --light: 50;
-  --treshold: 65;
-}
-
 body {
   margin: 0;
   font-family: "Roboto", sans-serif;
 }
 
-.content {
-  margin-top: 50px;
+a {
+  text-decoration: none;
+}
+
+.app {
+  min-height: calc(100vh - 50px);
 }
 
 a {

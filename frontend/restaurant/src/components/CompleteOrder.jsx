@@ -1,53 +1,94 @@
 import React, { useState } from 'react';
 import MessagingService from "../services/MessagingService";
-import NavBar from "./fragments/NavBar";
+import { Button } from "@material-ui/core";
+import { useStateValue } from '../context/stateProvider';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import OrderItem from './fragments/OrderItem';
 
-const CompleteOrder = (props) => {
-    const [orderStatus, setOrderStatus] = useState('');
+const CompleteOrder = () => {
 
-    // Get menu items in order
-    let counter = 0;
-    const [order, setOrder] = useState(JSON.parse(sessionStorage.getItem('order')) != null? JSON.parse(sessionStorage.getItem('order'))
-        // Convert menu item IDs to actual menu items
-        .map((itemId) => {return props.session.menu.items.find(item => item.id === itemId) })
-        // Sort menu items by name
-        .sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
-        // Select unique menu items and add amount
-        .map((item, i, items) => {counter++; if(typeof items[i + 1] === 'undefined' || item.name !== items[i + 1].name) {
-            item['amount'] = counter;
-            counter = 0
-            return item;
-        }})
-        // Remove undefined dishes
-        .filter((item) => typeof item != 'undefined'): []);
+    const [state, dispatch] = useStateValue();
 
-    function sendOrder() {
-        if(order.length > 0) {
-            setOrderStatus('Order status: processing');
-            MessagingService.fetchHandler('POST','/orders/', {
-                restaurantId: props.session.restaurantId,
-                tableNumber: props.session.tableNumber,
-                items: order.map((item) => { return ({ name: item.name, amount: item.amount })})
-            }).then(() => {
-                setOrderStatus('Order status: send order');
-                sessionStorage.removeItem('order');
-                setOrder([]);
-            }).catch(() => setOrderStatus("Order status: couldn't send order"));
+    const [message, setMessage] = useState("");
+
+    const sendOrder = () => {
+        if (state.order.length > 0) {
+            setMessage("Your order has just been sent to the kitchen");
+            console.log(order)
+            // MessagingService.fetchHandler('POST', '/orders/', {
+            //     restaurantId: state.restaurantId,
+            //     tableNumber: state.tableNumber,
+            //     order: order
+            // }).then(() => {
+
+            //     localStorage.removeItem('order');
+            // })
+
+            dispatch({
+                type: "Clear cart"
+            })
+
         }
+        else {
+            setMessage("Your order is empty")
+        }
+
     }
+
+    //Set quantity to the ordered items
+    let counter = 0;
+    let order = state.order
+
+        //Sort them by name
+        .sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
+
+        //Count items with similiar names
+        .map((item, index, array) => {
+            let itemWithQuantity = item;
+            counter++;
+            if (typeof array[index + 1] === 'undefined' || item.name !== array[index + 1].name) {
+                itemWithQuantity.quantity = counter;
+                counter = 0;
+                return itemWithQuantity;
+            }
+        })
+        //Clear the 'undefined' objects in the order array
+        .filter((item) => typeof item != 'undefined');
+
+    let orderItemsList, orderTotalSum;
+
+    if (order.lenght !== 0) {
+        orderItemsList = order.map((item, index) => <OrderItem key={index} item={item} />)
+        orderTotalSum = order.reduce(((acc, item) => acc + (item.price * item.quantity)), 0).toFixed(2);
+    } else {
+        orderItemsList = [];
+        orderTotalSum = 0.00;
+    }
+
 
     return (
         <>
-            <NavBar session={props.session}/>
-            <div className="content">
-                <h1>Order Details</h1>
-                <div>
-                    <ul>{order.map(item => {return(<li>{item.name + " (" + item.amount + ")"}</li>)})}</ul>
-                    <input type="button" href={(e) => {e.preventDefault()}} onClick={() => {sendOrder()}} value="Send Order"/>
-                </div>
-                <p>{orderStatus}</p>
-                <a href={"/" + props.session.restaurant.name + "/" + props.session.tableNumber}>Return to table</a>
+            <h1>Order Details</h1>
+            <div>
+                <Button size="large" variant="outlined" onClick={sendOrder}>Complete Order</Button>
+
+                {message !== '' ?
+                    <ListItem>
+                        <ListItemText primary={message} />
+                    </ListItem>
+                    : <></>}
+                <List component="nav">
+                    {orderItemsList}
+                </List>
+                <Divider />
+                <ListItem>
+                    <ListItemText primary={"TOTAL: €" + orderTotalSum} />
+                </ListItem>
             </div>
+
         </>
     )
 }

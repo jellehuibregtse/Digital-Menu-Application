@@ -1,30 +1,53 @@
 import React from 'react';
 import '../css/menu.css';
-import NavBar from "./fragments/NavBar";
 import '../css/orderBar.css';
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Product from './fragments/Product';
+import { useStateValue } from '../context/stateProvider';
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+        marginTop: "2%"
+    },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+    },
+}));
 
-const Menu = (props) => {
-    // Get order from session
-    const order = JSON.parse(sessionStorage.getItem('order')) != null? JSON.parse(sessionStorage.getItem('order')) : [];
+
+const Menu = () => {
+    // Get order from global state
+    const [state] = useStateValue();
+
+    const classes = useStyles();
 
     // Get all menuItems from menu
-    const items = props.session.menu.items.map(item => {return (
-        <a href="" onClick={() => {order.push(item.id); sessionStorage.setItem('order', JSON.stringify(order));}}>{item.name}</a>
-    )});
+    const itemsList = typeof state.menu !== 'undefined' ? state.menu.items.map(item => {
+        return (
+            <>
+                <Grid key={item.id+1000} item xs={6} sm={3}>
+                    <Product
+                        name={item.name}
+                        price={item.price}
+                        key={item.id}
+                        id={item.id}
+                    />
+                </Grid>
+            </>
+        )
+    }) : null;
 
     return (
         <>
-            <NavBar session={props.session}/>
-            <div className="content">
-                <div id="menu">
-                    <h1>{props.session.menu.name}</h1>
-                    <div className="item-flex">{items}</div>
-                </div>
-                <div id="order-bar">
-                    <a href={"/" + props.session.restaurant.name + "/" + props.session.tableNumber}>Cancel</a>
-                    <a href={order.length > 0? ("/" + props.session.restaurant.name + "/" + props.session.tableNumber + "/order/place") : (e) => {e.preventDefault()}}>Order {order.length > 0? "(" + order.length + ")" : null}</a>
-                </div>
+            <div className={classes.root}>
+                <Grid key={1} container spacing={3}>
+                    {itemsList}
+                </Grid>
             </div>
+
         </>
     )
 }
