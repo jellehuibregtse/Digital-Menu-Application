@@ -7,7 +7,7 @@ import OrderColumn from "./OrderColumn";
 const OrderView = (props) => {
 
   const {newItems,processingItems,completeItems,orders} = props;
-  
+
   return (
     <div className="container-fluid">
       <div className="row">

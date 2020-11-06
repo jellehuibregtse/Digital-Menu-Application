@@ -14,9 +14,23 @@ const Card = (props) => {
         >
           <div className="content">
             <h1>
-              {props.name} x {props.amount}
+              Table : {props.table}
             </h1>
-            <h2> Table number : {props.table}</h2>
+            <ul>
+              {props.items.map((item, index) => {
+                let listItem =
+                    <li key={props.id + "i" + index}>
+                      {item.name} x {item.amount}
+                    </li>
+
+                // if(item.status === 'COMPLETE')
+                // {
+                //   listItem.style.color === "green";
+                // }
+
+                return listItem;
+              })}
+            </ul>
           </div>
         </div>
       )}
