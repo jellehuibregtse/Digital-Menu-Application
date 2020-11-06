@@ -8,11 +8,20 @@ class MessagingService {
     static async fetchHandler(method, route, message) {
         console.log(message);
         let result = null;
-        await fetch('http://localhost:8762/api' + route, {
+        await fetch("/api" + route, {
             method: method,
-            body: JSON.stringify(message)
+            body: JSON.stringify(message),
+            headers: {
+                "Content-Type": "application/json",
+                "accept": "*/*",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Connection": "keep-alive"
+            }
+
         })
             .then((response) => {
+                console.log(response);
+                console.log(response.headers.get("Authorization"))
                 if (response.ok) {
                     return response.text()
                 } else {
@@ -22,7 +31,6 @@ class MessagingService {
             .then((res) => {
                 try {
                     result = typeof JSON.parse(res) === "object" && JSON.parse(res) !== null ? JSON.parse(res) : res
-                    console.log(result);
                 } catch (e) {
                     result = res
                 }

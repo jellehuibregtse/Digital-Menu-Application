@@ -50,7 +50,7 @@ const LoginPage = () => {
                     username: username.value,
                     password: password.value
                 }).then((res) => {
-                    console.log(res)
+
                 })
             }}>Login
             </button>
