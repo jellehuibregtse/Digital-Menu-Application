@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import '../css/loginpage.css'
+import MessagingService from "../services/MessagingService";
 
 const Login = styled.div`
     text-align: center;
@@ -12,10 +13,11 @@ const Login = styled.div`
 
 `
 
- const LoginPage = () =>{
+ const LoginPage = () => {
+    let username;
+    let password;
 
     return(
-        
         <Login>
             <h1>LOGIN:</h1>
 
@@ -24,7 +26,7 @@ const Login = styled.div`
                     <span class="input-group-text" id="1">Username</span>
                 </div>
 
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"/>
+                <input ref={(r) => {username = r}} type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"/>
 
             </div>
 
@@ -33,11 +35,13 @@ const Login = styled.div`
                     <span class="input-group-text" id="2">Password</span>
                 </div>
 
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"/>
+                <input ref={(r) => {password = r}} type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"/>
 
             </div>
 
-            <button className="btn btn-primary mt-2 btn-lg">Login</button>
+            <button className="btn btn-primary mt-2 btn-lg" onClick={() => {
+                MessagingService.fetchHandler('POST', '/auth-service/auth', {username: username.value, password: password.value}).then(() => {})
+            }}>Login</button>
         </Login>
     )
 }

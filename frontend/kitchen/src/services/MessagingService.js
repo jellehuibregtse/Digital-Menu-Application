@@ -1,16 +1,17 @@
 import Stomp from 'stompjs';
 
-// Service Registry Port: 8080
+// Gateway: 8762
 
 class MessagingService {
 
     // This is where you can get/post/put/delete messages
     static async fetchHandler(method, route, message) {
+        console.log(message);
         let result = null;
-        await fetch('http://localhost:8080/api' + route, {
+        await fetch('http://localhost:8762/api' + route, {
             method: method,
-            body: JSON.stringify(message),
             headers: {
+                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNjA0NjY2MDI1LCJleHAiOjE2MDU0ODEyMDB9.eUamlgUGorU88BpBf6oGUtMof924QS-0geSBHzYlhF7jn7zaECzC1VC4EtOFhIdjGLIy8hnlzwW-6iQxbnaiaA',
                 'Content-Type': 'application/json'
             }
         })
@@ -21,7 +22,7 @@ class MessagingService {
     }
 
     static register(route, onMessage, onClose, onConnect) {
-        let socket = new WebSocket('ws://localhost:8080/api/websockets');
+        let socket = new WebSocket('ws://localhost:8762/api/order-service/websockets');
         let stompClient = Stomp.over(socket);
         stompClient.debug = null;
         socket.onclose = onClose();

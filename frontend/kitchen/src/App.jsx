@@ -31,7 +31,7 @@ const App = () =>{
     );
 
     // Get restaurant settings
-    MessagingService.fetchHandler("GET", "/restaurants/" + RESTAURANT_ID)
+    MessagingService.fetchHandler("GET", "/restaurant-service/restaurants/" + RESTAURANT_ID)
       .then((res) => {
         setRestaurant(res);
       })
