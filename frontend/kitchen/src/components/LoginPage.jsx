@@ -13,11 +13,11 @@ const Login = styled.div`
 
 `
 
- const LoginPage = () => {
+const LoginPage = () => {
     let username;
     let password;
 
-    return(
+    return (
         <Login>
             <h1>LOGIN:</h1>
 
@@ -26,7 +26,10 @@ const Login = styled.div`
                     <span class="input-group-text" id="1">Username</span>
                 </div>
 
-                <input ref={(r) => {username = r}} type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"/>
+                <input ref={(r) => {
+                    username = r
+                }} type="text" class="form-control" aria-label="Sizing example input"
+                       aria-describedby="inputGroup-sizing-lg"/>
 
             </div>
 
@@ -35,13 +38,22 @@ const Login = styled.div`
                     <span class="input-group-text" id="2">Password</span>
                 </div>
 
-                <input ref={(r) => {password = r}} type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"/>
+                <input ref={(r) => {
+                    password = r
+                }} type="password" class="form-control" aria-label="Sizing example input"
+                       aria-describedby="inputGroup-sizing-lg"/>
 
             </div>
 
             <button className="btn btn-primary mt-2 btn-lg" onClick={() => {
-                MessagingService.fetchHandler('POST', '/auth-service/auth', {username: username.value, password: password.value}).then(() => {})
-            }}>Login</button>
+                MessagingService.fetchHandler('POST', '/auth-service/auth', {
+                    username: username.value,
+                    password: password.value
+                }).then((res) => {
+                    console.log(res)
+                })
+            }}>Login
+            </button>
         </Login>
     )
 }

@@ -1,18 +1,13 @@
 package com.dma.gateway.security;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.cors.reactive.CorsConfigurationSource;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
 
 /**
  * The security configuration for the authentication service.
@@ -30,8 +25,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .csrf().disable()
+        http.csrf()
+            .disable()
             // We want to use a stateless session, since we won't be storing the user's state.
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -41,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
             .and()
             // Add a filter to validate the tokens with every request.
-            .addFilterAfter(new JwtTokenAuthenticationFilter(jwtConfig), CorsAwareAuthenticationFilter.class)
+            .addFilterAfter(new JwtTokenAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class)
             // Authorization requests config.
             .authorizeRequests()
             // Allow all who are accessing authentication service.
