@@ -47,7 +47,7 @@ public class WebSocketTests {
     void setup() throws Exception {
         client = new WebSocketStompClient(new StandardWebSocketClient());
         client.setMessageConverter(new StringMessageConverter());
-        String URL = String.format("ws://localhost:%d/api/websockets", port);
+        String URL = String.format("ws://localhost:%d/websockets", port);
         session = client.connect(URL, new StompSessionHandlerAdapter() {}).get(1, SECONDS);
     }
 
