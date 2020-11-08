@@ -10,7 +10,6 @@ const Style= styled.div`
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    
 `
 const Background = styled.div`
     background-color: #f9f3ed;
@@ -27,7 +26,7 @@ const DishColumn = (props) => {
                     index={index}
                     name={item.name}
                     quantity={item.quantity}
-                    table={item.table}
+                    table={item.tableNumber}
                 />
             </React.Fragment>
         );

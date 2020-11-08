@@ -7,8 +7,10 @@ const Style= styled.div`
     font-family: 'Oswald', sans-serif;
     font-weight: bold;
     margin-top: 2vh;
-    min-height: 50px;
-    
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
 `
 const Background = styled.div`
 
@@ -26,7 +28,7 @@ const OrderColumn = (props) => {
                     index={index}
                     items={item.items}
                     createdDateTime={item.createdDateTime}
-                    table={item.tableNumber}
+                    tableNumber={item.tableNumber}
                 />
             </React.Fragment>
         );

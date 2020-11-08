@@ -66,7 +66,7 @@ class MessagingService {
     }
 
     static register(route, onMessage, onClose, onConnect) {
-        let socket = new WebSocket('ws://localhost:8083/api/order-service/websockets');
+        let socket = new WebSocket('ws://localhost:8083/websockets');
         let stompClient = Stomp.over(socket);
         stompClient.debug = null;
         socket.onclose = onClose();

@@ -3,17 +3,10 @@ import "../../css/card.css";
 import { Draggable } from "react-beautiful-dnd";
 import styled from 'styled-components'
 
-const StyledCard = styled.div`
-
-  font-family: 'Oswald', sans-serif;
-  
-  
-
-`
+const StyledCard = styled.div`font-family: 'Oswald', sans-serif;`
 
 const Card = (props) => {
   return (
-     
     <Draggable draggableId={props.id} index={props.index}>
       {(provided) => (
         <StyledCard>
@@ -21,11 +14,8 @@ const Card = (props) => {
           className="card"
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          ref={provided.innerRef}
-          
-        >
-         
-         
+          ref={provided.innerRef}>
+
           <div className="content">
             <h1>
               {props.name} x {props.quantity}
@@ -35,9 +25,6 @@ const Card = (props) => {
           
         </div>
         </StyledCard>
-        
-        
-        
       )}
     </Draggable>
     

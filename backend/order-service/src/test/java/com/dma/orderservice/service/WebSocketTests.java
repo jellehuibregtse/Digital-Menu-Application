@@ -66,12 +66,12 @@ public class WebSocketTests {
     void receivesMessageFromSubscription() throws Exception {
         CompletableFuture<String> completableFuture = new CompletableFuture<>();
 
-        session.subscribe("/topic/orders/" + order.getRestaurantId(),
+        session.subscribe("/orders/" + order.getRestaurantId(),
                           new MyStompFrameHandler(completableFuture::complete));
 
         Thread.sleep(1000);
 
-        orderService.sendMessage(order);
+        orderService.sendMessage(order.getRestaurantId());
 
         Assert.assertNotNull(new ObjectMapper().readValue(completableFuture.get(2, SECONDS), Object.class));
     }
