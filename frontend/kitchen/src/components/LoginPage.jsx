@@ -46,11 +46,12 @@ const LoginPage = () => {
             </div>
 
             <button className="btn btn-primary mt-2 btn-lg" onClick={() => {
-                MessagingService.fetchHandler('POST', '/auth-service/auth', {
+                MessagingService.auth({
                     username: username.value,
                     password: password.value
                 }).then((res) => {
-
+                    sessionStorage.setItem("Bearer", res);
+                    document.location.href = "/";
                 })
             }}>Login
             </button>

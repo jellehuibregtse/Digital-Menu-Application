@@ -18,17 +18,19 @@ const App = () =>{
 
   // Run once at runtime
   useEffect(() => {
-    // Subscribe to orders from restaurant
-    MessagingService.register(
-      "/topic/orders/" + RESTAURANT_ID,
-      (m) => {setOrders(JSON.parse(m.body))},
-      () => {},
-      () => {
-        MessagingService.fetchHandler("GET", "/orders")
-          .then()
-          .catch((e) => {});
-      }
-    );
+    MessagingService.fetchHandler("GET", "/order-service/orders/restaurant/" + RESTAURANT_ID)
+        .then((res) => {
+          console.log(res)
+          setOrders(res);
+          // Subscribe to orders from restaurant
+          MessagingService.register(
+              "/orders/" + RESTAURANT_ID,
+              (m) => {setOrders(JSON.parse(m.body))},
+              () => {},
+              () => {}
+          );
+        })
+        .catch((e) => {});
 
     // Get restaurant settings
     MessagingService.fetchHandler("GET", "/restaurant-service/restaurants/" + RESTAURANT_ID)
@@ -66,17 +68,17 @@ const App = () =>{
 
     if(destination.droppableId === 'newDishes') {
       order.items[items.find((item) => item.id.toString() === draggableId).index].status = OrderStatus.NEW;
-      MessagingService.fetchHandler("PUT", "/orders", order).then().catch((e) => {});
+      MessagingService.fetchHandler("PUT", "/order-service/orders/" + order.id, order).then().catch((e) => {});
     }
 
     if(destination.droppableId === 'processingDishes') {
       order.items[items.find((item) => item.id.toString() === draggableId).index].status = OrderStatus.PROCESSING;
-      MessagingService.fetchHandler("PUT", "/orders", order).then().catch((e) => {});
+      MessagingService.fetchHandler("PUT", "/order-service/orders/" + order.id, order).then().catch((e) => {});
     }
 
     if(destination.droppableId === 'completeDishes') {
       order.items[items.find((item) => item.id.toString() === draggableId).index].status = OrderStatus.COMPLETE;
-      MessagingService.fetchHandler("PUT", "/orders", order).then().catch((e) => {});
+      MessagingService.fetchHandler("PUT", "/order-service/orders/" + order.id, order).then().catch((e) => {});
     }
   };
 

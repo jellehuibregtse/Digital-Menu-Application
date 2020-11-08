@@ -26,7 +26,7 @@ const DishColumn = (props) => {
                     key={item.id.toString()}
                     index={index}
                     name={item.name}
-                    amount={item.amount}
+                    quantity={item.quantity}
                     table={item.table}
                 />
             </React.Fragment>

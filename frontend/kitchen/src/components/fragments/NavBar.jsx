@@ -17,10 +17,8 @@ const NavBar = (props) => {
         
         <nav id="nav-bar" style = {{backgroundColor : "#ffaf20"}}>
             <WelcomeText>
-            <h4>Hi 
-             {props.userName ? " " + props.userName : " {placeholder-user-name}"}!
-             Welcome to 
-             {props.restaurantName ? props.restaurantName : " {placeholder-restaurant-name}"}!</h4>
+            <h4>Hi {props.userName ? " " + props.userName : " {placeholder-user-name}"}!
+             Welcome to {props.restaurantName ? props.restaurantName : " {placeholder-restaurant-name}"}!</h4>
             </WelcomeText>
             <Link to="/login">
             <button className="btn btn-primary btn-badge btn-md" 

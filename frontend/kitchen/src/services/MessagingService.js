@@ -5,11 +5,11 @@ import Stomp from 'stompjs';
 class MessagingService {
 
     // This is where you can get/post/put/delete messages
-    static async fetchHandler(method, route, message) {
+    static async auth(message) {
         console.log(message);
         let result = null;
-        await fetch("/api" + route, {
-            method: method,
+        await fetch("/api/auth-service/auth", {
+            method: 'POST',
             body: JSON.stringify(message),
             headers: {
                 "Content-Type": "application/json",
@@ -19,9 +19,33 @@ class MessagingService {
             }
 
         })
+        .then((response) => {
+            if(response.headers.get("Authorization") != null) {
+                result = response.headers.get("Authorization");
+            }
+        })
+        .catch(error => {
+            throw new Error(error.message)
+        });
+        return result
+    }
+
+    // This is where you can get/post/put/delete messages
+    static async fetchHandler(method, route, message) {
+        let result = null;
+        await fetch("/api" + route, {
+            method: method,
+            body: JSON.stringify(message),
+            headers: {
+                "Content-Type": "application/json",
+                "accept": "*/*",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Connection": "keep-alive",
+                "Authorization": sessionStorage.getItem("Bearer")
+            }
+
+        })
             .then((response) => {
-                console.log(response);
-                console.log(response.headers.get("Authorization"))
                 if (response.ok) {
                     return response.text()
                 } else {
@@ -42,7 +66,7 @@ class MessagingService {
     }
 
     static register(route, onMessage, onClose, onConnect) {
-        let socket = new WebSocket('ws://localhost:8762/api/order-service/websockets');
+        let socket = new WebSocket('ws://localhost:8083/api/order-service/websockets');
         let stompClient = Stomp.over(socket);
         stompClient.debug = null;
         socket.onclose = onClose();

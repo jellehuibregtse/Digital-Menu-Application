@@ -1,5 +1,5 @@
 import React from "react";
-import Card from "./fragments/Card";
+import OrderCard from "./fragments/Card";
 import styled from 'styled-components'
 import '../css/columns.css'
 
