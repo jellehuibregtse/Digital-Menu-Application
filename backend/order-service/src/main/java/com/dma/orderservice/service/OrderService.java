@@ -67,7 +67,7 @@ public class OrderService implements IOrderService {
     }
 
     protected void sendMessage(CustomerOrder order) throws Exception {
-        template.convertAndSend("/topic/orders/" + order.getRestaurantId(),
+        template.convertAndSend("/orders/" + order.getRestaurantId(),
                                 new ObjectMapper().writeValueAsString(order));
     }
 }
