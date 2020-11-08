@@ -4,7 +4,7 @@ import Navbar from "./components/fragments/NavBar";
 import OrderView from "./components/OrderView";
 import LoginPage from "./components/LoginPage";
 import MessagingService from "./services/MessagingService";
-import {BrowserRouter as Router,Switch,Route} from "react-router-dom";
+import {BrowserRouter as Router,Switch,Route, Redirect} from "react-router-dom";
 
 // Hardcoded restaurant id
 const RESTAURANT_ID = 0;
@@ -46,7 +46,10 @@ const App = () => {
         <Navbar restaurantName={restaurant.name} userName={user.name}/>
         <Switch>
           <Route path="/" exact render={() => (<OrderView orders={orders} count={1}/>)}/>
+
           <Route path="/login" render={() => (<LoginPage />)}/>
+
+          <Route path="*"><Redirect to="/"/></Route>
         </Switch>
       </Router>
     </>

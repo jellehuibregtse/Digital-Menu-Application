@@ -61,9 +61,9 @@ const OrderView = (props) => {
   }
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="container-fluid">
-        <div className="row">
+    <div className="container-fluid">
+      <div className="row">
+        <DragDropContext onDragEnd={onDragEnd}>
           <div className="col-md-3 col-sm-6">
             <Droppable droppableId={"newDishes"}>
               {(provided) => (
@@ -114,7 +114,9 @@ const OrderView = (props) => {
               )}
             </Droppable>
           </div>
+        </DragDropContext>
 
+        <DragDropContext>
           <div className="col-md-3 col-sm-6">
             <Droppable droppableId={"orders"}>
               {(provided) => (
@@ -131,9 +133,9 @@ const OrderView = (props) => {
               )}
             </Droppable>
           </div>
-        </div>
+        </DragDropContext>
       </div>
-    </DragDropContext>
+    </div>
   );
 };
 
