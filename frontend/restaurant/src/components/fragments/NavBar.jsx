@@ -39,7 +39,7 @@ const NavBar = () => {
 
     //Shows order cart in the navigation when you are in the menu page
     let shoppingCartLink =
-        <Link to={"/" + initialState.restaurant.name + "/" + initialState.tableNumber + "/order/place"}
+        <Link to={"/place-order"}
             className={classes.buttonColor}>
             <Badge badgeContent={initialState.order.length} color="secondary">
                 <ShoppingCartIcon fontSize="large" className={classes.root} />
@@ -48,7 +48,7 @@ const NavBar = () => {
     
     //Shows menu link in the navigation when you are in order page
     let menuLink =
-        <Link to={"/" + initialState.restaurant.name + "/" + initialState.tableNumber}
+        <Link to={"/"}
             className={classes.buttonColor}>
             Menu
         </Link>

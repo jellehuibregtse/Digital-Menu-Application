@@ -15,17 +15,17 @@ const CompleteOrder = () => {
     const [message, setMessage] = useState("");
 
     const sendOrder = () => {
+        console.log(order)
         if (state.order.length > 0) {
-            setMessage("Your order has just been sent to the kitchen");
-            console.log(order)
-            // MessagingService.fetchHandler('POST', '/orders/', {
-            //     restaurantId: state.restaurantId,
-            //     tableNumber: state.tableNumber,
-            //     order: order
-            // }).then(() => {
-
-            //     localStorage.removeItem('order');
-            // })
+            MessagingService.fetchHandler('POST','/order-service/orders', {
+                restaurantId: state.restaurant.id,
+                tableNumber: state.tableNumber,
+                items: order.map((item) => { return ({ name: item.name, quantity: item.quantity })})
+            }).then(() => {
+                setMessage("Your order has just been sent to the kitchen");
+            }).catch((e) => {
+                setMessage(e);
+            })
 
             dispatch({
                 type: "Clear cart"
@@ -41,11 +41,10 @@ const CompleteOrder = () => {
     //Set quantity to the ordered items
     let counter = 0;
     let order = state.order
-
-        //Sort them by name
+        // Sort items by name
         .sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
 
-        //Count items with similiar names
+        //Count items with similar names
         .map((item, index, array) => {
             let itemWithQuantity = item;
             counter++;
@@ -60,7 +59,7 @@ const CompleteOrder = () => {
 
     let orderItemsList, orderTotalSum;
 
-    if (order.lenght !== 0) {
+    if (order.length !== 0) {
         orderItemsList = order.map((item, index) => <OrderItem key={index} item={item} />)
         orderTotalSum = order.reduce(((acc, item) => acc + (item.price * item.quantity)), 0).toFixed(2);
     } else {

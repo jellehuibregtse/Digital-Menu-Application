@@ -6,10 +6,11 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import FastfoodSharpIcon from '@material-ui/icons/FastfoodSharp';
 import { useStateValue } from '../../context/stateProvider';
+
 const OrderItem = (props) => {
     const[state,dispatch] = useStateValue();
 
-    const onClickHandler = (e) => {
+    const onDelete = (e) => {
         let deletedItem = e.target.parentNode.getAttribute("item");
         console.log(deletedItem)
         dispatch({
@@ -21,6 +22,8 @@ const OrderItem = (props) => {
               }
         })
     }
+
+    const price = typeof props.item.price !== 'undefined'? props.item.price.toFixed(2) : "-";
     return (
         <>
             <ListItem key={props.item.id}>
@@ -28,8 +31,8 @@ const OrderItem = (props) => {
                     <FastfoodSharpIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText primary={props.item.name} />
-                <ListItemText primary={"€" + " " + props.item.price.toFixed(2)+" x "+props.item.quantity} />
-                <Button item={props.item.name} onClick={onClickHandler} variant="outlined" color="secondary">Delete</Button>
+                <ListItemText primary={"€ " + price + " x " + props.item.quantity} />
+                <Button item={props.item.name} onClick={onDelete} variant="outlined" color="secondary">Delete</Button>
             </ListItem>
             <Divider />
         </>

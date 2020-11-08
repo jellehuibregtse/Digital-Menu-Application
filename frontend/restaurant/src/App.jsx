@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
-import Home from "./components/Home";
 import Menu from "./components/Menu";
 import CompleteOrder from "./components/CompleteOrder";
 import JoinRestaurant from "./components/JoinRestaurant";
@@ -12,7 +11,7 @@ import { grey } from "@material-ui/core/colors";
 import { useStateValue } from './context/stateProvider';
 
 const App = () => {
-    const [state] = useStateValue();
+    const [state] = useState(JSON.parse(sessionStorage.getItem("session")) != null? JSON.parse(sessionStorage.getItem("session")) : []);
 
     const theme = createMuiTheme({
         palette: {
@@ -38,21 +37,14 @@ const App = () => {
                     <Switch>
                         <Route exact strict path={"/qr"} component={JoinRestaurant} />
                         {state.menu != null ? <Switch>
-                            <Route exact strict path={"/" + state.restaurant.name + "/" + state.tableNumber}>
+                            <Route exact strict path={"/"}>
                                 <NavBar />
                                 <Banner />
                                 <Container>
-                                    <Home />
+                                    <Menu menu={state.menu} />
                                 </Container>
                             </Route>
-                            <Route exact strict path={"/" + state.restaurant.name + "/" + state.tableNumber + "/order"}>
-                                <NavBar />
-                                <Banner />
-                                <Container>
-                                    <Menu />
-                                </Container>
-                            </Route>
-                            <Route exact strict path={"/" + state.restaurant.name + "/" + state.tableNumber + "/order/place"}>
+                            <Route exact strict path={"/place-order"}>
                                 <NavBar />
                                 <Banner />
                                 <Container>
@@ -61,7 +53,7 @@ const App = () => {
                             </Route>
 
                             <Route path="*">
-                                <Redirect to={"/" + state.restaurant.name + "/" + state.tableNumber} />
+                                <Redirect to={"/"} />
                             </Route>
                         </Switch> : null}
 
