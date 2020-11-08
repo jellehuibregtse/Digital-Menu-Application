@@ -5,40 +5,27 @@ import DishColumn from "./DishColumn";
 import OrderColumn from "./OrderColumn";
 import MessagingService from "../services/MessagingService";
 
+const OrderStatus = {
+  NEW: "NEW",
+  PROCESSING: "PROCESSING",
+  COMPLETE: "COMPLETE",
+};
+
 const OrderView = (props) => {
 
-  const {restaurantID} = props;
-
-  const [orders, setOrders] = useState([]);
-
-  const OrderStatus = {
-    NEW: "NEW",
-    PROCESSING: "PROCESSING",
-    COMPLETE: "COMPLETE",
-  };
+  const {orders} = props;
 
   // Get all menu items from all open orders
-  const items = [].concat.apply([],orders.map((order) => order.items.map((item, index) => { item.index = index; item.parentId = order.id; item.tableNumber = order.tableNumber; return item; })));
-  let newItems = items.filter((item) => item.status === OrderStatus.NEW);
-  let processingItems = items.filter((item) => item.status === OrderStatus.PROCESSING);
-  let completeItems = items.filter((item) => item.status === OrderStatus.COMPLETE);
+  const [items, setItems] = useState([]);
+  const newItems = items.filter((item) => item.status === OrderStatus.NEW);
+  const processingItems = items.filter((item) => item.status === OrderStatus.PROCESSING);
+  const completeItems = items.filter((item) => item.status === OrderStatus.COMPLETE);
 
-  // Run once at runtime
   useEffect(() => {
-    MessagingService.register(
-        "/orders/" + restaurantID,
-        (m) => {setOrders(JSON.parse(m.body))},
-        () => {},
-        () => {
-          MessagingService.fetchHandler("GET", "/order-service/orders/restaurant/" + restaurantID)
-              .then((res) => {
-                setOrders(res)
-              })
-              .catch((e) => {
-              });
-        }
-    );
-  });
+    if(orders.length > 0) {
+      setItems(orders.map((order) => order.items.map((item, index) => { item.index = index; item.parentId = order.id; item.tableNumber = order.tableNumber; return item; })).flat());
+    }
+  }, [orders])
 
   const onDragEnd = (result) => {
     const {destination, source, draggableId} = result;
@@ -70,6 +57,7 @@ const OrderView = (props) => {
   const moveOrder = (order, draggableId, status) => {
     order.items[items.find((item) => item.id.toString() === draggableId).index].status = status;
     MessagingService.fetchHandler("PUT", "/order-service/orders/" + order.id, order).then().catch(() => {});
+    setItems(orders.map((order) => order.items.map((item, index) => { item.index = index; item.parentId = order.id; item.tableNumber = order.tableNumber; return item; })).flat());
   }
 
   return (

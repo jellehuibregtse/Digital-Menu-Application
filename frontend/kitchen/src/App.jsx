@@ -11,16 +11,33 @@ const RESTAURANT_ID = 0;
 
 const App = () => {
   const [restaurant, setRestaurant] = useState({});
+  const [orders, setOrders] = useState([]);
   const [user] = useState({ name: "user" });
 
   // Run once at runtime
   useEffect(() => {
-    // Get restaurant settings
-    MessagingService.fetchHandler("GET", "/restaurant-service/restaurants/" + RESTAURANT_ID)
-      .then((res) => {
-        setRestaurant(res);
-      })
-      .catch((e) => {});
+    async function fetchOrders() {
+      await MessagingService.fetchHandler("GET", "/restaurant-service/restaurants/" + RESTAURANT_ID)
+          .then((res) => {
+            setRestaurant(res);
+          })
+          .catch(() => {});
+
+      await MessagingService.register(
+          "/orders/" + RESTAURANT_ID,
+          (m) => {setOrders(JSON.parse(m.body))},
+          () => {},
+          () => {
+            MessagingService.fetchHandler("GET", "/order-service/orders/restaurant/" + RESTAURANT_ID)
+                .then((res) => {
+                  setOrders(res);
+                })
+                .catch(() => {
+                });
+          }
+      );
+    }
+    fetchOrders();
   }, []);
 
   return (
@@ -28,7 +45,7 @@ const App = () => {
       <Router>
         <Navbar restaurantName={restaurant.name} userName={user.name}/>
         <Switch>
-          <Route path="/" exact render={() => (<OrderView restaurantID={RESTAURANT_ID}/>)}/>
+          <Route path="/" exact render={() => (<OrderView orders={orders} count={1}/>)}/>
           <Route path="/login" render={() => (<LoginPage />)}/>
         </Switch>
       </Router>
