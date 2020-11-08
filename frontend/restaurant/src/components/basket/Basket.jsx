@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import MessagingService from "../services/MessagingService";
-import { Button } from "@material-ui/core";
-import { useStateValue } from '../context/stateProvider';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import OrderItem from './fragments/OrderItem';
+import MessagingService from "../../services/MessagingService";
+import { ListItemText, Button, List, ListItem, Divider } from "@material-ui/core";
+import { useStateValue } from '../../context/stateProvider';
+import BasketItem from './BasketItem';
 
-const CompleteOrder = () => {
+const Basket = () => {
 
     const [state, dispatch] = useStateValue();
 
@@ -33,7 +29,7 @@ const CompleteOrder = () => {
 
         }
         else {
-            setMessage("Your order is empty")
+            setMessage("")
         }
 
     }
@@ -59,11 +55,17 @@ const CompleteOrder = () => {
 
     let orderItemsList, orderTotalSum;
 
-    if (order.length !== 0) {
-        orderItemsList = order.map((item, index) => <OrderItem key={index} item={item} />)
+    if (order.length > 0) {
+        orderItemsList = order.map((item, index) => <BasketItem key={index} item={item} />)
         orderTotalSum = order.reduce(((acc, item) => acc + (item.price * item.quantity)), 0).toFixed(2);
     } else {
-        orderItemsList = [];
+        orderItemsList = [
+            <>
+                <ListItem>
+                    <ListItemText primary="Your basket is empty"/>
+                </ListItem>
+                <Divider/>
+            </>];
         orderTotalSum = 0.00;
     }
 
@@ -82,7 +84,6 @@ const CompleteOrder = () => {
                 <List component="nav">
                     {orderItemsList}
                 </List>
-                <Divider />
                 <ListItem>
                     <ListItemText primary={"TOTAL: €" + orderTotalSum} />
                 </ListItem>
@@ -92,4 +93,4 @@ const CompleteOrder = () => {
     )
 }
 
-export default CompleteOrder;
+export default Basket;

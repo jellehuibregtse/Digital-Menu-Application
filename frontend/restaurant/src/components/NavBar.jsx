@@ -1,10 +1,10 @@
 import React from 'react';
 import { Toolbar, Typography } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
-import '../../css/navbar.css';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import '../css/navbar.css';
+import { ShoppingBasket, Home } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { useStateValue } from '../../context/stateProvider';
+import { useStateValue } from '../context/stateProvider';
 import { Link } from 'react-router-dom';
 import Badge from '@material-ui/core/Badge';
 
@@ -17,11 +17,11 @@ const useStyles = makeStyles(theme => ({
         flex: 1,
         justifyContent: "center"
     },
-    shopingCart: {
+    icon: {
         flex: 0.1,
         marginLeft: "auto",
         textDecoration: "none",
-        height: "22px"
+        color: theme.palette.secondary.main
     },
     banner: {
         flex: 0.6
@@ -39,21 +39,19 @@ const NavBar = () => {
 
     //Shows order cart in the navigation when you are in the menu page
     let shoppingCartLink =
-        <Link to={"/place-order"}
-            className={classes.buttonColor}>
+        <Link to={"/basket"} className={classes.icon}>
             <Badge badgeContent={initialState.order.length} color="secondary">
-                <ShoppingCartIcon fontSize="large" className={classes.root} />
+                <ShoppingBasket fontSize="large" className={classes.root} />
             </Badge>
         </Link>
     
     //Shows menu link in the navigation when you are in order page
     let menuLink =
-        <Link to={"/"}
-            className={classes.buttonColor}>
-            Menu
+        <Link to={"/"} className={classes.icon}>
+            <Home href={"/"} fontSize="large" className={classes.root} />
         </Link>
 
-    let link = !window.location.href.toLowerCase().includes("place") ?
+    let link = !window.location.href.toLowerCase().includes("basket") ?
         shoppingCartLink : menuLink;
 
     return (
@@ -65,12 +63,9 @@ const NavBar = () => {
                             Welcome to {initialState.restaurant.name}!
                         </Typography>
                     </div>
-                    <Typography className={classes.shopingCart}>
-                        {link}
-                    </Typography>
+                    {link}
                 </Toolbar>
             </AppBar>
-            <Toolbar />
         </>
     )
 }

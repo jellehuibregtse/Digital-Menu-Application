@@ -1,13 +1,9 @@
 import React from 'react';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import FastfoodSharpIcon from '@material-ui/icons/FastfoodSharp';
+import {ListItemText, Select, ListItemIcon, ListItem, Button, Divider, MenuItem} from '@material-ui/core';
+import {FastfoodSharp} from '@material-ui/icons';
 import { useStateValue } from '../../context/stateProvider';
 
-const OrderItem = (props) => {
+const BasketItem = (props) => {
     const[state,dispatch] = useStateValue();
 
     const onDelete = (e) => {
@@ -28,15 +24,21 @@ const OrderItem = (props) => {
         <>
             <ListItem key={props.item.id}>
                 <ListItemIcon>
-                    <FastfoodSharpIcon color="primary" />
+                    <FastfoodSharp color="primary" />
                 </ListItemIcon>
                 <ListItemText primary={props.item.name} />
                 <ListItemText primary={"€ " + price + " x " + props.item.quantity} />
-                <Button item={props.item.name} onClick={onDelete} variant="outlined" color="secondary">Delete</Button>
+                <div>
+                    {/*amount */}
+                    {/*<Select labelId="demo-customized-select-label" variant="outlined" color="primary">*/}
+                    {/*    <MenuItem value={1}>1</MenuItem>*/}
+                    {/*</Select>*/}
+                    <Button item={props.item.name} onClick={onDelete} variant="outlined" color="secondary">Delete</Button>
+                </div>
             </ListItem>
             <Divider />
         </>
     );
 }
 
-export default OrderItem;
+export default BasketItem;
