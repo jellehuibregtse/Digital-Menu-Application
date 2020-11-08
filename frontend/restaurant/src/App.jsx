@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import Menu from "./components/menu/Menu";
-import Basket from "./components/basket/Basket";
+import Basket from "./components/order/Basket";
 import JoinRestaurant from "./components/JoinRestaurant";
 import NavBar from "./components/NavBar";
 import Banner from "./components/Banner";

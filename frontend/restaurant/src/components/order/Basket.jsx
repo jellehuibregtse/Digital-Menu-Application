@@ -15,7 +15,7 @@ const Basket = () => {
             MessagingService.fetchHandler('POST','/order-service/orders', {
                 restaurantId: state.restaurant.id,
                 tableNumber: state.tableNumber,
-                items: order.map((item) => { return ({ name: item.name, quantity: item.quantity })})
+                items: order.map((item) =>  ({ name: item.name, quantity: item.quantity }))
             }).then(() => {
                 setMessage("Your order has just been sent to the kitchen");
             }).catch((e) => {
@@ -38,15 +38,13 @@ const Basket = () => {
     let order = state.order
         // Sort items by name
         .sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
-
         //Count items with similar names
         .map((item, index, array) => {
-            let itemWithQuantity = item;
             counter++;
             if (typeof array[index + 1] === 'undefined' || item.name !== array[index + 1].name) {
-                itemWithQuantity.quantity = counter;
+                item.quantity = counter;
                 counter = 0;
-                return itemWithQuantity;
+                return item;
             }
         })
         //Clear the 'undefined' objects in the order array
@@ -67,7 +65,6 @@ const Basket = () => {
             </>];
         orderTotalSum = 0.00;
     }
-
 
     return (
         <>
