@@ -11,7 +11,6 @@ const Basket = () => {
     const [message, setMessage] = useState("");
 
     const sendOrder = () => {
-        console.log(order)
         if (state.order.length > 0) {
             MessagingService.fetchHandler('POST','/order-service/orders', {
                 restaurantId: state.restaurant.id,
