@@ -1,29 +1,86 @@
-import OrderColumn from "./fragments/OrderColumn";
 import React from "react";
-
-const OrderStatus = {
-    NEW: "NEW",
-    PROCESSING: "PROCESSING",
-    COMPLETE: "COMPLETE"
-}
+import "../css/orderview.css";
+import { Droppable } from "react-beautiful-dnd";
+import DishColumn from "./DishColumn";
+import OrderColumn from "./OrderColumn";
 
 const OrderView = (props) => {
-    // Get all menu items from all open orders
-    const items = [].concat.apply([], props.orders.map((order) => { return order.items.map((item) => { item.table = order.tableNumber; return item; })}));
 
-    // Dividing menu items to assigned columns
-    const newItems = items.filter(item => item.status === OrderStatus.NEW);
-    const processingItems = items.filter(item => item.status === OrderStatus.PROCESSING);
-    const completeItems = items.filter(item => item.status === OrderStatus.COMPLETE);
+  const {newItems,processingItems,completeItems,orders} = props;
 
-    return(
-        <div className="orderView">
-            <div className="column"><OrderColumn name={"New Dishes"} columnType={0} items={newItems}/> </div>
-            <div className="column"><OrderColumn name={"Preparing Dishes"} columnType={0} items={processingItems}/></div>
-            <div className="column"><OrderColumn name={"Completed Dishes"} columnType={0} items={completeItems}/></div>
-            <div className="column"><OrderColumn name={"Orders"} columnType={1} items={props.orders}/></div>
+  return (
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col-md-3 col-sm-6">
+          <Droppable droppableId={"newDishes"}>
+            {(provided) => (
+              <DishColumn
+                key={1}
+                id={1}
+                name="New Dishes"
+                items={newItems}
+                innerRef={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {provided.placeholder}
+              </DishColumn>
+            )}
+          </Droppable>
         </div>
-    )
-}
+
+        <div className="col-md-3 col-sm-6">
+          <Droppable droppableId={"processingDishes"}>
+            {(provided) => (
+                <DishColumn
+                    key={2}
+                    id={2}
+                    name="Preparing Dishes"
+                    items={processingItems}
+                    innerRef={provided.innerRef}
+                    {...provided.droppableProps}
+                >
+                  {provided.placeholder}
+                </DishColumn>
+            )}
+          </Droppable>
+        </div>
+
+        <div className="col-md-3 col-sm-6">
+          <Droppable droppableId={"completeDishes"}>
+            {(provided) => (
+                <DishColumn
+                    key={3}
+                    id={3}
+                    name="Completed Dishes"
+                    items={completeItems}
+                    innerRef={provided.innerRef}
+                    {...provided.droppableProps}
+                >
+                  {provided.placeholder}
+                </DishColumn>
+            )}
+          </Droppable>
+        </div>
+
+        <div className="col-md-3 col-sm-6">
+          <Droppable droppableId={"orders"}>
+            {(provided) => (
+                <OrderColumn
+                    key={4}
+                    id={4}
+                    name="Orders"
+                    items={orders}
+                    innerRef={provided.innerRef}
+                    {...provided.droppableProps}
+                >
+                  {provided.placeholder}
+                </OrderColumn>
+            )}
+          </Droppable>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default OrderView;

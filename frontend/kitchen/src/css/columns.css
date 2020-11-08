@@ -1,0 +1,16 @@
+.main {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  border: 2px #96d6cf solid;
+  font-family: 'Oswald', sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.main .items {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+}

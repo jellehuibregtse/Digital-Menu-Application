@@ -1,0 +1,36 @@
+.card {
+  width: 200px;
+  height: 100px;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.card .content {
+  margin-top: 10px;
+  
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.card:hover
+{
+  opacity: 80%;
+}
+
+.card .content h2 {
+  font-size: 15px;
+  /* margin-bottom: 10px; */
+}
+
+.card .content p {
+  font-size: 24px;
+  /* margin-bottom: 10px; */
+}
+
+.card .content ul {
+  list-style-type: none;
+  margin-bottom: 0;
+}

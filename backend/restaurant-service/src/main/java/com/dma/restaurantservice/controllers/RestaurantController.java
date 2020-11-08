@@ -30,7 +30,7 @@ public class RestaurantController {
      *
      * @return <code>ResponseEntity</code> with a list of restaurants and HTTP status OK.
      */
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Restaurant>> getAllRestaurants() {
         List<Restaurant> result = new ArrayList<>();
         repository.findAll().forEach(result::add);
@@ -56,7 +56,7 @@ public class RestaurantController {
      * @param restaurant that needs to be created.
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<String> createRestaurant(@RequestBody Restaurant restaurant) {
         repository.save(restaurant);
 
@@ -70,7 +70,7 @@ public class RestaurantController {
      * @param restaurant that needs to be updated
      * @return message and HTTP status OK.
      */
-    @PutMapping("/")
+    @PutMapping
     public ResponseEntity<String> updateRestaurant(@RequestBody Restaurant restaurant) {
         Restaurant updatedRestaurant =
                 repository.findById(restaurant.getId()).orElseThrow(() -> new ResourceNotFoundException("not found"));

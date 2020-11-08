@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Jelle Huibregtse
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/test")
 public class TestController {
