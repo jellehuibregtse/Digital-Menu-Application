@@ -27,16 +27,11 @@ public class OrderService implements IOrderService {
 
     @Override
     public ResponseEntity<List<CustomerOrder>> findAllOrders(long restaurantId) {
-        List<CustomerOrder> orders = Lists.newArrayList(repository.findAllByRestaurantId(restaurantId));
-
-        return ResponseEntity.ok(orders);
+        return ResponseEntity.ok(Lists.newArrayList(repository.findAllByRestaurantId(restaurantId)));
     }
 
     @Override
-    public ResponseEntity<CustomerOrder> findOrder(long id) {
-        CustomerOrder order = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found."));
-
-        return ResponseEntity.ok(order);
+    public ResponseEntity<CustomerOrder> findOrder(long id) {return ResponseEntity.ok(repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found.")));
     }
 
     @Override
