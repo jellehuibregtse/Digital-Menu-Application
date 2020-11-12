@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const Design = () => {
+export default () => {
     const classes = useStyles();
 
     return (
@@ -28,5 +28,3 @@ const Design = () => {
         </main>
     )
 }
-
-export default Design;

@@ -68,7 +68,7 @@ const isValidImage = (url) => {
     return true;
 }
 
-const SideBar = () => {
+export default () => {
     const classes = useStyles();
 
     // palette
@@ -124,5 +124,3 @@ const SideBar = () => {
         </Drawer>
     )
 }
-
-export default SideBar;

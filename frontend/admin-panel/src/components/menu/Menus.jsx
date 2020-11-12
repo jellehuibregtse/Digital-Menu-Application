@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const Menus = () => {
+export default () => {
     const classes = useStyles();
 
     return (
@@ -75,5 +75,3 @@ const Menus = () => {
         </Container>
     )
 }
-
-export default Menus;

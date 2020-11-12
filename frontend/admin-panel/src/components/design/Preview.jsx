@@ -1,7 +1,7 @@
 import React from "react";
 import {Typography} from "@material-ui/core";
 
-const Preview = () => {
+export default () => {
     return (
         <>
             <Typography variant="h4">
@@ -12,5 +12,3 @@ const Preview = () => {
 
     )
 }
-
-export default Preview;

@@ -27,7 +27,7 @@ const theme = createMuiTheme({
 
 const App = () => {
 
-    const [loggedIn] = useState(false);
+    const [loggedIn] = useState(true);
 
     return (
         <Router>

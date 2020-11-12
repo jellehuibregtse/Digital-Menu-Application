@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-const ColorPicker = (props) => {
+export default (props) => {
     const classes = useStyles();
 
     const [open, setOpen] = useState(false);
@@ -48,5 +48,3 @@ const ColorPicker = (props) => {
         </ListItem>
     )
 }
-
-export default ColorPicker;
