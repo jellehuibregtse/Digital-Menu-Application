@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import {LockOutlined} from "@material-ui/icons";
 import Validate from "./Validate";
+import Auth from "./Auth";
 
 const useStyles = makeStyles((theme) => ({
     flex: {
@@ -62,7 +63,7 @@ export default (props) => {
                 </Typography>
                 <form className={classes.form} noValidate onSubmit={(e) => {
                     e.preventDefault();
-                    form === 'sign-in' ? Validate.handleSignIn(email, password) : Validate.handleSignUp(email, password)
+                    form === 'sign-in' ? Auth.handleSignIn(email, password) : Auth.handleSignUp(email, password)
                 }}>
                     <TextField
                         size="small"
