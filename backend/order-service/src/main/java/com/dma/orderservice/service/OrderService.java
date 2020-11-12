@@ -2,6 +2,7 @@ package com.dma.orderservice.service;
 
 import com.dma.orderservice.model.CustomerOrder;
 import com.dma.orderservice.repository.OrderRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +31,14 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public ResponseEntity<CustomerOrder> findOrder(long id) {
-        return ResponseEntity.ok(repository.findById(id)
-                                           .orElseThrow(() -> new ResourceNotFoundException("Not found.")));
+    public ResponseEntity<CustomerOrder> findOrder(long id) {return ResponseEntity.ok(repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found.")));
     }
 
     @Override
-    public ResponseEntity<String> addOrder(CustomerOrder order) throws Exception {
+    public ResponseEntity<String> addOrder(CustomerOrder order) {
         repository.save(order);
 
-        sendMessage(order);
+        sendMessage(order.getRestaurantId());
 
         return ResponseEntity.ok(String.format("Order, %s has been successfully created!", order.getId()));
     }
@@ -66,8 +65,9 @@ public class OrderService implements IOrderService {
         return ResponseEntity.ok(String.format("Order, %s has been successfully deleted!", id));
     }
 
-    protected void sendMessage(CustomerOrder order) throws Exception {
-        template.convertAndSend("/topic/orders/" + order.getRestaurantId(),
-                                new ObjectMapper().writeValueAsString(order));
+    protected void sendMessage(long restaurantId) {
+        try {
+            template.convertAndSend("/orders/" + restaurantId, new ObjectMapper().writeValueAsString(Lists.newArrayList(repository.findAllByRestaurantId(restaurantId))));
+        } catch (JsonProcessingException ignore) {}
     }
 }

@@ -4,94 +4,53 @@ import Navbar from "./components/fragments/NavBar";
 import OrderView from "./components/OrderView";
 import LoginPage from "./components/LoginPage";
 import MessagingService from "./services/MessagingService";
-import { DragDropContext } from "react-beautiful-dnd";
-import {BrowserRouter as Router,Switch,Route} from "react-router-dom";
-
+import {BrowserRouter as Router,Switch,Route, Redirect} from "react-router-dom";
 
 // Hardcoded restaurant id
 const RESTAURANT_ID = 0;
 
-const App = () =>{
-  const [orders, setOrders] = useState([]);
+const App = () => {
   const [restaurant, setRestaurant] = useState({});
+  const [orders, setOrders] = useState([]);
   const [user] = useState({ name: "user" });
 
   // Run once at runtime
   useEffect(() => {
-    // Subscribe to orders from restaurant
-    MessagingService.register(
-      "/topic/orders/" + RESTAURANT_ID,
-      (m) => {setOrders(JSON.parse(m.body))},
-      () => {},
-      () => {
-        MessagingService.fetchHandler("GET", "/orders")
-          .then()
-          .catch((e) => {});
-      }
-    );
+    async function fetchOrders() {
+      await MessagingService.fetchHandler("GET", "/restaurant-service/restaurants/" + RESTAURANT_ID)
+          .then((res) => {
+            setRestaurant(res);
+          })
+          .catch(() => {});
 
-    // Get restaurant settings
-    MessagingService.fetchHandler("GET", "/restaurant-service/restaurants/" + RESTAURANT_ID)
-      .then((res) => {
-        setRestaurant(res);
-      })
-      .catch((e) => {});
+      await MessagingService.register(
+          "/orders/" + RESTAURANT_ID,
+          (m) => {setOrders(JSON.parse(m.body))},
+          () => {},
+          () => {
+            MessagingService.fetchHandler("GET", "/order-service/orders/restaurant/" + RESTAURANT_ID)
+                .then((res) => {
+                  setOrders(res);
+                })
+                .catch(() => {
+                });
+          }
+      );
+    }
+    fetchOrders();
   }, []);
-
-  const OrderStatus = {
-    NEW: "NEW",
-    PROCESSING: "PROCESSING",
-    COMPLETE: "COMPLETE",
-  };
-
-  // Get all menu items from all open orders
-  const items = [].concat.apply([],orders.map((order) => { return order.items.map((item, index) => { item.index = index; item.parentId = order.id; item.table = order.tableNumber; return item; }); }));
-  let newItems = items.filter((item) => item.status === OrderStatus.NEW);
-  let processingItems = items.filter((item) => item.status === OrderStatus.PROCESSING);
-  let completeItems = items.filter((item) => item.status === OrderStatus.COMPLETE);
-
-  const onDragEnd = (result) => {
-    const {destination, source, draggableId} = result;
-
-    if(!destination)
-      return;
-
-    if(source.droppableId === 'orders')
-      return;
-
-    if(destination.droppableId === source.droppableId && destination.index === source.index)
-      return;
-
-    const order = orders.find((order) => order.id === items.find((item) => item.id.toString() === draggableId).parentId);
-
-    if(destination.droppableId === 'newDishes') {
-      order.items[items.find((item) => item.id.toString() === draggableId).index].status = OrderStatus.NEW;
-      MessagingService.fetchHandler("PUT", "/orders", order).then().catch((e) => {});
-    }
-
-    if(destination.droppableId === 'processingDishes') {
-      order.items[items.find((item) => item.id.toString() === draggableId).index].status = OrderStatus.PROCESSING;
-      MessagingService.fetchHandler("PUT", "/orders", order).then().catch((e) => {});
-    }
-
-    if(destination.droppableId === 'completeDishes') {
-      order.items[items.find((item) => item.id.toString() === draggableId).index].status = OrderStatus.COMPLETE;
-      MessagingService.fetchHandler("PUT", "/orders", order).then().catch((e) => {});
-    }
-  };
-
 
   return (
     <>
       <Router>
-      <DragDropContext onDragEnd={onDragEnd}>
         <Navbar restaurantName={restaurant.name} userName={user.name}/>
         <Switch>
-          <Route path="/" exact render={(props) => (<OrderView orders={orders} newItems = {newItems} processingItems = {processingItems} completeItems = {completeItems}/>)}/>
-          <Route path="/login" render={(props) => (<LoginPage />)}/>
+          <Route path="/" exact render={() => (<OrderView orders={orders} count={1}/>)}/>
+
+          <Route path="/login" render={() => (<LoginPage />)}/>
+
+          <Route path="*"><Redirect to="/"/></Route>
         </Switch>
-        
-      </DragDropContext>
       </Router>
     </>
   );

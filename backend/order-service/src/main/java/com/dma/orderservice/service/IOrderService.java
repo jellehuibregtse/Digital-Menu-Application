@@ -13,7 +13,7 @@ public interface IOrderService {
 
     ResponseEntity<CustomerOrder> findOrder(long id);
 
-    ResponseEntity<String> addOrder(CustomerOrder order) throws Exception;
+    ResponseEntity<String> addOrder(CustomerOrder order);
 
     ResponseEntity<String> updateOrder(CustomerOrder updatedOrder, long id);
 

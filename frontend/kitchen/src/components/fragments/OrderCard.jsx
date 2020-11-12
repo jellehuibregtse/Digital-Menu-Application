@@ -1,6 +1,6 @@
 import React from "react";
 import "../../css/card.css";
-import { Draggable } from "react-beautiful-dnd";
+import {Draggable} from "react-beautiful-dnd";
 
 const Card = (props) => {
   return (
@@ -17,19 +17,11 @@ const Card = (props) => {
               Table : {props.table}
             </h1>
             <ul>
-              {props.items.map((item, index) => {
-                let listItem =
-                    <li key={props.id + "i" + index}>
-                      {item.name} x {item.amount}
-                    </li>
-
-                // if(item.status === 'COMPLETE')
-                // {
-                //   listItem.style.color === "green";
-                // }
-
-                return listItem;
-              })}
+              {props.items.map((item, index) =>
+                <li style={item.status === 'COMPLETE'? {color: 'green'} : null} key={props.id + "i" + index}>
+                  {item.name} x {item.quantity}
+                </li>
+              )}
             </ul>
           </div>
         </div>

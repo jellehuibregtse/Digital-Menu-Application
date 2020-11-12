@@ -1,10 +1,11 @@
 import React from 'react';
-import '../css/menu.css';
-import '../css/orderBar.css';
+import '../../css/menu.css';
+import '../../css/orderBar.css';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Product from './fragments/Product';
-import { useStateValue } from '../context/stateProvider';
+import Dish from './Dish';
+import { useStateValue } from '../../context/stateProvider';
+
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -18,18 +19,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Menu = () => {
-    // Get order from global state
-    const [state] = useStateValue();
+const Menu = (props) => {
 
     const classes = useStyles();
 
     // Get all menuItems from menu
-    const itemsList = typeof state.menu !== 'undefined' ? state.menu.items.map(item => {
+    const itemsList = typeof props.menu !== 'undefined' ? props.menu.items.map(item => {
         return (
             <>
                 <Grid key={item.id+1000} item xs={6} sm={3}>
-                    <Product
+                    <Dish
                         name={item.name}
                         price={item.price}
                         key={item.id}

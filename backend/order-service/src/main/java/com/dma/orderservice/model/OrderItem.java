@@ -25,16 +25,16 @@ public class OrderItem {
 
     @NotNull
     @Min(1)
-    private int amount = 1;
+    private int quantity = 1;
 
     @NotNull
     private Status status = Status.NEW;
 
     public OrderItem() {}
 
-    public OrderItem(@NotNull String name, @NotNull @Min(1) int amount, @NotNull Status status) {
+    public OrderItem(@NotNull String name, @NotNull @Min(1) int quantity, @NotNull Status status) {
         this.name = name;
-        this.amount = amount;
+        this.quantity = quantity;
         this.status = status;
     }
 
@@ -62,11 +62,11 @@ public class OrderItem {
         this.status = status;
     }
 
-    public int getAmount() {
-        return amount;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

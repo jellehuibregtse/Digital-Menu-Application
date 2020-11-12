@@ -12,10 +12,10 @@ const JoinRestaurant = (props) => {
 
         if (restaurantId >= 0 && tableId >= 0) {
             // Get restaurant by id
-            MessagingService.fetchHandler('GET','/restaurants/' + restaurantId).then(
+            MessagingService.fetchHandler('GET','/restaurant-service/restaurants/' + restaurantId).then(
                 (restaurant) => {
                     // Get menu from restaurant
-                    MessagingService.fetchHandler('GET','/menus/' + restaurant.menuIDs[0]).then(
+                    MessagingService.fetchHandler('GET','/menu-service/menus/' + restaurant.menuIDs[0]).then(
                         (menu) => {
                             // Set session to restaurant, menu and tableNumber
                             sessionStorage.setItem('session', JSON.stringify({

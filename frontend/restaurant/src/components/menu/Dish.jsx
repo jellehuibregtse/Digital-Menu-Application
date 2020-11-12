@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import '../../css/product.css';
 import { useStateValue } from '../../context/stateProvider';
-const Product = (props) => {
+const Dish = (props) => {
   const [state, update] = useStateValue();
   
   const onClickHandler = (e) => {
@@ -27,7 +27,7 @@ const Product = (props) => {
           {props.name.toUpperCase()}
         </Typography>
         <Typography variant="body2" component="p">
-          € {props.price.toFixed(2)}
+          € {props.price ? props.price.toFixed(2) : "-"}
         </Typography>
         <Button id={props.id} onClick={onClickHandler} variant="outlined">Add to order</Button>
       </CardContent>
@@ -35,4 +35,4 @@ const Product = (props) => {
   );
 }
 
-export default Product;
+export default Dish;

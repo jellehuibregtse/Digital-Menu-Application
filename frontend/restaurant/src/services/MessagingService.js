@@ -1,14 +1,17 @@
-// Service Registry Port: 8080
+// Service Registry Port: 8762
 
 class MessagingService {
     // This is where you can get/post/put/delete messages
     static async fetchHandler(method, route, message) {
         let result = null;
-        await fetch('http://localhost:8080/api' + route, {
+        await fetch("api" + route, {
             method: method,
             body: JSON.stringify(message),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                "accept": "*/*",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Connection": "keep-alive"
             }
         })
             .then((response) => {if (response.ok) { return response.text() } else { throw new Error(response.statusText) }})

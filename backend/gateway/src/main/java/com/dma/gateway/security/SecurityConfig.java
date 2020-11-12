@@ -42,7 +42,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // Allow all who are accessing authentication service.
             .antMatchers(HttpMethod.POST, jwtConfig.getUri())
             .permitAll()
+            // Allow actuator
             .antMatchers("/actuator/health/**", "/actuator/routes/**")
+            .permitAll()
+            // Allow certain methods for customer.
+            .antMatchers(HttpMethod.GET, "/api/restaurant-service/restaurants/*", "/api/menu-service/menus/*")
+            .permitAll()
+            .antMatchers(HttpMethod.POST, "/api/order-service/orders")
+            .permitAll()
+            .antMatchers("/api/order-service/websockets/**")
             .permitAll()
             // Any other request must be authenticated.
             .anyRequest()

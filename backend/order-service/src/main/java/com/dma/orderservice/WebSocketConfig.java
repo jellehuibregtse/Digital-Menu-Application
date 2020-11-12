@@ -17,11 +17,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic");
+        registry.enableSimpleBroker("/orders");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
-        stompEndpointRegistry.addEndpoint("/websockets").setAllowedOrigins("*");
+        stompEndpointRegistry.addEndpoint("/websockets")
+                .setAllowedOrigins("*");
     }
 }
