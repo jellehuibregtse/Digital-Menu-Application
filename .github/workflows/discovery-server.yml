@@ -24,8 +24,10 @@ jobs:
       run: mvn -B test
     
     - name: Create artifact with Maven
+      working-directory: ./backend/discovery-server
       run: mvn -B package --file pom.xml
-    - name: Move file 
+    - name: Move file
+      working-directory: ./backend/discovery-server 
       run: mkdir staging && cp target/*.jar staging
     - name: Upload artifact
       uses: actions/upload-artifact@v2
