@@ -23,12 +23,12 @@ jobs:
       working-directory: ./backend/discovery-server
       run: mvn -B test
     
-    - name: Create artifact
-      working-directory: ./backend/discovery-server
-    - run: |
-        mvn -B package --file pom.xml
-        mkdir staging && cp target/*.jar staging  
-    - uses: actions/upload-artifact@v2
+    - name: Create artifact with Maven
+      run: mvn -B package --file pom.xml
+    - name: Move file 
+      run: mkdir staging && cp target/*.jar staging
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
       with:
-          name: Package
-          path: staging
+        name: Package
+        path: staging
