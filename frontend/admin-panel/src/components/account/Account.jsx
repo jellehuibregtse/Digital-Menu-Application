@@ -8,11 +8,13 @@ import {
     Avatar,
     Typography,
     makeStyles,
-    Link, FormHelperText
+    Link, FormHelperText, IconButton
 } from "@material-ui/core";
-import {LockOutlined} from "@material-ui/icons";
+import {Close, LockOutlined} from "@material-ui/icons";
 import Validate from "./Validate";
 import Auth from "./Auth";
+import Popup from "reactjs-popup";
+import {grey} from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
     flex: {
@@ -20,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
         height: '90%'
     },
     paper: {
-        position: 'relative',
         margin: 'auto',
         display: 'flex',
         flexDirection: 'column',
@@ -40,6 +41,21 @@ const useStyles = makeStyles((theme) => ({
     link: {
         textDecoration: 'none',
         color: theme.palette.primary.main
+    },
+    popupAnchor: {
+        marginTop: theme.spacing(12),
+        position: 'absolute',
+        top: 0
+    },
+    popup: {
+        borderRadius: '5px',
+        border: '1px solid ' + grey['400'],
+        padding: theme.spacing(1, 1, 1, 2),
+        width: 'Calc(600px - ' + theme.spacing(3) + 'px)',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        background: '#E8F0FE'
     }
 }))
 
@@ -56,9 +72,27 @@ export default (props) => {
 
     const [signError, setSignError] = useState('');
 
+    const [open, setOpen] = useState(props.location !== null && new URLSearchParams(props.location.search).get('c') === "true");
+
     const submitHandler = async (e) => {
         e.preventDefault();
-        if (form === 'sign-in') {
+        if (form === 'sign-up') {
+            if (Validate.isValidEmail(email) === true && emailAvailable === true && Validate.isValidPassword(password) === true && (password2 === '' || password2 === password)) {
+                await Auth.handleSignUp(email, password).then(r => {
+                    if (r === true) {
+                        document.location.href = '/sign-in?c=true';
+                    } else
+                        setSignError(r);
+                }).catch(r => setSignError(r));
+            } else {
+                if (email === null)
+                    setEmail('');
+                if (password === null)
+                    setPassword('');
+                if (password2 === null)
+                    setPassword2('');
+            }
+        } else {
             if (password !== null && password.length > 0) {
                 await Auth.handleSignIn(email, password).then(r => {
                     if (r !== null) {
@@ -72,24 +106,11 @@ export default (props) => {
                 if (password === null)
                     setPassword('');
             }
-        } else {
-            if (Validate.isValidEmail(email) === true && emailAvailable === true && Validate.isValidPassword(password) === true && (password2 === '' || password2 === password)) {
-                await Auth.handleSignUp(email, password).then(r => {
-                    if (r === true) {
-                        alert('account was created');
-                        document.location.href = 'sign-in';
-                    } else
-                        setSignError(r);
-                }).catch(r => setSignError(r));
-            } else {
-                if (email === null)
-                    setEmail('');
-                if (password === null)
-                    setPassword('');
-                if (password2 === null)
-                    setPassword2('');
-            }
         }
+    }
+
+    const popupStyle = {
+        margin: '60px auto',
     }
 
     return (
@@ -101,6 +122,15 @@ export default (props) => {
                 <Typography component="h1" variant="h5">
                     {form === 'sign-in' ? "Sign In" : "Sign Up"}
                 </Typography>
+                <Popup arrow={false}
+                       trigger={<div className={classes.popupAnchor}/>}
+                       closeOnDocumentClick={false}
+                       open={open}>
+                    <div className={classes.popup}>
+                        Account was created! Sign in to continue.
+                        <IconButton focusRipple={false} onClick={() => setOpen(false)}><Close/></IconButton>
+                    </div>
+                </Popup>
                 <form className={classes.form} noValidate onSubmit={submitHandler}>
                     <TextField
                         size="small"
