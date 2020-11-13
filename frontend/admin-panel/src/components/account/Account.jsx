@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     TextField,
     FormControlLabel,
@@ -74,6 +74,15 @@ export default (props) => {
 
     const [open, setOpen] = useState(props.location !== null && new URLSearchParams(props.location.search).get('c') === "true");
 
+    useEffect(() => {
+        if(open) {
+            const timer = setTimeout(() => {
+                setOpen(false)
+            }, 4000);
+            return () => clearTimeout(timer);
+        }
+    }, []);
+
     const submitHandler = async (e) => {
         e.preventDefault();
         if (form === 'sign-up') {
@@ -146,7 +155,7 @@ export default (props) => {
                             setEmailAvailable(null);
                             await Validate.emailAvailable(e.target.value).then(r => setEmailAvailable(r));
                         }}
-                        error={Validate.isValidEmail(email) !== true ? true : form === 'sign-up' ? emailAvailable === false : emailAvailable === true}
+                        error={Validate.isValidEmail(email) !== true ? true : form === 'sign-up' && emailAvailable === false}
                         helperText={Validate.isValidEmail(email) !== true ? Validate.isValidEmail(email) : form === 'sign-up' && emailAvailable === false ? 'Email was already taken!' : ''}
                     />
                     <TextField
@@ -193,10 +202,10 @@ export default (props) => {
                     <FormHelperText error>{signError}</FormHelperText>
                     <Grid container>
                         <Grid item xs>
-                            {form === 'sign-in' ?
-                                <Link href="#" variant="body2" className={classes.link}>
-                                    Forgot password?
-                                </Link> : null}
+                            {/*{form === 'sign-in' ?*/}
+                            {/*    <Link href="#" variant="body2" className={classes.link}>*/}
+                            {/*        Forgot password?*/}
+                            {/*    </Link> : null}*/}
                         </Grid>
                         <Grid item>
                             <Link href={form === "sign-in" ? "/sign-up" : "/sign-in"} variant="body2"
