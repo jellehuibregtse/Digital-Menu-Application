@@ -8,11 +8,12 @@ import {
     Avatar,
     Typography,
     makeStyles,
-    Link
+    Link, FormHelperText
 } from "@material-ui/core";
 import {LockOutlined} from "@material-ui/icons";
 import Validate from "./Validate";
 import Auth from "./Auth";
+import MessagingService from "../../services/MessagingService";
 
 const useStyles = makeStyles((theme) => ({
     flex: {
@@ -52,6 +53,12 @@ export default (props) => {
     const [password, setPassword] = useState(null);
     const [password2, setPassword2] = useState(null);
 
+    const [validEmailResponse, setValidEmailResponse] = useState(true);
+    const [validPasswordResponse, setValidPasswordResponse] = useState(true);
+    const [validPassword2Response, setValidPassword2Response] = useState(true);
+
+    const [signResponse, setSignResponse] = useState('');
+
     return (
         <div className={classes.flex}>
             <div className={classes.paper}>
@@ -61,9 +68,19 @@ export default (props) => {
                 <Typography component="h1" variant="h5">
                     {form === 'sign-in' ? "Sign In" : "Sign Up"}
                 </Typography>
-                <form className={classes.form} noValidate onSubmit={(e) => {
+                <form className={classes.form} noValidate onSubmit={async (e) => {
                     e.preventDefault();
-                    form === 'sign-in' ? Auth.handleSignIn(email, password) : Auth.handleSignUp(email, password)
+                    if (form === 'sign-up' && validEmailResponse === true && validPasswordResponse === true && validPassword2Response === true) {
+                        let result = '';
+                        await Auth.handleSignUp(email, password).then(r => result = r);
+                        if (result === true) {
+                            alert('account was created');
+                            document.location.href = 'sign-in';
+                        }
+                        else
+                            setSignResponse(result);
+                    } else
+                        Auth.handleSignIn(email, password);
                 }}>
                     <TextField
                         size="small"
@@ -74,11 +91,15 @@ export default (props) => {
                         label="Email Address"
                         autoComplete={form === 'sign-in' ? "email" : "off"}
                         autoFocus
-                        onChange={e => {
-                            setEmail(e.target.value)
+                        onChange={async (e) => {
+                            setEmail(e.target.value);
+                            if (form === 'sign-up') {
+                                setValidEmailResponse(false);
+                                await Validate.isValidEmail(e.target.value).then(r => setValidEmailResponse(r));
+                            }
                         }}
-                        error={form === 'sign-up' && Validate.isValidEmail(email) !== true}
-                        helperText={form === 'sign-up' ? Validate.isValidEmail(email) : ''}
+                        error={form === 'sign-up' && validEmailResponse !== true}
+                        helperText={form === 'sign-up' ? validEmailResponse : ''}
                     />
                     <TextField
                         size="small"
@@ -90,10 +111,12 @@ export default (props) => {
                         type="password"
                         autoComplete={form === 'sign-in' ? "current-password" : "new-password"}
                         onChange={e => {
-                            setPassword(e.target.value)
+                            setPassword(e.target.value);
+                            if (form === 'sign-up')
+                                setValidPasswordResponse(Validate.isValidPassword(e.target.value));
                         }}
-                        error={form === 'sign-up' && Validate.isValidPassword(password) !== true}
-                        helperText={form === 'sign-up' ? Validate.isValidPassword(password) : ''}
+                        error={form === 'sign-up' && validPasswordResponse !== true}
+                        helperText={form === 'sign-up' ? validPasswordResponse : ''}
                     />
                     {form === 'sign-up' ?
                         <TextField
@@ -106,10 +129,10 @@ export default (props) => {
                             label="Repeat Password"
                             type="password"
                             onChange={e => {
-                                setPassword2(e.target.value)
+                                setValidPassword2Response(e.target.value === '' || e.target.value === password);
                             }}
-                            error={password2 !== null && password !== password2}
-                            helperText={password2 !== null && password !== password2 ? "Passwords don't match!" : ''}
+                            error={!validPassword2Response}
+                            helperText={validPassword2Response ? '' : 'Passwords don\'t match!'}
                         /> : null}
                     <FormControlLabel
                         control={<Switch value="remember" defaultChecked color="primary"/>}
@@ -125,6 +148,7 @@ export default (props) => {
                         {form === "sign-in" ?
                             "Sign In" : "Sign Up"}
                     </Button>
+                    <FormHelperText error>{signResponse}</FormHelperText>
                     <Grid container>
                         <Grid item xs>
                             {form === 'sign-in' ?
