@@ -34,8 +34,8 @@ public class UserController {
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
     @GetMapping
-    public ResponseEntity<Boolean> emailTaken(@RequestBody String email) {
-        return ResponseEntity.ok(applicationUserRepository.findByEmail(email).orElse(null) != null);
+    public ResponseEntity<Boolean> emailTaken(@RequestParam String email) {
+        return ResponseEntity.ok(applicationUserRepository.findByEmail(email).isPresent());
     }
 
     /**
@@ -44,13 +44,13 @@ public class UserController {
      * @param user that needs to be created.
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
-    @PostMapping("/register")
+    @PostMapping
     public ResponseEntity<String> createApplicationUser(@RequestBody ApplicationUser user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         applicationUserRepository.save(user);
 
-        return ResponseEntity.ok(String.format("User with username: %s has been successfully created!",
+        return ResponseEntity.ok(String.format("User with email: %s has been successfully created!",
                                                user.getEmail()));
     }
 
