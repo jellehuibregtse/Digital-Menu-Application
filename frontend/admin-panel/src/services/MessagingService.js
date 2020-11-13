@@ -4,12 +4,17 @@ class MessagingService {
     // This is where you can get/post/put/delete messages
     static async fetchHandler(method, route, message) {
         let result = null;
-        await fetch('http://localhost:8762/api' + route, {
+        await fetch("/api" + route, {
             method: method,
             body: JSON.stringify(message),
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
+                "accept": "*/*",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Connection": "keep-alive",
+                "Authorization": sessionStorage.getItem("Bearer")
             }
+
         })
             .then((response) => {
                 if (response.ok) {
