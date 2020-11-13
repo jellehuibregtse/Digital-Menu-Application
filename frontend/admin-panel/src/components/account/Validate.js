@@ -2,7 +2,7 @@ import MessagingService from "../../services/MessagingService";
 
 export default class {
 
-    static async isValidEmail(email) {
+    static isValidEmail(email) {
         if (email !== null) {
             if (email.length === 0)
                 return 'Email address is required!';
@@ -16,11 +16,17 @@ export default class {
                 return 'Email is invalid! Try adding \'@\' before the domain.';
             if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email))
                 return 'Email is invalid!';
+        }
 
-            let response = false;
+        return true;
+    }
+
+    static async emailAvailable(email) {
+        if (email !== null) {
+            let response = '';
             await MessagingService.fetchHandler('GET', '/auth-service/users?email=' + email).then(r => response = r).catch();
             if(response === 'true')
-                return 'Email was already taken!';
+                return false;
         }
 
         return true;

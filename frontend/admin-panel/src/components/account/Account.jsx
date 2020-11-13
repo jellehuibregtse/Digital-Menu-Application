@@ -52,27 +52,44 @@ export default (props) => {
     const [password, setPassword] = useState(null);
     const [password2, setPassword2] = useState(null);
 
-    const [validEmailResponse, setValidEmailResponse] = useState(true);
-    const [validPasswordResponse, setValidPasswordResponse] = useState(true);
-    const [signResponse, setSignResponse] = useState('');
+    const [emailAvailable, setEmailAvailable] = useState(null);
+
+    const [signError, setSignError] = useState('');
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        if (form === 'sign-up') {
-            await Validate.isValidEmail(email).then(r => setValidEmailResponse(r));
-            setValidPasswordResponse(Validate.isValidPassword(password));
-            if(validEmailResponse === true && validPasswordResponse === true && (password2 === '' || password2 === password)) {
+        if (form === 'sign-in') {
+            if (password !== null && password.length > 0) {
+                await Auth.handleSignIn(email, password).then(r => {
+                    if (r !== null) {
+                        sessionStorage.setItem('bearer', r);
+                        document.location.href = "/";
+                    } else setSignError('No bearer available');
+                }).catch(r => setSignError(r));
+            } else {
+                if (email === null)
+                    setEmail('');
+                if (password === null)
+                    setPassword('');
+            }
+        } else {
+            if (Validate.isValidEmail(email) === true && emailAvailable === true && Validate.isValidPassword(password) === true && (password2 === '' || password2 === password)) {
                 let result = '';
                 await Auth.handleSignUp(email, password).then(r => result = r);
                 if (result === true) {
                     alert('account was created');
                     document.location.href = 'sign-in';
-                }
-                else
-                    setSignResponse(result);
+                } else
+                    setSignError(result);
+            } else {
+                if (email === null)
+                    setEmail('');
+                if (password === null)
+                    setPassword('');
+                if (password2 === null)
+                    setPassword2('');
             }
-        } else
-            await Auth.handleSignIn(email, password).then(r => {if(r !== null) {sessionStorage.setItem('bearer', r); document.location.href = "/"} else setSignResponse('Bad request')}).catch(r => setSignResponse(r));
+        }
     }
 
     return (
@@ -96,13 +113,11 @@ export default (props) => {
                         autoFocus
                         onChange={async (e) => {
                             setEmail(e.target.value);
-                            if (form === 'sign-up') {
-                                setValidEmailResponse(true);
-                                await Validate.isValidEmail(e.target.value).then(r => setValidEmailResponse(r));
-                            }
+                            setEmailAvailable(null);
+                            await Validate.emailAvailable(e.target.value).then(r => setEmailAvailable(r));
                         }}
-                        error={form === 'sign-up' && validEmailResponse !== true}
-                        helperText={form === 'sign-up' ? validEmailResponse : ''}
+                        error={Validate.isValidEmail(email) !== true ? true : form === 'sign-up' ? emailAvailable === false : emailAvailable === true}
+                        helperText={Validate.isValidEmail(email) !== true ? Validate.isValidEmail(email) : form === 'sign-up' && emailAvailable === false ? 'Email was already taken!' : ''}
                     />
                     <TextField
                         size="small"
@@ -113,13 +128,9 @@ export default (props) => {
                         label="Password"
                         type="password"
                         autoComplete={form === 'sign-in' ? "current-password" : "new-password"}
-                        onChange={e => {
-                            setPassword(e.target.value);
-                            if (form === 'sign-up')
-                                setValidPasswordResponse(Validate.isValidPassword(e.target.value));
-                        }}
-                        error={form === 'sign-up' && validPasswordResponse !== true}
-                        helperText={form === 'sign-up' ? validPasswordResponse : ''}
+                        onChange={e => setPassword(e.target.value)}
+                        error={form === 'sign-up' ? Validate.isValidPassword(password) !== true : password !== null && password.length === 0}
+                        helperText={form === 'sign-up' ? Validate.isValidPassword(password) : password !== null && password.length === 0 ? 'Password is required!' : ''}
                     />
                     {form === 'sign-up' ?
                         <TextField
@@ -131,11 +142,9 @@ export default (props) => {
                             autoComplete="new-password"
                             label="Repeat Password"
                             type="password"
-                            onChange={e => {
-                                setPassword2(e.target.value);
-                            }}
-                            error={!(password2 === '' || password2 === password)}
-                            helperText={(password2 === '' || password2 === password) ? '' : 'Passwords don\'t match!'}
+                            onChange={e => setPassword2(e.target.value)}
+                            error={password2 === '' || password2 !== password}
+                            helperText={password2 !== password ? 'Passwords don\'t match!' : password2 === '' ? 'Password is required!' : ''}
                         /> : null}
                     <FormControlLabel
                         control={<Switch value="remember" defaultChecked color="primary"/>}
@@ -151,7 +160,7 @@ export default (props) => {
                         {form === "sign-in" ?
                             "Sign In" : "Sign Up"}
                     </Button>
-                    <FormHelperText error>{signResponse}</FormHelperText>
+                    <FormHelperText error>{signError}</FormHelperText>
                     <Grid container>
                         <Grid item xs>
                             {form === 'sign-in' ?
