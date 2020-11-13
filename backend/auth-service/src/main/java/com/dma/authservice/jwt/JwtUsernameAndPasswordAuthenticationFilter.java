@@ -44,7 +44,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
-                                                HttpServletResponse response) throws AuthenticationException {
+                                                HttpServletResponse response) {
         try {
             // Get credentials from request.
             var userCredentials = new ObjectMapper().readValue(request.getInputStream(), AuthenticationRequest.class);
