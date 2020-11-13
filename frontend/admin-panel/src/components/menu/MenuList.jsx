@@ -1,7 +1,8 @@
 import React from 'react';
 import {makeStyles} from "@material-ui/core/styles";
-import {InputBase, List, ListItem, Divider, Typography, Container} from "@material-ui/core";
-import {Search} from '@material-ui/icons';
+import {Container} from "@material-ui/core";
+import {MenuBook} from '@material-ui/icons';
+import List from "../List";
 
 const useStyles = makeStyles((theme) => ({
     listItem: {
@@ -37,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
     },
     inputInput: {
         padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
         transition: theme.transitions.create('width'),
         width: '100%',
@@ -52,26 +52,7 @@ export default () => {
 
     return (
         <Container>
-            <List>
-                <ListItem className={classes.listItem + classes.subFlex}>
-                    <Typography variant="h6">Menus</Typography>
-
-                    <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                            <Search/>
-                        </div>
-                        <InputBase
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            inputProps={{'aria-label': 'search'}}
-                        />
-                    </div>
-                </ListItem>
-                <Divider/>
-            </List>
+            <List type="menu" icon={<MenuBook/>} items={[{primary: 'Menu1', secondary: '20 dishes'}]}/>
         </Container>
     )
 }

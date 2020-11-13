@@ -4,11 +4,9 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 import { deepOrange } from "@material-ui/core/colors";
 import NavBar from "./components/NavBar";
 import Design from "./components/design/Design";
-import Menus from "./components/menu/Menus";
+import MenuList from "./components/menu/MenuList";
 import Account from "./components/account/Account";
-import Restaurant from "./components/restaurant/Restaurant";
-import RestaurantForm from "./components/restaurant/Form";
-import RestaurantSettings from "./components/restaurant/Settings";
+import RestaurantList from "./components/restaurant/RestaurantList";
 
 const theme = createMuiTheme({
     palette: {
@@ -27,7 +25,7 @@ const theme = createMuiTheme({
 
 const App = () => {
 
-    const [loggedIn] = useState(true);
+    const [loggedIn] = useState(false);
 
     return (
         <Router>
@@ -37,19 +35,16 @@ const App = () => {
                     {loggedIn?
                         <Switch>
                             <Route exact strict path="/">
-                                <Restaurant/>
+                                <RestaurantList/>
                             </Route>
-
 
                             <Route exact strict path="/restaurant/create">
-                                <RestaurantForm/>
                             </Route>
                             <Route exact strict path="/restaurant/settings">
-                                <RestaurantForm/>
                             </Route>
 
                             <Route exact strict path="/menu">
-                                <Menus/>
+                                <MenuList/>
                             </Route>
 
                             <Route exact strict path="/categories">
