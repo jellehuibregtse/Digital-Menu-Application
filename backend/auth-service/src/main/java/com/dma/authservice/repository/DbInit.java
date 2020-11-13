@@ -1,13 +1,13 @@
 package com.dma.authservice.repository;
 
 import com.dma.authservice.model.ApplicationUser;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Initialises the database with some data upon startup.
@@ -30,9 +30,14 @@ public class DbInit implements CommandLineRunner {
     public void run(String... args) {
         this.repository.deleteAll();
 
-        final List<ApplicationUser> users =
-                Arrays.asList(new ApplicationUser(1, "jelle", passwordEncoder.encode("12345"), "USER"),
-                              new ApplicationUser(2, "admin", passwordEncoder.encode("12345"), "ADMIN"));
+        final var users = Arrays.asList(new ApplicationUser(1,
+                                                            "user@mail.com",
+                                                            passwordEncoder.encode("password"),
+                                                            Maps.newHashMap()),
+                                        new ApplicationUser(2,
+                                                            "admin@mail.com",
+                                                            passwordEncoder.encode("password"),
+                                                            Maps.newHashMap()));
 
         this.repository.saveAll(users);
     }

@@ -32,16 +32,16 @@ public class ApplicationUserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         var user = repository.findByUsername(username);
 
         if (user.isPresent()) {
             var applicationUser = user.get();
 
             List<GrantedAuthority> grantedAuthorities =
-                    AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_" + applicationUser.getRole());
+                    AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_" + applicationUser.getRestaurantAuthorities());
 
-            return new User(applicationUser.getUsername(), applicationUser.getPassword(), grantedAuthorities);
+            return new User(applicationUser.getEmail(), applicationUser.getPassword(), grantedAuthorities);
         }
 
         throw new UsernameNotFoundException("Username: " + username + " not found!");
