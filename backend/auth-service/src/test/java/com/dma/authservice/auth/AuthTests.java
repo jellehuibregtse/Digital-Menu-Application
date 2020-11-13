@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class AuthTests {
+class AuthTests {
 
     @Autowired
     private JwtTokenService jwtTokenService;
@@ -21,7 +21,7 @@ public class AuthTests {
     private JwtConfig jwtConfig;
 
     @Test
-    public void generateToken_returnsString() {
+    void generateToken_returnsString() {
         var token = jwtTokenService.generateToken("subject");
 
         assertNotNull(token);

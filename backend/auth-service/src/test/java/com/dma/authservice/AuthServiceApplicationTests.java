@@ -15,7 +15,7 @@ class AuthServiceApplicationTests {
     private TestController testController;
 
     @Test
-    public void contextLoads() {
+    void contextLoads() {
         Assert.assertNotNull(testController);
     }
 }

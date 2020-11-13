@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class TestControllerTests {
+class TestControllerTests {
 
     @Autowired
     private MockMvc mvc;
@@ -29,12 +29,12 @@ public class TestControllerTests {
     private JwtConfig jwtConfig;
 
     @Test
-    public void shouldNotAllowAccessToUnauthenticatedUsers() throws Exception {
+    void shouldNotAllowAccessToUnauthenticatedUsers() throws Exception {
         this.mvc.perform(MockMvcRequestBuilders.get("/test")).andExpect(status().isUnauthorized());
     }
 
     @Test
-    public void shouldGenerateAuthToken() throws Exception {
+    void shouldGenerateAuthToken() throws Exception {
         String token = jwtTokenService.generateToken("john", Lists.newArrayList("ROLE_ADMIN"));
 
         assertNotNull(token);
