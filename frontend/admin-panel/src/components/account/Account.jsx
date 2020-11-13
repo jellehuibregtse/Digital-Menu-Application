@@ -74,13 +74,13 @@ export default (props) => {
             }
         } else {
             if (Validate.isValidEmail(email) === true && emailAvailable === true && Validate.isValidPassword(password) === true && (password2 === '' || password2 === password)) {
-                let result = '';
-                await Auth.handleSignUp(email, password).then(r => result = r);
-                if (result === true) {
-                    alert('account was created');
-                    document.location.href = 'sign-in';
-                } else
-                    setSignError(result);
+                await Auth.handleSignUp(email, password).then(r => {
+                    if (r === true) {
+                        alert('account was created');
+                        document.location.href = 'sign-in';
+                    } else
+                        setSignError(r);
+                }).catch(r => setSignError(r));
             } else {
                 if (email === null)
                     setEmail('');
