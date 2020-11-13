@@ -1,20 +1,18 @@
-import React from 'react';
+import React ,{useState} from 'react';
 import '../../css/menu.css';
 import '../../css/orderBar.css';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Dish from './Dish';
 import { useStateValue } from '../../context/stateProvider';
-
+import SearchBar from './SearchBar';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         marginTop: "2%"
     },
-    paper: {
-        padding: theme.spacing(2),
+    dish: {
         textAlign: 'center',
-        color: theme.palette.text.secondary,
     },
 }));
 
@@ -22,12 +20,20 @@ const useStyles = makeStyles((theme) => ({
 const Menu = (props) => {
 
     const classes = useStyles();
+    const [category,setCategory] = useState("");
 
-    // Get all menuItems from menu
-    const itemsList = typeof props.menu !== 'undefined' ? props.menu.items.map(item => {
+    const onSelectedOption =(selectedCategory)=>{
+        setCategory(selectedCategory);
+    }
+    let menuItems = props.menu.items
+    
+    const itemsList = typeof props.menu !== 'undefined' ? 
+    props.menu.items
+    .filter(i=>i.category.includes(category))
+    .map(item => {
         return (
             <>
-                <Grid key={item.id+1000} item xs={6} sm={3}>
+                <Grid className={classes.dish} key={item.id+1000} item xs={6} sm={3}>
                     <Dish
                         name={item.name}
                         price={item.price}
@@ -42,6 +48,7 @@ const Menu = (props) => {
     return (
         <>
             <div className={classes.root}>
+                <SearchBar category={category} onSelect={onSelectedOption}/>
                 <Grid key={1} container spacing={3}>
                     {itemsList}
                 </Grid>

@@ -1,10 +1,8 @@
 package com.dma.menuservice.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 
 /**
  * The MenuItem entity.
@@ -21,6 +19,15 @@ public class MenuItem {
     @NotNull
     private String name;
 
+    private double price;
+
+    @Enumerated(EnumType.STRING)
+    private ItemCategory category;
+
+    @Enumerated
+    @ElementCollection(targetClass = Allergens.class)
+    private Collection<Allergens> allergens;
+
     public MenuItem() {
 
     }
@@ -35,5 +42,29 @@ public class MenuItem {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public ItemCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ItemCategory category) {
+        this.category = category;
+    }
+
+    public Collection<Allergens> getAllergens() {
+        return allergens;
+    }
+
+    public void setAllergens(Collection<Allergens> allergens) {
+        this.allergens = allergens;
     }
 }
