@@ -28,6 +28,17 @@ public class UserController {
     }
 
     /**
+     * Check if email is taken.
+     *
+     * @param email that needs to be found.
+     * @return <code>ResponseEntity</code> with a message and HTTP status OK.
+     */
+    @GetMapping
+    public ResponseEntity<Boolean> emailTaken(@RequestBody String email) {
+        return ResponseEntity.ok(applicationUserRepository.findByEmail(email).orElse(null) != null);
+    }
+
+    /**
      * Create a user.
      *
      * @param user that needs to be created.
