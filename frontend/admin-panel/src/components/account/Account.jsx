@@ -13,7 +13,6 @@ import {
 import {LockOutlined} from "@material-ui/icons";
 import Validate from "./Validate";
 import Auth from "./Auth";
-import MessagingService from "../../services/MessagingService";
 
 const useStyles = makeStyles((theme) => ({
     flex: {
@@ -55,9 +54,26 @@ export default (props) => {
 
     const [validEmailResponse, setValidEmailResponse] = useState(true);
     const [validPasswordResponse, setValidPasswordResponse] = useState(true);
-    const [validPassword2Response, setValidPassword2Response] = useState(true);
-
     const [signResponse, setSignResponse] = useState('');
+
+    const submitHandler = async (e) => {
+        e.preventDefault();
+        if (form === 'sign-up') {
+            await Validate.isValidEmail(email).then(r => setValidEmailResponse(r));
+            setValidPasswordResponse(Validate.isValidPassword(password));
+            if(validEmailResponse === true && validPasswordResponse === true && (password2 === '' || password2 === password)) {
+                let result = '';
+                await Auth.handleSignUp(email, password).then(r => result = r);
+                if (result === true) {
+                    alert('account was created');
+                    document.location.href = 'sign-in';
+                }
+                else
+                    setSignResponse(result);
+            }
+        } else
+            await Auth.handleSignIn(email, password).then(r => {if(r !== null) {sessionStorage.setItem('bearer', r); document.location.href = "/"} else setSignResponse('Bad request')}).catch(r => setSignResponse(r));
+    }
 
     return (
         <div className={classes.flex}>
@@ -68,20 +84,7 @@ export default (props) => {
                 <Typography component="h1" variant="h5">
                     {form === 'sign-in' ? "Sign In" : "Sign Up"}
                 </Typography>
-                <form className={classes.form} noValidate onSubmit={async (e) => {
-                    e.preventDefault();
-                    if (form === 'sign-up' && validEmailResponse === true && validPasswordResponse === true && validPassword2Response === true) {
-                        let result = '';
-                        await Auth.handleSignUp(email, password).then(r => result = r);
-                        if (result === true) {
-                            alert('account was created');
-                            document.location.href = 'sign-in';
-                        }
-                        else
-                            setSignResponse(result);
-                    } else
-                        Auth.handleSignIn(email, password);
-                }}>
+                <form className={classes.form} noValidate onSubmit={submitHandler}>
                     <TextField
                         size="small"
                         variant="outlined"
@@ -94,7 +97,7 @@ export default (props) => {
                         onChange={async (e) => {
                             setEmail(e.target.value);
                             if (form === 'sign-up') {
-                                setValidEmailResponse(false);
+                                setValidEmailResponse(true);
                                 await Validate.isValidEmail(e.target.value).then(r => setValidEmailResponse(r));
                             }
                         }}
@@ -129,10 +132,10 @@ export default (props) => {
                             label="Repeat Password"
                             type="password"
                             onChange={e => {
-                                setValidPassword2Response(e.target.value === '' || e.target.value === password);
+                                setPassword2(e.target.value);
                             }}
-                            error={!validPassword2Response}
-                            helperText={validPassword2Response ? '' : 'Passwords don\'t match!'}
+                            error={!(password2 === '' || password2 === password)}
+                            helperText={(password2 === '' || password2 === password) ? '' : 'Passwords don\'t match!'}
                         /> : null}
                     <FormControlLabel
                         control={<Switch value="remember" defaultChecked color="primary"/>}

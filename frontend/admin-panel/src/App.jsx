@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ThemeProvider, createMuiTheme} from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import { deepOrange } from "@material-ui/core/colors";
@@ -25,7 +25,7 @@ const theme = createMuiTheme({
 
 const App = () => {
 
-    const [loggedIn] = useState(false);
+    const loggedIn = sessionStorage.getItem('bearer') !== null;
 
     return (
         <Router>
