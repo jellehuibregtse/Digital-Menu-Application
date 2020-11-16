@@ -17,7 +17,7 @@ steps:
 
 - script: |
     displayName: 'installing npm'
-    workingDirectory: .frontend/kitchen
+    workingDirectory: ./frontend/kitchen
     npm install
     npm run build
   displayName: 'npm install and build'
