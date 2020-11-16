@@ -23,21 +23,27 @@ const theme = createMuiTheme({
 
 });
 
-const App = () => {
-
-    const loggedIn = localStorage.getItem('token') !== null;
-
-    const parseJwt = (token) => {
+const parseSubFromJwt = (token) => {
+    if(token === null)
+        return null;
+    try {
         let base64Url = token.split('.')[1];
         let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
         let jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
 
-        return JSON.parse(jsonPayload);
-    };
+        return JSON.parse(jsonPayload).sub;
+    } catch (e) {
+        return null;
+    }
+};
 
-    const email = parseJwt(localStorage.getItem('token')).sub;
+const App = () => {
+
+    const loggedIn = localStorage.getItem('token') !== null;
+
+    const email = parseSubFromJwt(localStorage.getItem('token'));
 
     return (
         <Router>
