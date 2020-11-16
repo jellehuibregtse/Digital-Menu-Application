@@ -1,10 +1,14 @@
 package com.dma.authservice.controllers;
 
 import com.dma.authservice.model.ApplicationUser;
+import com.dma.authservice.model.UserDto;
 import com.dma.authservice.repository.ApplicationUserRepository;
+import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +29,28 @@ public class UserController {
     public UserController(PasswordEncoder passwordEncoder, ApplicationUserRepository applicationUserRepository) {
         this.passwordEncoder = passwordEncoder;
         this.applicationUserRepository = applicationUserRepository;
+    }
+
+    /**
+     * Get more information by providing the e-mail of the user.
+     *
+     * @return information on the user.
+     */
+    @GetMapping("/information")
+    public ResponseEntity<Object> retrieveInformation() {
+        var principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        var user = applicationUserRepository.findByEmail(principal);
+
+        if (user.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var dto = new UserDto();
+        dto.setId(user.get().getId());
+        dto.setRestaurantAuthorities(user.get().getRestaurantAuthorities());
+
+        return ResponseEntity.ok(dto);
     }
 
     /**
@@ -50,8 +76,7 @@ public class UserController {
 
         applicationUserRepository.save(user);
 
-        return ResponseEntity.ok(String.format("User with email: %s has been successfully created!",
-                                               user.getEmail()));
+        return ResponseEntity.ok(String.format("User with email: %s has been successfully created!", user.getEmail()));
     }
 
 
