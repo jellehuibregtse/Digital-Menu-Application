@@ -15,5 +15,7 @@ import java.util.Map;
 public class UserDto {
 
     private long id;
+    private String email;
+    private String password;
     private Map<Long, String> restaurantAuthorities;
 }

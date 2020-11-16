@@ -78,10 +78,6 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
                 // Allow all POST requests, otherwise a user can't authenticate.
                 .antMatchers(HttpMethod.POST, jwtConfig.getUri())
                 .permitAll()
-                .antMatchers(HttpMethod.POST, "/users")
-                .permitAll()
-                .antMatchers(HttpMethod.GET, "/users")
-                .permitAll()
                 // Any other requests must be authenticated.
                 .anyRequest()
                 .authenticated();
