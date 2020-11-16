@@ -90,7 +90,7 @@ const NavBar = (props) => {
                         Settings
                     </ListItem>
                 </Link>
-                <ListItem button onClick={() => {sessionStorage.removeItem('bearer'); document.location.href = "/"}}>
+                <ListItem button onClick={() => {localStorage.removeItem('token'); document.location.href = "/"}}>
                     Sign Out
                 </ListItem>
             </List>

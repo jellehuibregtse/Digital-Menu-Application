@@ -6,7 +6,7 @@ export default class {
         let result = null;
         await fetch("/api/auth-service/auth", {
             method: 'POST',
-            body: JSON.stringify({email: email, password: password}),
+            body: JSON.stringify({username: email, password: password}),
             headers: {
                 "Content-Type": "application/json",
                 "accept": "*/*",
