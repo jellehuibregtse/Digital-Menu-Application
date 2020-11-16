@@ -38,7 +38,7 @@ const MenuProps = {
     },
 };
 const ingredients = [
-    "Meat", 'Vegetables', 'Fish', 'Vegan'
+    "MEAT", 'SOYA', 'FISH',"MILK"
 ];
 const SearchBar = (props) => {
 
@@ -49,6 +49,7 @@ const SearchBar = (props) => {
 
     const handleChangeIngredients = (event) => {
         setIngredient(event.target.value);
+        props.onCheck(event.target.value)
     };
 
 
@@ -56,8 +57,8 @@ const SearchBar = (props) => {
         setSelectedCategory(event.target.value)
         props.onSelect(event.target.value);
     };
-    console.log(selectedCategory)
-    console.log(selectedIngredient)
+    //console.log(selectedCategory)
+    //console.log(selectedIngredient)
     return (
         <Container className={classes.root}>
             <FormControl className={classes.formControl}>

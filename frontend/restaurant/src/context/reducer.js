@@ -12,21 +12,21 @@ export const initialState = {
                 name: "test item 1",
                 price: 9.99,
                 category:"SALAD",
-                allergens:["FISH","SOYA"]
+                ingredients:["FISH"]
             },
             {
                 id: 1,
                 name: "test item 2",
                 price: 11.99,
                 category:"MAIN",
-                allergens:["SOYA"]
+                ingredients:["MEAT"]
             },
             {
                 id: 2,
                 name: "test item 3",
                 price: 19.00,
                 category:"SIDE",
-                allergens:["FISH","SOYA"],
+                ingredients:["FISH"],
 
             },
             {
@@ -34,35 +34,35 @@ export const initialState = {
                 name: "test item 4",
                 price: 5.59,
                 category:"MAIN",
-                allergens:["FISH","SOYA"]
+                ingredients:["SOYA"]
             },
             {
                 id: 4,
                 name: "test item 5",
                 price: 9.00,
                 category:"DESSERT",
-                allergens:["GLUTEN","SOYA","MILK"]
+                ingredients:["SOYA","MILK"]
             },
             {
                 id: 5,
                 name: "test item 6",
                 price: 10.99,
                 category:"DESSERT",
-                allergens:["NUTS"]
+                ingredients:["SUGAR"]
             },
             {
                 id: 6,
                 name: "test beverage 1",
                 price: 1.99,
                 category:"BEVERAGE",
-                allergens:[]
+                ingredients:[]
             },
             {
                 id: 7,
                 name: "test beverage 1",
                 price: 1.99,
                 category:"BEVERAGE",
-                allergens:[]
+                ingredients:[]
             }
 
         ]

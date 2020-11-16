@@ -21,11 +21,15 @@ const Menu = (props) => {
 
     const classes = useStyles();
     const [category,setCategory] = useState("");
+    const [ingredients,setIngredients] = useState([]);
 
-    const onSelectedOption =(selectedCategory)=>{
+    const onSelectedCategoryOption =(selectedCategory)=>{
         setCategory(selectedCategory);
     }
-    let menuItems = props.menu.items
+    const onCheckedIngredientOption =(selectedIngredients)=>{
+        setIngredients(selectedIngredients);
+    }
+    console.log(ingredients)
     
     const itemsList = typeof props.menu !== 'undefined' ? 
     props.menu.items
@@ -48,7 +52,8 @@ const Menu = (props) => {
     return (
         <>
             <div className={classes.root}>
-                <SearchBar category={category} onSelect={onSelectedOption}/>
+                <SearchBar category={category} onSelect={onSelectedCategoryOption}
+                onCheck={onCheckedIngredientOption}/>
                 <Grid key={1} container spacing={3}>
                     {itemsList}
                 </Grid>

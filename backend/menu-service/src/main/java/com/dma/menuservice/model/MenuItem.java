@@ -2,7 +2,7 @@ package com.dma.menuservice.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * The MenuItem entity.
@@ -21,13 +21,12 @@ public class MenuItem {
 
     private double price;
 
-    @Enumerated(EnumType.STRING)
-    private ItemCategory category;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Category category;
 
-    @Enumerated
-    @ElementCollection(targetClass = Allergens.class)
-    private Collection<Allergens> allergens;
-
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Ingredient> ingredients;
+    
     public MenuItem() {
 
     }
@@ -52,19 +51,19 @@ public class MenuItem {
         this.price = price;
     }
 
-    public ItemCategory getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(ItemCategory category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
-    public Collection<Allergens> getAllergens() {
-        return allergens;
+    public List<Ingredient> getIngredients() {
+        return this.ingredients;
     }
 
-    public void setAllergens(Collection<Allergens> allergens) {
-        this.allergens = allergens;
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients =ingredients;
     }
 }

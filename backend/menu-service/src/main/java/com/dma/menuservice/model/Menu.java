@@ -2,7 +2,8 @@ package com.dma.menuservice.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * The menu entity.
@@ -24,6 +25,12 @@ public class Menu {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<MenuItem> items;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Category> categories;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Ingredient> ingredients;
 
     public Menu() {}
 
@@ -63,5 +70,22 @@ public class Menu {
 
     public void setItems(List<MenuItem> items) {
         this.items = items;
+    }
+
+    public List<Category> getCategories() {
+        return this.categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return this.ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+
+        this.ingredients = ingredients;
     }
 }
