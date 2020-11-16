@@ -7,7 +7,7 @@ trigger:
 - main
 
 variables:
-  uiSource: 'frontend/kitchen'
+  uiSource: 'src'
   uiBuild: '$(uiSource)/build'
 
 pool:
