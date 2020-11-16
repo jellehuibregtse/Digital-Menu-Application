@@ -25,7 +25,7 @@ const theme = createMuiTheme({
 
 const App = () => {
 
-    const loggedIn = sessionStorage.getItem('bearer') !== null;
+    const loggedIn = localStorage.getItem('token') !== null;
 
     return (
         <Router>

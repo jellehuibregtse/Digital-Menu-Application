@@ -1,20 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {
-    TextField,
-    FormControlLabel,
-    Switch,
-    Button,
-    Grid,
-    Avatar,
-    Typography,
-    makeStyles,
-    Link, FormHelperText, IconButton
+    TextField, FormControlLabel, Switch,
+    Button, Grid, Avatar, Typography, makeStyles, Link, IconButton, Box
 } from "@material-ui/core";
 import {Close, LockOutlined} from "@material-ui/icons";
 import Validate from "./Validate";
 import Auth from "./Auth";
 import Popup from "reactjs-popup";
-import {grey} from "@material-ui/core/colors";
+import {grey, red} from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
     flex: {
@@ -54,8 +47,7 @@ const useStyles = makeStyles((theme) => ({
         width: 'Calc(600px - ' + theme.spacing(3) + 'px)',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        background: '#E8F0FE'
+        alignItems: 'center'
     }
 }))
 
@@ -75,7 +67,7 @@ export default (props) => {
     const [open, setOpen] = useState(props.location !== null && new URLSearchParams(props.location.search).get('c') === "true");
 
     useEffect(() => {
-        if(open) {
+        if (open) {
             const timer = setTimeout(() => {
                 setOpen(false)
             }, 4000);
@@ -105,9 +97,9 @@ export default (props) => {
             if (password !== null && password.length > 0) {
                 await Auth.handleSignIn(email, password).then(r => {
                     if (r !== null) {
-                        sessionStorage.setItem('bearer', r);
+                        localStorage.setItem('token', r);
                         document.location.href = "/";
-                    } else setSignError('No bearer available');
+                    } else setSignError('Incorrect email or password!');
                 }).catch(r => setSignError(r));
             } else {
                 if (email === null)
@@ -116,10 +108,6 @@ export default (props) => {
                     setPassword('');
             }
         }
-    }
-
-    const popupStyle = {
-        margin: '60px auto',
     }
 
     return (
@@ -134,11 +122,11 @@ export default (props) => {
                 <Popup arrow={false}
                        trigger={<div className={classes.popupAnchor}/>}
                        closeOnDocumentClick={false}
-                       open={open}>
-                    <div className={classes.popup}>
-                        Account was created! Sign in to continue.
+                       open={signError.length > 0 || open}>
+                    <Box className={classes.popup} style={{background: signError.length > 0 ? red['50'] : '#E8F0FE'}}>
+                        {signError.length > 0 ? signError : 'Account was created! Sign in to continue.'}
                         <IconButton focusRipple={false} onClick={() => setOpen(false)}><Close/></IconButton>
-                    </div>
+                    </Box>
                 </Popup>
                 <form className={classes.form} noValidate onSubmit={submitHandler}>
                     <TextField
@@ -199,7 +187,6 @@ export default (props) => {
                         {form === "sign-in" ?
                             "Sign In" : "Sign Up"}
                     </Button>
-                    <FormHelperText error>{signError}</FormHelperText>
                     <Grid container>
                         <Grid item xs>
                             {/*{form === 'sign-in' ?*/}
