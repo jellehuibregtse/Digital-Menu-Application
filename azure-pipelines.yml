@@ -6,6 +6,10 @@
 trigger:
 - main
 
+variables:
+  uiSource: 'src'
+  uiBuild: '$(uiSource)/build'
+
 pool:
   vmImage: 'ubuntu-latest'
 
@@ -22,7 +26,6 @@ steps:
     popd
   displayName: 'npm install and build'
   workingDirectory: frontend/kitchen
-
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(uiBuild)'
