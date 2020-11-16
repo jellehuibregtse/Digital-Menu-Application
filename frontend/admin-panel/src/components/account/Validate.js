@@ -1,3 +1,5 @@
+import MessagingService from "../../services/MessagingService";
+
 export default class {
 
     static isValidEmail(email) {
@@ -9,14 +11,24 @@ export default class {
             if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+")).*$/.test(email))
                 return 'Email is invalid! Try adding a valid local part.';
             if (!/^.*((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email))
-                return 'Email is invalid! Try adding a valid domain.'
+                return 'Email is invalid! Try adding a valid domain.';
             if (!/([@])/.test(email))
                 return 'Email is invalid! Try adding \'@\' before the domain.';
             if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email))
                 return 'Email is invalid!';
-            // TODO:
-            //     return 'Email is already taken';
         }
+
+        return true;
+    }
+
+    static async emailAvailable(email) {
+        if (email !== null) {
+            let response = '';
+            await MessagingService.fetchHandler('GET', '/auth-service/users?email=' + email).then(r => response = r).catch();
+            if(response === 'true')
+                return false;
+        }
+
         return true;
     }
 

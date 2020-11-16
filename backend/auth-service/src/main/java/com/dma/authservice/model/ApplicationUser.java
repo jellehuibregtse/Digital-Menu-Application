@@ -22,8 +22,9 @@ public class ApplicationUser {
     @Setter(AccessLevel.PROTECTED)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(unique=true)
     private @NotNull String email;
     private @NotNull String password;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Map<Long, String> restaurantAuthorities;
 }

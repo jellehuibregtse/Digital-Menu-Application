@@ -57,30 +57,34 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf()
-            .disable()
-            // Make sure we use a stateless session (a session that won't be used to store a user's state).
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            // Handle an authorized attempts.
-            .exceptionHandling()
-            .authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-            .and()
-            // Add a filter to validate user credentials and add token in the response header.
-            // What's the authenticationManager()?
-            // An object provided by WebSecurityConfigurerAdapter, used to authenticate the user passing user's credentials.
-            // The filter needs this auth manager to authenticate the user.
-            .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(),
-                                                                      jwtConfig,
-                                                                      jwtTokenService))
-            .addFilterAfter(new JwtTokenAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class)
-            .authorizeRequests()
-            // Allow all POST requests, otherwise a user can't authenticate.
-            .antMatchers(HttpMethod.POST, jwtConfig.getUri())
-            .permitAll()
-            // Any other requests must be authenticated.
-            .anyRequest()
-            .authenticated();
+                .disable()
+                // Make sure we use a stateless session (a session that won't be used to store a user's state).
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                // Handle an authorized attempts.
+                .exceptionHandling()
+                .authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
+                .and()
+                // Add a filter to validate user credentials and add token in the response header.
+                // What's the authenticationManager()?
+                // An object provided by WebSecurityConfigurerAdapter, used to authenticate the user passing user's credentials.
+                // The filter needs this auth manager to authenticate the user.
+                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(),
+                        jwtConfig,
+                        jwtTokenService))
+                .addFilterAfter(new JwtTokenAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class)
+                .authorizeRequests()
+                // Allow all POST requests, otherwise a user can't authenticate.
+                .antMatchers(HttpMethod.POST, jwtConfig.getUri())
+                .permitAll()
+                .antMatchers(HttpMethod.POST, "/users")
+                .permitAll()
+                .antMatchers(HttpMethod.GET, "/users")
+                .permitAll()
+                // Any other requests must be authenticated.
+                .anyRequest()
+                .authenticated();
     }
 
     // Spring has UserDetailsService interface, which can be overridden to provide our implementation for fetching user from database (or any other source).
