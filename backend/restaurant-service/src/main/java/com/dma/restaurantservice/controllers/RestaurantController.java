@@ -6,7 +6,6 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,6 +13,7 @@ import java.util.List;
  *
  * @author Jordan Radushev
  * @author Jelle Huibregtse
+ * @author Aron Hemmes
  */
 @RestController
 @RequestMapping(value = "/restaurants")
@@ -30,12 +30,20 @@ public class RestaurantController {
      *
      * @return <code>ResponseEntity</code> with a list of restaurants and HTTP status OK.
      */
-    @GetMapping
-    public ResponseEntity<List<Restaurant>> getAllRestaurants() {
-        List<Restaurant> result = new ArrayList<>();
-        repository.findAll().forEach(result::add);
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<Restaurant>> getAllRestaurantsForUser(@PathVariable long id) {
+        return ResponseEntity.ok(repository.findAllByUserId(id).orElseThrow());
+    }
 
-        return ResponseEntity.ok(result);
+    /**
+     * Check if email is taken.
+     *
+     * @param name that needs to be found.
+     * @return <code>ResponseEntity</code> with a message and HTTP status OK.
+     */
+    @GetMapping
+    public ResponseEntity<Boolean> nameTaken(@RequestParam String name) {
+        return ResponseEntity.ok(repository.findByName(name).isPresent());
     }
 
     /**
@@ -76,8 +84,8 @@ public class RestaurantController {
                 repository.findById(restaurant.getId()).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
         updatedRestaurant.setName(restaurant.getName());
-        updatedRestaurant.setColorScheme(restaurant.getColorScheme());
-        updatedRestaurant.setLogoURL(restaurant.getLogoURL());
+        updatedRestaurant.getStyling().setColorScheme(restaurant.getStyling().getColorScheme());
+        updatedRestaurant.getStyling().setLogoURL(restaurant.getStyling().getLogoURL());
         updatedRestaurant.setMenuIDs(restaurant.getMenuIDs());
         repository.save(updatedRestaurant);
 

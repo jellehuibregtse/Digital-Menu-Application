@@ -37,11 +37,8 @@ public class RestaurantControllerMVCTests {
 
     @BeforeEach
     public void setup() {
-        Restaurant restaurant1 = new Restaurant("Test1", "test_theme", "test_url", new ArrayList<>());
-        Restaurant restaurant2 = new Restaurant("Test2", "test_theme", "test_url", new ArrayList<>());
-
-        restaurant1.setId(1L);
-        restaurant2.setId(2L);
+        Restaurant restaurant1 = new Restaurant(1L, "Test1", 0, 10, null, new ArrayList<>());
+        Restaurant restaurant2 = new Restaurant(2L, "Test2", 0, 10, null, new ArrayList<>());
 
         repository.saveAll(Arrays.asList(restaurant1, restaurant2));
     }
@@ -98,7 +95,7 @@ public class RestaurantControllerMVCTests {
 
     @Test
     public void createNewRestaurant_andReturnStatus200() throws Exception {
-        Restaurant restaurant = new Restaurant("Test3", "test_theme", "test_url", new ArrayList<>());
+        Restaurant restaurant = new Restaurant(3L, "Test3", 0, 10, null, new ArrayList<>());
         this.mockMvc.perform(MockMvcRequestBuilders.post("/restaurants/")
                                                    .contentType(MediaType.APPLICATION_JSON)
                                                    .content(mapper.writeValueAsString(restaurant)))
@@ -113,8 +110,7 @@ public class RestaurantControllerMVCTests {
     public void updateRestaurant_andReturnStatus200() throws Exception {
         Restaurant foundRestaurant = repository.findByName("Test1").orElseThrow();
 
-        Restaurant restaurant = new Restaurant("UpdatedTest2", "test_theme", "test_url", new ArrayList<>());
-        restaurant.setId(foundRestaurant.getId());
+        Restaurant restaurant = new Restaurant(foundRestaurant.getId(), "UpdatedTest2", 0, 10, null, new ArrayList<>());
 
         this.mockMvc.perform(MockMvcRequestBuilders.put("/restaurants/")
                                                    .contentType(MediaType.APPLICATION_JSON)
@@ -128,8 +124,7 @@ public class RestaurantControllerMVCTests {
 
     @Test
     public void updateUnknownRestaurant_andReturnStatus404() throws Exception {
-        Restaurant restaurant = new Restaurant("UpdatedTest2", "test_theme", "test_url", new ArrayList<>());
-        restaurant.setId(111L);
+        Restaurant restaurant = new Restaurant(111L, "UpdatedTest2", 0, 10, null, new ArrayList<>());
         this.mockMvc.perform(MockMvcRequestBuilders.put("/restaurants/")
                                                    .contentType(MediaType.APPLICATION_JSON)
                                                    .content(mapper.writeValueAsString(restaurant)))
