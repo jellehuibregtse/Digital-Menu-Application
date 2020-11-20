@@ -23,6 +23,7 @@ import java.util.Collections;
  * This filter authenticates a user with username and password then returns a JWT token.
  *
  * @author Jelle Huibregtse
+ * @author Aron Hemmes
  */
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -54,7 +55,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
             var userCredentials = new ObjectMapper().readValue(request.getInputStream(), AuthenticationRequest.class);
 
             // Create auth object, that contains the credentials, which will be used by auth manager
-            var authToken = new UsernamePasswordAuthenticationToken(userCredentials.getUsername(),
+            var authToken = new UsernamePasswordAuthenticationToken(userCredentials.getEmail(),
                                                                     userCredentials.getPassword(),
                                                                     Collections.emptyList());
 
@@ -88,7 +89,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     @Setter
     private static class AuthenticationRequest {
 
-        private String username;
+        private String email;
         private String password;
     }
 }

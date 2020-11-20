@@ -2,7 +2,6 @@ package com.dma.authservice.controller;
 
 import com.dma.authservice.jwt.JwtConfig;
 import com.dma.authservice.services.JwtTokenService;
-import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class TestControllerTests {
+public class UserControllerTests {
 
     @Autowired
     private MockMvc mvc;
@@ -30,16 +29,6 @@ class TestControllerTests {
 
     @Test
     void shouldNotAllowAccessToUnauthenticatedUsers() throws Exception {
-        this.mvc.perform(MockMvcRequestBuilders.get("/test")).andExpect(status().isUnauthorized());
+        this.mvc.perform(MockMvcRequestBuilders.get("/auth")).andExpect(status().isUnauthorized());
     }
-
-    @Test
-    void shouldGenerateAuthToken() throws Exception {
-        String token = jwtTokenService.generateToken("john", 0);
-
-        assertNotNull(token);
-        this.mvc.perform(MockMvcRequestBuilders.get("/test").header("Authorization", jwtConfig.getPrefix() + token))
-                .andExpect(status().isOk());
-    }
-
 }
