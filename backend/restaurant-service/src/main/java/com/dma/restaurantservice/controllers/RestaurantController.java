@@ -2,10 +2,14 @@ package com.dma.restaurantservice.controllers;
 
 import com.dma.restaurantservice.models.Restaurant;
 import com.dma.restaurantservice.repositories.RestaurantRepository;
+import org.apache.commons.codec.binary.Base64;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 
 /**
@@ -31,9 +35,9 @@ public class RestaurantController {
      *
      * @return <code>ResponseEntity</code> with a list of restaurants and HTTP status OK.
      */
-    @GetMapping("/user/{id}")
-    public ResponseEntity<List<Restaurant>> getAllRestaurantsForUser(@PathVariable long id) {
-        return ResponseEntity.ok(repository.findAllByUserId(id).orElseThrow());
+    @GetMapping("/user")
+    public ResponseEntity<List<Restaurant>> getAllRestaurantsForUser(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(repository.findAllByUserId(getIdFromJwtToken(token)).orElseThrow());
     }
 
     /**
@@ -54,7 +58,7 @@ public class RestaurantController {
      * @return <code>ResponseEntity</code> with a restaurant and HTTP status OK.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Restaurant> getRestaurant(@PathVariable long id) {
+    public ResponseEntity<Restaurant> getRestaurant(@PathVariable long id, @RequestHeader("Authorization") String token) {
         Restaurant result = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found."));
         return ResponseEntity.ok(result);
     }
@@ -107,5 +111,11 @@ public class RestaurantController {
         repository.delete(restaurant);
 
         return ResponseEntity.ok(String.format("Restaurant with id: %d has been successfully deleted!", id));
+    }
+
+    private long getIdFromJwtToken(String token) {
+        String base64EncodedBody = token.split("\\.")[1];
+
+        return (long) ((JSONObject) JSONValue.parse(new String(new Base64(true).decode(base64EncodedBody)))).get("id");
     }
 }
