@@ -48,12 +48,12 @@ export const initialState = {
                 name: "test item 6",
                 price: 10.99,
                 category:"DESSERT",
-                ingredients:["SUGAR"]
+                ingredients:["MILK"]
             },
             {
                 id: 6,
                 name: "test beverage 1",
-                price: 1.99,
+                 price: 1.99,
                 category:"BEVERAGE",
                 ingredients:[]
             },
@@ -62,7 +62,7 @@ export const initialState = {
                 name: "test beverage 1",
                 price: 1.99,
                 category:"BEVERAGE",
-                ingredients:[]
+                ingredients:[ ]
             }
 
         ]

@@ -1,4 +1,4 @@
-import React ,{useState} from 'react';
+import React, { useState } from 'react';
 import '../../css/menu.css';
 import '../../css/orderBar.css';
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,40 +20,49 @@ const useStyles = makeStyles((theme) => ({
 const Menu = (props) => {
 
     const classes = useStyles();
-    const [category,setCategory] = useState("");
-    const [ingredients,setIngredients] = useState([]);
+    const [selectedCategory, setCategory] = useState("");
+    const [selectedIngredients, setIngredients] = useState([]);
 
-    const onSelectedCategoryOption =(selectedCategory)=>{
+    const onSelectedCategoryOption = (selectedCategory) => {
         setCategory(selectedCategory);
     }
-    const onCheckedIngredientOption =(selectedIngredients)=>{
+    const onCheckedIngredientOption = (selectedIngredients) => {
         setIngredients(selectedIngredients);
     }
-    console.log(ingredients)
     
-    const itemsList = typeof props.menu !== 'undefined' ? 
-    props.menu.items
-    .filter(i=>i.category.includes(category))
-    .map(item => {
+    //First map the items according to selected category
+    let filteredItems = typeof props.menu !== 'undefined' ?
+        props.menu.items
+            .filter(item => item.category.includes(selectedCategory)) : null;
+
+    //Then we filter by selected ingredients
+    if (selectedIngredients.length !== 0) {
+        filteredItems = filteredItems
+            .filter(item => item.ingredients.some(i => selectedIngredients.includes(i)))
+    }
+
+    //Display Dish Component for every filtered item
+    const itemsList = filteredItems.map(item => {
         return (
             <>
-                <Grid className={classes.dish} key={item.id+1000} item xs={6} sm={3}>
+                <Grid className={classes.dish} key={item.id + 1000} item xs={6} sm={3}>
                     <Dish
                         name={item.name}
                         price={item.price}
                         key={item.id}
                         id={item.id}
+                        ingredients={item.ingredients}
                     />
                 </Grid>
             </>
         )
-    }) : null;
-
+    })
+    
     return (
         <>
             <div className={classes.root}>
-                <SearchBar category={category} onSelect={onSelectedCategoryOption}
-                onCheck={onCheckedIngredientOption}/>
+                <SearchBar category={selectedCategory} onSelect={onSelectedCategoryOption}
+                    onCheck={onCheckedIngredientOption} />
                 <Grid key={1} container spacing={3}>
                     {itemsList}
                 </Grid>

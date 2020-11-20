@@ -10,7 +10,6 @@ import '../../css/product.css';
 import { useStateValue } from '../../context/stateProvider';
 const Dish = (props) => {
   const [state, update] = useStateValue();
-  
   const onClickHandler = (e) => {
     console.log(e.target.parentNode.id)
     update({
@@ -38,6 +37,9 @@ const Dish = (props) => {
         </ListItem>
       </List> */}
         <Button id={props.id} onClick={onClickHandler} variant="outlined">Add to order</Button>
+        <Typography variant="body2" component="p">
+          includes: {props.ingredients.toString()}
+        </Typography>
       </CardContent>
     </Card>
   );

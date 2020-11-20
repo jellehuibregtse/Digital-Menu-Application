@@ -1,9 +1,16 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import App from './App';
+import Dish from './components/menu/Dish';
+import NavBar from './components/NavBar';
 
-test('renders learn react link', () => {
-  const { getByText } = render(<App />);
-  const linkElement = getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test('Render Dish Component', () => {
+  const { getByText } = render(<Dish 
+    name={"Steak"}
+    price={19.99}
+    id={1}/>);
+  const itemName = getByText(/Steak/i);
+  const itemPrice = getByText(/19.99/i);
+  expect(itemName).toBeInTheDocument();
+  expect(itemPrice).toBeInTheDocument()
 });
+ 
