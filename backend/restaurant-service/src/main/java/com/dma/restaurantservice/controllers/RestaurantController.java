@@ -15,6 +15,7 @@ import java.util.List;
  * @author Jelle Huibregtse
  * @author Aron Hemmes
  */
+@CrossOrigin
 @RestController
 @RequestMapping(value = "/restaurants")
 public class RestaurantController {
@@ -24,6 +25,12 @@ public class RestaurantController {
     public RestaurantController(RestaurantRepository repository) {
         this.repository = repository;
     }
+
+    @GetMapping("test")
+    public String test(@RequestHeader("Authorization") String token) {
+        return "token: " + token;
+    }
+
 
     /**
      * Get a list of all restaurants.

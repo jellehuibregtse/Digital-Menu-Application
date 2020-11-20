@@ -74,6 +74,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
             // Then throw an exception.
             throw new IllegalStateException(String.format("Token %s is invalid!", token));
         }
+
         // Make sure that other filters down the chain get called with the proper request and response objects.
         filterChain.doFilter(request, response);
     }

@@ -32,6 +32,7 @@ public class Restaurant {
     @NotNull
     @Min(1)
     private int tableCount;
+    @NotNull
     @OneToOne(cascade = CascadeType.ALL)
     private Styling styling;
     @ElementCollection

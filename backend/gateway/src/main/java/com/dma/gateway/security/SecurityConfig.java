@@ -26,8 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf()
-            .disable()
+        http.csrf().disable()
             // We want to use a stateless session, since we won't be storing the user's state.
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
