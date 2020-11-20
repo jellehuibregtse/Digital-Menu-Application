@@ -26,12 +26,6 @@ public class RestaurantController {
         this.repository = repository;
     }
 
-    @GetMapping("test")
-    public String test(@RequestHeader("Authorization") String token) {
-        return "token: " + token;
-    }
-
-
     /**
      * Get a list of all restaurants.
      *
