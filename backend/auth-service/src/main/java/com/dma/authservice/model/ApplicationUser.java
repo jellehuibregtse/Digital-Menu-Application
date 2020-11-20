@@ -25,6 +25,4 @@ public class ApplicationUser {
     @Column(unique=true)
     private @NotNull String email;
     private @NotNull String password;
-    @ElementCollection(fetch = FetchType.EAGER)
-    private Map<Long, String> restaurantAuthorities;
 }

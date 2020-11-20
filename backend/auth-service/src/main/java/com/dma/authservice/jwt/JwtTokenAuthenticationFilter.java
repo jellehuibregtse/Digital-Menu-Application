@@ -76,6 +76,6 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         }
 
         // Make sure that other filters down the chain get called with the proper request and response objects.
-//        filterChain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
 }

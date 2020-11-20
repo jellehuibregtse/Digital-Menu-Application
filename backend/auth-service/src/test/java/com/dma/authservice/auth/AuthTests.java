@@ -22,7 +22,7 @@ class AuthTests {
 
     @Test
     void generateToken_returnsString() {
-        var token = jwtTokenService.generateToken("subject");
+        var token = jwtTokenService.generateToken("subject", 0);
 
         assertNotNull(token);
         assertFalse(token.contains(jwtConfig.getPrefix()));

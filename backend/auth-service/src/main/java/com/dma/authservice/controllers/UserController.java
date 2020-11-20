@@ -1,7 +1,6 @@
 package com.dma.authservice.controllers;
 
 import com.dma.authservice.model.ApplicationUser;
-import com.dma.authservice.model.UserDto;
 import com.dma.authservice.repository.ApplicationUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -30,28 +29,6 @@ public class UserController {
     }
 
     /**
-     * Get more information by providing the e-mail of the user.
-     *
-     * @return information on the user.
-     */
-    @GetMapping("/information")
-    public ResponseEntity<Object> retrieveInformation() {
-        var principal = getPrincipal();
-
-        var user = applicationUserRepository.findByEmail(principal);
-
-        if (user.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        var dto = new UserDto();
-        dto.setId(user.get().getId());
-        dto.setRestaurantAuthorities(user.get().getRestaurantAuthorities());
-
-        return ResponseEntity.ok(dto);
-    }
-
-    /**
      * Check if email is taken.
      *
      * @param email that needs to be found.
@@ -65,35 +42,35 @@ public class UserController {
     /**
      * Create a user.
      *
+     * @param user that needs to created
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
     @PostMapping
-    public ResponseEntity<String> createApplicationUser(@RequestBody UserDto userDto) {
-        var applicationUser = new ApplicationUser();
-        applicationUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+    public ResponseEntity<String> createApplicationUser(@RequestBody ApplicationUser user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        applicationUserRepository.save(applicationUser);
+        applicationUserRepository.save(user);
 
         return ResponseEntity.ok(String.format("User with email: %s has been successfully created!",
-                                               applicationUser.getEmail()));
+                                               user.getEmail()));
     }
 
     /**
      * Update a single user.
      *
-     * @param dto that needs to be updated
+     * @param user that needs to be updated
      * @return message and HTTP status OK.
      */
     @PutMapping
-    public ResponseEntity<String> updateApplicationUser(@RequestBody UserDto dto) {
+    public ResponseEntity<String> updateApplicationUser(@RequestBody ApplicationUser user) {
         var principal = getPrincipal();
         var updatedApplicationUser = applicationUserRepository.findByEmail(principal)
-                                                              .orElseThrow(() -> new ResourceNotFoundException(
-                                                                      "Not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Not found."));
 
-        updatedApplicationUser.setPassword(dto.getPassword());
-        updatedApplicationUser.setEmail(dto.getEmail());
-        updatedApplicationUser.setRestaurantAuthorities(dto.getRestaurantAuthorities());
+        updatedApplicationUser.setPassword(user.getPassword());
+        updatedApplicationUser.setEmail(user.getEmail());
+
         applicationUserRepository.save(updatedApplicationUser);
 
         return ResponseEntity.ok(String.format("User with id: %d has been successfully updated!",

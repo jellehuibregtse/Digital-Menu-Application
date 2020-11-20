@@ -35,7 +35,7 @@ class TestControllerTests {
 
     @Test
     void shouldGenerateAuthToken() throws Exception {
-        String token = jwtTokenService.generateToken("john", Lists.newArrayList("ROLE_ADMIN"));
+        String token = jwtTokenService.generateToken("john", 0);
 
         assertNotNull(token);
         this.mvc.perform(MockMvcRequestBuilders.get("/test").header("Authorization", jwtConfig.getPrefix() + token))
