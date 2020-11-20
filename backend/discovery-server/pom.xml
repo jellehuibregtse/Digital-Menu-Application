@@ -8,7 +8,7 @@
         <version>2.3.3.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.lit</groupId>
+    <groupId>com.dma</groupId>
     <artifactId>discovery-server</artifactId>
     <name>discovery-server</name>
 
@@ -39,22 +39,17 @@
     <build>
         <plugins>
             <plugin>
-                <!-- Build an executable JAR -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.dma.discoveryserver.DiscoveryServerApplication</mainClass>
-                        </manifest>
-                    </archive>
+                    <mainClass>com.dma.discoveryserver.DiscoveryServerApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+
 
 
 </project>
