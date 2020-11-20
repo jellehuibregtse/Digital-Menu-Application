@@ -8,9 +8,9 @@ import {
     IconButton,
     ListItem,
     Divider,
-    Box
+    Box,
+    makeStyles
 } from "@material-ui/core";
-import {makeStyles} from '@material-ui/core/styles';
 import {Link} from 'react-router-dom';
 import {AccountCircle} from "@material-ui/icons";
 import Popup from "reactjs-popup";

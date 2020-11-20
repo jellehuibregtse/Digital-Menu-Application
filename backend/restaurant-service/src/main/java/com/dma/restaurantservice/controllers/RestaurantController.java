@@ -9,7 +9,6 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.AuthenticationException;
 import java.util.List;
 
 /**
@@ -58,7 +57,7 @@ public class RestaurantController {
      * @return <code>ResponseEntity</code> with a restaurant and HTTP status OK.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Restaurant> getRestaurant(@PathVariable long id, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Restaurant> getRestaurant(@PathVariable long id) {
         Restaurant result = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found."));
         return ResponseEntity.ok(result);
     }

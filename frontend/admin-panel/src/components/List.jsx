@@ -99,7 +99,7 @@ export default (props) => {
                     />
                 </div>
 
-                <Button variant="contained" color="secondary">
+                <Button variant="contained" color="secondary" onClick={() => document.location.href = "/new"}>
                     <AddCircle className={classes.buttonIcon}/>
                     New
                 </Button>
