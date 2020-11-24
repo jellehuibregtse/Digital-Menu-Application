@@ -33,12 +33,12 @@ const Menu = (props) => {
     //First map the items according to selected category
     let filteredItems = typeof props.menu !== 'undefined' ?
         props.menu.items
-            .filter(item => item.category.includes(selectedCategory)) : null;
+            .filter(item => item.category.name.includes(selectedCategory)) : null;
 
     //Then we filter by selected ingredients
     if (selectedIngredients.length !== 0) {
         filteredItems = filteredItems
-            .filter(item => item.ingredients.some(i => selectedIngredients.includes(i)))
+            .filter(item => item.ingredients.some(i => selectedIngredients.includes(i.name)))
     }
 
     //Display Dish Component for every filtered item
@@ -61,7 +61,11 @@ const Menu = (props) => {
     return (
         <>
             <div className={classes.root}>
-                <SearchBar category={selectedCategory} onSelect={onSelectedCategoryOption}
+                <SearchBar 
+                categories={props.menu.categories.map(i=>i.name)}
+                ingredients={props.menu.ingredients.map(i=>i.name)} 
+                category={selectedCategory} 
+                onSelect={onSelectedCategoryOption}
                     onCheck={onCheckedIngredientOption} />
                 <Grid key={1} container spacing={3}>
                     {itemsList}

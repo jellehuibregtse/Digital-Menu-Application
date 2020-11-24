@@ -75,11 +75,16 @@ const SearchBar = (props) => {
                     <MenuItem value={""}>
                         <em>All</em>
                     </MenuItem>
-                    <MenuItem value={"SALAD"}>Salads</MenuItem>
+                    {props.categories.map(i=>{
+                        return(
+                            <MenuItem value={i}>{i}</MenuItem>
+                        )
+                    })}
+                    {/* <MenuItem value={"SALAD"}>Salads</MenuItem>
                     <MenuItem value={"MAIN"}>Main dishes</MenuItem>
                     <MenuItem value={"SIDE"}>Side dishes</MenuItem>
                     <MenuItem value={"DESSERT"}>Desserts</MenuItem>
-                    <MenuItem value={"BEVERAGE"}>Beverages</MenuItem>
+                    <MenuItem value={"BEVERAGE"}>Beverages</MenuItem> */}
                 </Select>
             </FormControl>
 
@@ -96,7 +101,7 @@ const SearchBar = (props) => {
                     renderValue={(selected) => selected.join(', ')}
                     MenuProps={MenuProps}
                 >
-                    {ingredients.map((name) => (
+                    {props.ingredients.map((name) => (
                         <MenuItem key={name} value={name}>
                             <Checkbox checked={selectedIngredient.indexOf(name) > -1} />
                             <ListItemText primary={name} />
