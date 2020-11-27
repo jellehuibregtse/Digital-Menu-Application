@@ -1,7 +1,7 @@
-FROM openjdk:11-alpine
+FROM openjdk:11
 
 EXPOSE 8761
 
-ADD target/*.jar app.jar
+ADD target/backend/discovery-server/target/*.jar app.jar
 
 ENTRYPOINT ["java","-jar","app.jar"]
