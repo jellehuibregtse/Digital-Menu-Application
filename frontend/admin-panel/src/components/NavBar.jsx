@@ -103,11 +103,6 @@ const NavBar = (props) => {
                     <Link className={classes.link} to="/">
                         <Typography variant="h6">Digital Menu Application</Typography>
                     </Link>
-                    {props.loggedIn ?
-                        <>
-                            <Link className={classes.link} to="/menu">Menu</Link>
-                            <Link className={classes.link} to="/design">Design</Link>
-                        </> : null}
                 </div>
 
                 {props.loggedIn ?

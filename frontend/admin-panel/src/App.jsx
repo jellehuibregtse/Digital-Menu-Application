@@ -4,7 +4,6 @@ import {BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom
 import {deepOrange} from "@material-ui/core/colors";
 import NavBar from "./components/NavBar";
 import Design from "./components/design/Design";
-import MenuList from "./components/menu/MenuList";
 import Account from "./components/account/Account";
 import RestaurantList from "./components/restaurant/RestaurantList";
 import New from "./components/restaurant/New";
@@ -45,7 +44,7 @@ const App = () => {
     const [restaurants, setRestaurants] = useState(null);
 
     useEffect(() => {
-        if(loggedIn) {
+        if (loggedIn) {
             MessagingService.fetchHandler('GET', '/api/restaurant-service/restaurants/user')
                 .then(r => setRestaurants(r))
                 .catch(() => setRestaurants([]));
@@ -66,14 +65,9 @@ const App = () => {
                                 <Route exact strict path="/new" render={() => <New/>}/>
 
                                 <Route exact strict path={restaurants.map(restaurant => "/" + restaurant.name)}
-                                       render={(props) => <RestaurantPage restaurantName={restaurants.find(restaurant => restaurant.name === props.history.location.pathname.substring(1)).displayName} id={restaurants.find(restaurant => restaurant.name === props.history.location.pathname.substring(1)).id}/>}/>
-
-                                <Route exact strict
-                                       path={restaurants.map(restaurant => "/" + restaurant.name + "/settings")}/>
-
-                                <Route exact strict
-                                       path={restaurants.map(restaurant => "/" + restaurant.name + "/menu")}
-                                       render={() => <MenuList/>}/>
+                                       render={(props) => {
+                                           const restaurant = restaurants.find(restaurant => restaurant.name === props.history.location.pathname.substring(1));
+                                           return <RestaurantPage restaurantName={restaurant.displayName} id={restaurant.id}/>}}/>
 
                                 <Route exact strict path="/categories"/>
 
