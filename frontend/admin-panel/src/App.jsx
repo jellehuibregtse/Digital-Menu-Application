@@ -3,12 +3,12 @@ import {ThemeProvider, createMuiTheme} from "@material-ui/core/styles";
 import {BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
 import {deepOrange} from "@material-ui/core/colors";
 import NavBar from "./components/NavBar";
-import Design from "./components/design/Design";
 import Account from "./components/account/Account";
 import RestaurantList from "./components/restaurant/RestaurantList";
 import New from "./components/restaurant/New";
 import MessagingService from "./services/MessagingService";
 import RestaurantPage from "./components/restaurant/RestaurantPage";
+import Settings from "./components/restaurant/Settings";
 
 const theme = createMuiTheme({
     palette: {
@@ -64,14 +64,10 @@ const App = () => {
 
                                 <Route exact strict path="/new" render={() => <New/>}/>
 
-                                <Route exact strict path={restaurants.map(restaurant => "/" + restaurant.name)}
+                                <Route strict path={restaurants.map(restaurant => "/" + restaurant.name)}
                                        render={(props) => {
-                                           const restaurant = restaurants.find(restaurant => restaurant.name === props.history.location.pathname.substring(1));
-                                           return <RestaurantPage restaurantName={restaurant.displayName} id={restaurant.id}/>}}/>
-
-                                <Route exact strict path="/categories"/>
-
-                                <Route exact strict path="/design" render={() => <Design/>}/>
+                                           const restaurant = restaurants.find(restaurant => restaurant.name === props.history.location.pathname.substring(1).split('/')[0]);
+                                           return <RestaurantPage name={restaurant.name} displayName={restaurant.displayName} id={restaurant.id}/>}}/>
 
                                 <Route path="*" render={() => <Redirect to="/"/>}/>
                             </Switch> : null :

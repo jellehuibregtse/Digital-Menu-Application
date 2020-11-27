@@ -67,16 +67,8 @@ const Item = (props) => {
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={props.name} secondary={props.info}/>
-                <Popup trigger={
-                    <ListItemSecondaryAction>
-                        <IconButton onClick={() => console.log('2')}>
-                            <Create/>
-                        </IconButton>
-                    </ListItemSecondaryAction>}>
-                    test
-                </Popup>
             </ListItem>
-            <Divider/>
+            {props.divider? <Divider/> : null}
         </>
     )
 }
@@ -118,12 +110,13 @@ export default (props) => {
                     New
                 </Button>
             </div>
-            <Divider/>
             <List>
                 {
+                    items.length > 0?
                     items.map(item =>
-                        <Item key={item.href} name={item.primary} icon={props.icon} info={item.secondary} href={item.href}/>
-                    )
+                        <Item divider={items.length > 1} key={item.href} name={item.primary} icon={props.icon} info={item.secondary} href={item.href}/>
+                    ) :
+                        <ListItem>It seems like you don't have any restaurants yet.</ListItem>
                 }
             </List>
         </div>
