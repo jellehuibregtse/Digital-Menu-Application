@@ -16,7 +16,6 @@ import java.util.Map;
 @Setter
 @Entity
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 public class ApplicationUser {
 
