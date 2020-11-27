@@ -1,4 +1,4 @@
-FROM java:11
+FROM java:openjdk:11-alpine
 
 EXPOSE 8761
 
