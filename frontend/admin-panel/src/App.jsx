@@ -7,8 +7,9 @@ import Design from "./components/design/Design";
 import MenuList from "./components/menu/MenuList";
 import Account from "./components/account/Account";
 import RestaurantList from "./components/restaurant/RestaurantList";
-import MessagingService from "./services/MessagingService";
 import New from "./components/restaurant/New";
+import MessagingService from "./services/MessagingService";
+import Cookies from 'js-cookie'
 
 const theme = createMuiTheme({
     palette: {
@@ -39,25 +40,24 @@ const parseSubFromJwt = (token) => {
 };
 
 const App = () => {
+    const loggedIn = localStorage.getItem('token');
 
-    const loggedIn = localStorage.getItem('token') !== null;
+    const [restaurants, setRestaurants] = useState([]);
 
-    // const [restaurants, setRestaurants] = useState(null);
-    //
-    // useEffect(() => {
-    //     MessagingService.fetchHandler('GET', '/restaurant-service/restaurants')
-    //         .then(r => console.log(r))
-    //         .catch(r => console.log(r));
-    // }, [])
+    useEffect(() => {
+        MessagingService.fetchHandler('GET', '/api/restaurant-service/restaurants/user')
+            .then(r => setRestaurants(r))
+            .catch(r => console.log(r))
+    }, [])
 
     return (
         <Router>
             <ThemeProvider theme={theme}>
-                <NavBar loggedIn={loggedIn} email={loggedIn? parseSubFromJwt(localStorage.getItem('token')) : null}/>
+                <NavBar loggedIn={loggedIn} email={loggedIn ? parseSubFromJwt(localStorage.getItem('token')) : null}/>
                 <Switch>
                     {loggedIn ?
                         <Switch>
-                            <Route exact strict path="/" render={() => <RestaurantList/>}/>
+                            <Route exact strict path="/" render={() => <RestaurantList restaurants={restaurants}/>}/>
 
                             <Route exact strict path="/new" render={() => <New/>}/>
 
@@ -72,9 +72,11 @@ const App = () => {
                             <Route path="*" render={() => <Redirect to="/"/>}/>
                         </Switch> :
                         <Switch>
-                            <Route exact strict path="/sign-in" render={(props) => <Account {...props} form="sign-in"/>}/>
+                            <Route exact strict path="/sign-in"
+                                   render={(props) => <Account {...props} form="sign-in"/>}/>
 
-                            <Route exact strict path="/sign-up" render={(props) => <Account {...props} form="sign-up"/>}/>
+                            <Route exact strict path="/sign-up"
+                                   render={(props) => <Account {...props} form="sign-up"/>}/>
 
                             <Route path="*" render={() => <Redirect to="/sign-in"/>}/>
                         </Switch>}

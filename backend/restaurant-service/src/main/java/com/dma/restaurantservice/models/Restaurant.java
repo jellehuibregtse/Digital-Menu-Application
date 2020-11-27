@@ -28,11 +28,12 @@ public class Restaurant {
     @Column(unique = true)
     private String name;
     @NotNull
+    private String displayName;
+    @NotNull
     private long userId;
     @NotNull
     @Min(1)
     private int tableCount;
-    @NotNull
     @OneToOne(cascade = CascadeType.ALL)
     private Styling styling;
     @ElementCollection

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Divider,
     List,
@@ -82,6 +82,16 @@ const Item = (props) => {
 export default (props) => {
     const classes = useStyles();
 
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        setItems(props.items);
+    }, [props.items])
+
+    const filter = (input) => {
+        setItems(props.items.filter(item => item.primary.toLowerCase().includes(input.toLowerCase())));
+    }
+
     return (
         <List>
             <div className={classes.head}>
@@ -96,6 +106,7 @@ export default (props) => {
                         variant="outlined"
                         placeholder={"Find a " + props.type + "…"}
                         inputProps={{'aria-label': 'search'}}
+                        onChange={e => filter(e.target.value)}
                     />
                 </div>
 
@@ -106,7 +117,7 @@ export default (props) => {
             </div>
             <Divider/>
             {
-                props.items.map(item =>
+                items.map(item =>
                     <Item name={item.primary} icon={props.icon} info={item.secondary}/>
                 )
             }

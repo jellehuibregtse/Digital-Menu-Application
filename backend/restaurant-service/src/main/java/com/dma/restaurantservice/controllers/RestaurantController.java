@@ -9,6 +9,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,11 +37,11 @@ public class RestaurantController {
      */
     @GetMapping("/user")
     public ResponseEntity<List<Restaurant>> getAllRestaurantsForUser(@RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(repository.findAllByUserId(getIdFromJwtToken(token)).orElseThrow());
+        return ResponseEntity.ok(repository.findAllByUserId((long) parseJwtToken(token).get("id")).orElse(new ArrayList<>()));
     }
 
     /**
-     * Check if email is taken.
+     * Check if restaurant name is taken.
      *
      * @param name that needs to be found.
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
@@ -69,7 +70,8 @@ public class RestaurantController {
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
     @PostMapping
-    public ResponseEntity<String> createRestaurant(@RequestBody Restaurant restaurant) {
+    public ResponseEntity<String> createRestaurant(@RequestBody Restaurant restaurant, @RequestHeader("Authorization") String token) {
+        restaurant.setUserId((long) parseJwtToken(token).get("id"));
         repository.save(restaurant);
 
         return ResponseEntity.ok(String.format("Restaurant with name: %s has been successfully created!",
@@ -112,9 +114,9 @@ public class RestaurantController {
         return ResponseEntity.ok(String.format("Restaurant with id: %d has been successfully deleted!", id));
     }
 
-    private long getIdFromJwtToken(String token) {
+    private JSONObject parseJwtToken(String token) {
         String base64EncodedBody = token.split("\\.")[1];
 
-        return (long) ((JSONObject) JSONValue.parse(new String(new Base64(true).decode(base64EncodedBody)))).get("id");
+        return (JSONObject) JSONValue.parse(new String(new Base64(true).decode(base64EncodedBody)));
     }
 }

@@ -34,8 +34,8 @@ public class RestaurantRepositoryTests {
      */
     @BeforeEach
     public void init() {
-        Restaurant restaurant1 = new Restaurant(1L, "Test1", 0, 10, null, new ArrayList<>());
-        Restaurant restaurant2 = new Restaurant(2L, "Test2", 0, 10, null, new ArrayList<>());
+        Restaurant restaurant1 = new Restaurant(1L, "test1", "Test1", 0, 10, null, new ArrayList<>());
+        Restaurant restaurant2 = new Restaurant(2L, "test2", "Test2", 0, 10, null, new ArrayList<>());
 
         entityManager.persist(restaurant1);
         entityManager.persist(restaurant2);
@@ -78,7 +78,7 @@ public class RestaurantRepositoryTests {
     @Test
     public void should_save_new_restaurant() {
         Restaurant savedRestaurant =
-                repository.save(new Restaurant(3L, "Test3", 0, 10, null, new ArrayList<>()));
+                repository.save(new Restaurant(3L, "test3", "Test3", 0, 10, null, new ArrayList<>()));
 
         assertThat(savedRestaurant.getName()).isEqualTo("Test3");
     }

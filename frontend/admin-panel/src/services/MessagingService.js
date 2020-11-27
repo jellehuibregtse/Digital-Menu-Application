@@ -4,15 +4,15 @@ class MessagingService {
     // This is where you can get/post/put/delete messages
     static async fetchHandler(method, route, message) {
         let result = null;
-        await fetch("/api" + route, {
+        await fetch(route, {
             method: method,
             body: JSON.stringify(message),
             headers: {
-                "Content-Type": "application/json",
-                "accept": "*/*",
-                "Accept-Encoding": "gzip, deflate, br",
-                "Connection": "keep-alive",
-                "Authorization": localStorage.getItem("token")
+                'Content-Type': 'application/json',
+                'accept': '*/*',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Connection': 'keep-alive',
+                'Authorization': localStorage.getItem('token')
             }
 
         })
@@ -25,7 +25,7 @@ class MessagingService {
             })
             .then((res) => {
                 try {
-                    result = typeof JSON.parse(res) === "object" && JSON.parse(res) !== null ? JSON.parse(res) : res
+                    result = typeof JSON.parse(res) === 'object' && JSON.parse(res) !== null ? JSON.parse(res) : res
                 } catch (e) {
                     result = res
                 }

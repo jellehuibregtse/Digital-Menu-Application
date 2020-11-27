@@ -22,6 +22,11 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final ApplicationUserRepository applicationUserRepository;
 
+    @GetMapping("/logged-in")
+    public ResponseEntity<Boolean> loggedIn() {
+        return ResponseEntity.ok(true);
+    }
+
     @Autowired
     public UserController(PasswordEncoder passwordEncoder, ApplicationUserRepository applicationUserRepository) {
         this.passwordEncoder = passwordEncoder;

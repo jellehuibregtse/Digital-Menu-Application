@@ -3,7 +3,6 @@ package com.dma.authservice.jwt;
 import com.google.common.base.Strings;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -12,8 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 /**
  * The filter that will check each request for the JWT token. Then it checks if the token is valid.
@@ -50,20 +48,15 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
             // 4. Validate the token
             var claims = Jwts.parser().setSigningKey(jwtConfig.getSecret().getBytes()).parseClaimsJws(token).getBody();
             var username = claims.getSubject();
+            assert claims.get("id") != null;
 
             if (!Strings.isNullOrEmpty(username)) {
-                @SuppressWarnings("unchecked") List<String> authorities = (List<String>) claims.get("authorities");
-
                 // 5. Create the authentication object.
                 // UsernamePasswordAuthenticationToken is a built-in object,
                 // used by spring to represent the current authenticated / being authenticated user.
                 // It needs a list of authorities, which has type of GrantedAuthority interface,
                 // where SimpleGrantedAuthority is an implementation of that interface.
-                var authentication = new UsernamePasswordAuthenticationToken(username,
-                                                                             null,
-                                                                             authorities.stream()
-                                                                                        .map(SimpleGrantedAuthority::new)
-                                                                                        .collect(Collectors.toList()));
+                var authentication = new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
 
                 // 6. Authenticate the user; the user is now authenticated within the system.
                 SecurityContextHolder.getContext().setAuthentication(authentication);

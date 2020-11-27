@@ -6,7 +6,7 @@ export default class {
         let result = null;
         await fetch("/api/auth-service/auth", {
             method: 'POST',
-            body: JSON.stringify({username: email, password: password}),
+            body: JSON.stringify({email: email, password: password}),
             headers: {
                 "Content-Type": "application/json",
                 "accept": "*/*",
@@ -27,7 +27,7 @@ export default class {
 
     static async handleSignUp(email, password) {
         let result = null;
-        await MessagingService.fetchHandler('POST', '/auth-service/users', {email: email, password: password}).then(() => result = true).catch(r => result = r);
+        await MessagingService.fetchHandler('POST', '/api/auth-service/users', {email: email, password: password}).then(() => result = true).catch(r => result = r);
         return result;
     }
 }
