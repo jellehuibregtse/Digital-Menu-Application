@@ -9,7 +9,7 @@ import Account from "./components/account/Account";
 import RestaurantList from "./components/restaurant/RestaurantList";
 import New from "./components/restaurant/New";
 import MessagingService from "./services/MessagingService";
-import Cookies from 'js-cookie'
+import RestaurantPage from "./components/restaurant/RestaurantPage";
 
 const theme = createMuiTheme({
     palette: {
@@ -42,12 +42,14 @@ const parseSubFromJwt = (token) => {
 const App = () => {
     const loggedIn = localStorage.getItem('token');
 
-    const [restaurants, setRestaurants] = useState([]);
+    const [restaurants, setRestaurants] = useState(null);
 
     useEffect(() => {
-        MessagingService.fetchHandler('GET', '/api/restaurant-service/restaurants/user')
-            .then(r => setRestaurants(r))
-            .catch(r => console.log(r))
+        if(loggedIn) {
+            MessagingService.fetchHandler('GET', '/api/restaurant-service/restaurants/user')
+                .then(r => setRestaurants(r))
+                .catch(() => setRestaurants([]));
+        }
     }, [])
 
     return (
@@ -56,21 +58,29 @@ const App = () => {
                 <NavBar loggedIn={loggedIn} email={loggedIn ? parseSubFromJwt(localStorage.getItem('token')) : null}/>
                 <Switch>
                     {loggedIn ?
-                        <Switch>
-                            <Route exact strict path="/" render={() => <RestaurantList restaurants={restaurants}/>}/>
+                        restaurants !== null ?
+                            <Switch>
+                                <Route exact strict path="/"
+                                       render={() => <RestaurantList restaurants={restaurants}/>}/>
 
-                            <Route exact strict path="/new" render={() => <New/>}/>
+                                <Route exact strict path="/new" render={() => <New/>}/>
 
-                            <Route exact strict path="/restaurant/settings"/>
+                                <Route exact strict path={restaurants.map(restaurant => "/" + restaurant.name)}
+                                       render={(props) => <RestaurantPage restaurantName={restaurants.find(restaurant => restaurant.name === props.history.location.pathname.substring(1)).displayName} id={restaurants.find(restaurant => restaurant.name === props.history.location.pathname.substring(1)).id}/>}/>
 
-                            <Route exact strict path="/menu" render={() => <MenuList/>}/>
+                                <Route exact strict
+                                       path={restaurants.map(restaurant => "/" + restaurant.name + "/settings")}/>
 
-                            <Route exact strict path="/categories"/>
+                                <Route exact strict
+                                       path={restaurants.map(restaurant => "/" + restaurant.name + "/menu")}
+                                       render={() => <MenuList/>}/>
 
-                            <Route exact strict path="/design" render={() => <Design/>}/>
+                                <Route exact strict path="/categories"/>
 
-                            <Route path="*" render={() => <Redirect to="/"/>}/>
-                        </Switch> :
+                                <Route exact strict path="/design" render={() => <Design/>}/>
+
+                                <Route path="*" render={() => <Redirect to="/"/>}/>
+                            </Switch> : null :
                         <Switch>
                             <Route exact strict path="/sign-in"
                                    render={(props) => <Account {...props} form="sign-in"/>}/>

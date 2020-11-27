@@ -9,6 +9,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Popup from "reactjs-popup";
 import ListItem from "@material-ui/core/ListItem";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     head: {
@@ -54,11 +55,12 @@ const useStyles = makeStyles((theme) => ({
 
 const Item = (props) => {
     const classes = useStyles();
+    const history = useHistory();
 
     return (
         <>
             <ListItem className={classes.head} button
-                      onClick={() => document.location.href = "/restaurant/" + props.name.toLowerCase()}>
+                      onClick={() => history.push(props.href)}>
                 <ListItemAvatar>
                     <Avatar>
                         {props.icon}
@@ -80,6 +82,7 @@ const Item = (props) => {
 }
 
 export default (props) => {
+    const history = useHistory();
     const classes = useStyles();
 
     const [items, setItems] = useState([]);
@@ -93,7 +96,7 @@ export default (props) => {
     }
 
     return (
-        <List>
+        <div>
             <div className={classes.head}>
                 <div className={classes.search}>
                     <div className={classes.searchIcon}>
@@ -110,17 +113,19 @@ export default (props) => {
                     />
                 </div>
 
-                <Button variant="contained" color="secondary" onClick={() => document.location.href = "/new"}>
+                <Button variant="contained" color="secondary" onClick={() => history.push("/new")}>
                     <AddCircle className={classes.buttonIcon}/>
                     New
                 </Button>
             </div>
             <Divider/>
-            {
-                items.map(item =>
-                    <Item name={item.primary} icon={props.icon} info={item.secondary}/>
-                )
-            }
-        </List>
+            <List>
+                {
+                    items.map(item =>
+                        <Item key={item.href} name={item.primary} icon={props.icon} info={item.secondary} href={item.href}/>
+                    )
+                }
+            </List>
+        </div>
     )
 }

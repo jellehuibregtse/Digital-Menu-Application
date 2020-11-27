@@ -106,12 +106,16 @@ public class RestaurantController {
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRestaurant(@PathVariable long id) {
+    public ResponseEntity<String> deleteRestaurant(@PathVariable long id, @RequestHeader("Authorization") String token) throws Exception {
         Restaurant restaurant = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
+        if(restaurant.getUserId() == (long) parseJwtToken(token).get("id")) {
 
-        repository.delete(restaurant);
+            repository.delete(restaurant);
 
-        return ResponseEntity.ok(String.format("Restaurant with id: %d has been successfully deleted!", id));
+            return ResponseEntity.ok(String.format("Restaurant with id: %d has been successfully deleted!", id));
+        }
+        else
+            throw new Exception("You do not have permission to delete this restaurant!");
     }
 
     private JSONObject parseJwtToken(String token) {
