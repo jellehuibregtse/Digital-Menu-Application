@@ -1,11 +1,4 @@
-FROM alpine:latest
-
-
-ENV JAVA_HOME="/usr/lib/jvm/default-jvm/"
-RUN apk add openjdk11
-
-# Has to be set explictly to find binaries 
-ENV PATH=$PATH:${JAVA_HOME}/bin
+FROM openjdk:11
 
 EXPOSE 8761
 
