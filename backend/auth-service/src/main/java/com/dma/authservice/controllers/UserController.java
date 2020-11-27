@@ -5,6 +5,7 @@ import com.dma.authservice.repository.ApplicationUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,11 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final ApplicationUserRepository applicationUserRepository;
 
+    @GetMapping("/logged-in")
+    public ResponseEntity<Boolean> loggedIn() {
+        return ResponseEntity.ok(true);
+    }
+
     @Autowired
     public UserController(PasswordEncoder passwordEncoder, ApplicationUserRepository applicationUserRepository) {
         this.passwordEncoder = passwordEncoder;
@@ -28,57 +34,77 @@ public class UserController {
     }
 
     /**
-     * Create a user.
+     * Check if email is taken.
      *
-     * @param user that needs to be created.
+     * @param email that needs to be found.
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
-    @PostMapping("/register")
+    @GetMapping
+    public ResponseEntity<Boolean> emailTaken(@RequestParam String email) {
+        return ResponseEntity.ok(applicationUserRepository.findByEmail(email).isPresent());
+    }
+
+    /**
+     * Create a user.
+     *
+     * @param user that needs to created
+     * @return <code>ResponseEntity</code> with a message and HTTP status OK.
+     */
+    @PostMapping
     public ResponseEntity<String> createApplicationUser(@RequestBody ApplicationUser user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         applicationUserRepository.save(user);
 
-        return ResponseEntity.ok(String.format("User with username: %s has been successfully created!",
+        return ResponseEntity.ok(String.format("User with email: %s has been successfully created!",
                                                user.getEmail()));
     }
-
 
     /**
      * Update a single user.
      *
-     * @param applicationUser that needs to be updated
+     * @param user that needs to be updated
      * @return message and HTTP status OK.
      */
-    @PutMapping("{id}")
-    public ResponseEntity<String> updateApplicationUser(@RequestBody ApplicationUser applicationUser,
-                                                        @PathVariable long id) {
-        var updatedApplicationUser = applicationUserRepository.findById(id)
-                                                              .orElseThrow(() -> new ResourceNotFoundException(
-                                                                      "Not found."));
+    @PutMapping
+    public ResponseEntity<String> updateApplicationUser(@RequestBody ApplicationUser user) {
+        var principal = getPrincipal();
+        var updatedApplicationUser = applicationUserRepository.findByEmail(principal)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Not found."));
 
-        updatedApplicationUser.setPassword(applicationUser.getPassword());
-        updatedApplicationUser.setEmail(applicationUser.getEmail());
-        updatedApplicationUser.setRestaurantAuthorities(applicationUser.getRestaurantAuthorities());
+        updatedApplicationUser.setPassword(user.getPassword());
+        updatedApplicationUser.setEmail(user.getEmail());
+
         applicationUserRepository.save(updatedApplicationUser);
 
-        return ResponseEntity.ok(String.format("User with id: %d has been successfully updated!", id));
+        return ResponseEntity.ok(String.format("User with id: %d has been successfully updated!",
+                                               updatedApplicationUser.getId()));
     }
 
     /**
      * Delete a single user.
      *
-     * @param id of the applicationUser.
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
-    @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteApplicationUser(@PathVariable long id) {
-        ApplicationUser applicationUser = applicationUserRepository.findById(id)
-                                                                   .orElseThrow(() -> new ResourceNotFoundException(
-                                                                           "Not found."));
+    @DeleteMapping
+    public ResponseEntity<String> deleteApplicationUser() {
+        var principal = getPrincipal();
 
-        applicationUserRepository.delete(applicationUser);
+        var user = applicationUserRepository.findByEmail(principal)
+                                            .orElseThrow(() -> new ResourceNotFoundException("Not found."));
 
-        return ResponseEntity.ok(String.format("User with id: %d has been successfully deleted!", id));
+        applicationUserRepository.delete(user);
+
+        return ResponseEntity.ok(String.format("User with id: %d has been successfully deleted!", user.getId()));
+    }
+
+    /**
+     * Gets the principal (email) of the currently logged in user.
+     *
+     * @return email.
+     */
+    private String getPrincipal() {
+        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

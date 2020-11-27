@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,18 +33,15 @@ public class ApplicationUserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) {
-        var user = repository.findByUsername(username);
+    public UserDetails loadUserByUsername(String email) {
+        var user = repository.findByEmail(email);
 
         if (user.isPresent()) {
             var applicationUser = user.get();
 
-            List<GrantedAuthority> grantedAuthorities =
-                    AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_" + applicationUser.getRestaurantAuthorities());
-
-            return new User(applicationUser.getEmail(), applicationUser.getPassword(), grantedAuthorities);
+            return new User(applicationUser.getEmail(), applicationUser.getPassword(), new ArrayList<>());
         }
 
-        throw new UsernameNotFoundException("Username: " + username + " not found!");
+        throw new UsernameNotFoundException("Email: " + email + " not found!");
     }
 }

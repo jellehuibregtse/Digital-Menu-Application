@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,9 +22,7 @@ public class ApplicationUser {
     @Setter(AccessLevel.PROTECTED)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(unique=true)
     private @NotNull String email;
     private @NotNull String password;
-    @NotNull
-    @ElementCollection
-    private Map<Long, String> restaurantAuthorities;
 }

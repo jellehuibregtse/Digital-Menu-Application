@@ -1,12 +1,14 @@
 package com.dma.authservice.jwt;
 
+import com.dma.authservice.model.ApplicationUser;
+import com.dma.authservice.repository.ApplicationUserRepository;
 import com.dma.authservice.services.JwtTokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.*;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -16,12 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.HttpMethod;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 /**
  * This filter authenticates a user with username and password then returns a JWT token.
  *
  * @author Jelle Huibregtse
+ * @author Aron Hemmes
  */
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -29,13 +31,16 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     // We use auth manager to validate the user credentials.
     private final AuthenticationManager authManager;
     private final JwtTokenService jwtTokenService;
+    private final ApplicationUserRepository applicationUserRepository;
 
     public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authManager,
                                                       JwtConfig jwtConfig,
-                                                      JwtTokenService jwtTokenService) {
+                                                      JwtTokenService jwtTokenService,
+                                                      ApplicationUserRepository applicationUserRepository) {
         this.authManager = authManager;
         this.jwtConfig = jwtConfig;
         this.jwtTokenService = jwtTokenService;
+        this.applicationUserRepository = applicationUserRepository;
 
         // By default, UsernamePasswordAuthenticationFilter listens to "/login" path.
         // In our case, we use "/auth". So, we need to override the defaults.
@@ -50,7 +55,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
             var userCredentials = new ObjectMapper().readValue(request.getInputStream(), AuthenticationRequest.class);
 
             // Create auth object, that contains the credentials, which will be used by auth manager
-            var authToken = new UsernamePasswordAuthenticationToken(userCredentials.getUsername(),
+            var authToken = new UsernamePasswordAuthenticationToken(userCredentials.getEmail(),
                                                                     userCredentials.getPassword(),
                                                                     Collections.emptyList());
 
@@ -72,35 +77,19 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
         // Converts the authorities to list of strings.
         // This is important because it affects the way we get them back at the gateway.
-        var token = jwtTokenService.generateToken(authentication.getName(),
-                                                  authentication.getAuthorities()
-                                                                .stream()
-                                                                .map(GrantedAuthority::getAuthority)
-                                                                .collect(Collectors.toList()));
+        ApplicationUser applicationUser = applicationUserRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("Not found."));
+        var token = jwtTokenService.generateToken(applicationUser.getEmail(), applicationUser.getId());
 
         // Add token to header.
         response.addHeader(jwtConfig.getHeader(), jwtConfig.getPrefix() + token);
     }
 
+    @Getter
+    @Setter
     private static class AuthenticationRequest {
 
-        private String username;
+        private String email;
         private String password;
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
     }
 }

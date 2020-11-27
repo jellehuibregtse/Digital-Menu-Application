@@ -2,6 +2,9 @@ package com.dma.restaurantservice.controllers;
 
 import com.dma.restaurantservice.models.Restaurant;
 import com.dma.restaurantservice.repositories.RestaurantRepository;
+import org.apache.commons.codec.binary.Base64;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +17,9 @@ import java.util.List;
  *
  * @author Jordan Radushev
  * @author Jelle Huibregtse
+ * @author Aron Hemmes
  */
+@CrossOrigin
 @RestController
 @RequestMapping(value = "/restaurants")
 public class RestaurantController {
@@ -30,12 +35,20 @@ public class RestaurantController {
      *
      * @return <code>ResponseEntity</code> with a list of restaurants and HTTP status OK.
      */
-    @GetMapping
-    public ResponseEntity<List<Restaurant>> getAllRestaurants() {
-        List<Restaurant> result = new ArrayList<>();
-        repository.findAll().forEach(result::add);
+    @GetMapping("/user")
+    public ResponseEntity<List<Restaurant>> getAllRestaurantsForUser(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(repository.findAllByUserId((long) parseJwtToken(token).get("id")).orElse(new ArrayList<>()));
+    }
 
-        return ResponseEntity.ok(result);
+    /**
+     * Check if restaurant name is taken.
+     *
+     * @param name that needs to be found.
+     * @return <code>ResponseEntity</code> with a message and HTTP status OK.
+     */
+    @GetMapping
+    public ResponseEntity<Boolean> nameTaken(@RequestParam String name) {
+        return ResponseEntity.ok(repository.findByName(name).isPresent());
     }
 
     /**
@@ -57,7 +70,8 @@ public class RestaurantController {
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
     @PostMapping
-    public ResponseEntity<String> createRestaurant(@RequestBody Restaurant restaurant) {
+    public ResponseEntity<String> createRestaurant(@RequestBody Restaurant restaurant, @RequestHeader("Authorization") String token) {
+        restaurant.setUserId((long) parseJwtToken(token).get("id"));
         repository.save(restaurant);
 
         return ResponseEntity.ok(String.format("Restaurant with name: %s has been successfully created!",
@@ -76,8 +90,8 @@ public class RestaurantController {
                 repository.findById(restaurant.getId()).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
         updatedRestaurant.setName(restaurant.getName());
-        updatedRestaurant.setColorScheme(restaurant.getColorScheme());
-        updatedRestaurant.setLogoURL(restaurant.getLogoURL());
+        updatedRestaurant.getStyling().setColorScheme(restaurant.getStyling().getColorScheme());
+        updatedRestaurant.getStyling().setLogoURL(restaurant.getStyling().getLogoURL());
         updatedRestaurant.setMenuIDs(restaurant.getMenuIDs());
         repository.save(updatedRestaurant);
 
@@ -98,5 +112,11 @@ public class RestaurantController {
         repository.delete(restaurant);
 
         return ResponseEntity.ok(String.format("Restaurant with id: %d has been successfully deleted!", id));
+    }
+
+    private JSONObject parseJwtToken(String token) {
+        String base64EncodedBody = token.split("\\.")[1];
+
+        return (JSONObject) JSONValue.parse(new String(new Base64(true).decode(base64EncodedBody)));
     }
 }

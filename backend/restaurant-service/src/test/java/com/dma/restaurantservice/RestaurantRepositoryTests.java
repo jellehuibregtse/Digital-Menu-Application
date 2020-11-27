@@ -34,8 +34,8 @@ public class RestaurantRepositoryTests {
      */
     @BeforeEach
     public void init() {
-        Restaurant restaurant1 = new Restaurant("Test1", "test_theme", "test_url", new ArrayList<>());
-        Restaurant restaurant2 = new Restaurant("Test2", "test_theme", "test_url", new ArrayList<>());
+        Restaurant restaurant1 = new Restaurant(1L, "test1", "Test1", 0, 10, null, new ArrayList<>());
+        Restaurant restaurant2 = new Restaurant(2L, "test2", "Test2", 0, 10, null, new ArrayList<>());
 
         entityManager.persist(restaurant1);
         entityManager.persist(restaurant2);
@@ -49,8 +49,7 @@ public class RestaurantRepositoryTests {
         repository.findAll();
         assertThat(repository.findAll()).hasSize(2);
 
-        assertThat(((List<Restaurant>) repository.findAll()).stream().count()).isEqualTo(2L);
-
+        assertThat(((List<Restaurant>) repository.findAll()).size()).isEqualTo(2);
     }
 
     /**
@@ -70,9 +69,7 @@ public class RestaurantRepositoryTests {
      */
     @Test()
     public void should_not_get_unknown_restaurant() {
-        Assertions.assertThrows(NoSuchElementException.class, () -> {
-            repository.findByName("WrongName").get();
-        });
+        Assertions.assertThrows(NoSuchElementException.class, () -> repository.findByName("WrongName").get());
     }
 
     /**
@@ -81,7 +78,7 @@ public class RestaurantRepositoryTests {
     @Test
     public void should_save_new_restaurant() {
         Restaurant savedRestaurant =
-                repository.save(new Restaurant("Test3", "test_theme", "test_url", new ArrayList<>()));
+                repository.save(new Restaurant(3L, "test3", "Test3", 0, 10, null, new ArrayList<>()));
 
         assertThat(savedRestaurant.getName()).isEqualTo("Test3");
     }

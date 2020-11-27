@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  * The security configuration for the authentication service.
  *
  * @author Jelle Huibregtse
+ * @author Aron Hemmes
  */
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -25,8 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf()
-            .disable()
+        http.csrf().disable()
             // We want to use a stateless session, since we won't be storing the user's state.
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -46,9 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/actuator/health/**", "/actuator/routes/**")
             .permitAll()
             // Allow certain methods for customer.
-            .antMatchers(HttpMethod.GET, "/api/restaurant-service/restaurants/*", "/api/menu-service/menus/*")
+            .antMatchers(HttpMethod.GET, "/token", "/api/restaurant-service/restaurants/*", "/api/menu-service/menus/*", "/api/auth-service/users")
             .permitAll()
-            .antMatchers(HttpMethod.POST, "/api/order-service/orders")
+            .antMatchers(HttpMethod.POST, "/api/order-service/orders", "/api/auth-service/users")
             .permitAll()
             .antMatchers("/api/order-service/websockets/**")
             .permitAll()

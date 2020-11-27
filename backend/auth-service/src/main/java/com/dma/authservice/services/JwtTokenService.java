@@ -26,16 +26,12 @@ public class JwtTokenService {
         this.jwtConfig = jwtConfig;
     }
 
-    public String generateToken(String subject) {
-        return generateToken(subject, Lists.newArrayList());
-    }
-
-    public String generateToken(String subject, List<String> authorities) {
+    public String generateToken(String subject, long id) {
         var now = System.currentTimeMillis();
 
         return Jwts.builder()
                    .setSubject(subject)
-                   .claim("authorities", authorities)
+                   .claim("id", id)
                    .setIssuedAt(new Date(now))
                    .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getExpiration())))
                    .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret().getBytes())

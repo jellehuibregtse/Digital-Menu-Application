@@ -7,7 +7,7 @@ const JoinRestaurant = (props) => {
     // Run once at runtime
     useEffect(() => {
         // Get parameters from URL
-        let restaurantId  = parseInt(new URLSearchParams(props.location.search).get('restaurantId'));
+        let restaurantId = parseInt(new URLSearchParams(props.location.search).get('restaurantId'));
         let tableId = parseInt(new URLSearchParams(props.location.search).get('tableId'));
 
         if (restaurantId >= 0 && tableId >= 0) {
