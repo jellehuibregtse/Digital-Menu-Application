@@ -3,13 +3,12 @@ import {ThemeProvider, createMuiTheme} from "@material-ui/core/styles";
 import {BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
 import {deepOrange} from "@material-ui/core/colors";
 import NavBar from "./components/NavBar";
-import Design from "./components/design/Design";
-import MenuList from "./components/menu/MenuList";
 import Account from "./components/account/Account";
 import RestaurantList from "./components/restaurant/RestaurantList";
 import New from "./components/restaurant/New";
 import MessagingService from "./services/MessagingService";
-import Cookies from 'js-cookie'
+import RestaurantPage from "./components/restaurant/RestaurantPage";
+import Settings from "./components/restaurant/Settings";
 
 const theme = createMuiTheme({
     palette: {
@@ -42,12 +41,14 @@ const parseSubFromJwt = (token) => {
 const App = () => {
     const loggedIn = localStorage.getItem('token');
 
-    const [restaurants, setRestaurants] = useState([]);
+    const [restaurants, setRestaurants] = useState(null);
 
     useEffect(() => {
-        MessagingService.fetchHandler('GET', '/api/restaurant-service/restaurants/user')
-            .then(r => setRestaurants(r))
-            .catch(r => console.log(r))
+        if (loggedIn) {
+            MessagingService.fetchHandler('GET', '/api/restaurant-service/restaurants/user')
+                .then(r => setRestaurants(r))
+                .catch(() => setRestaurants([]));
+        }
     }, [])
 
     return (
@@ -56,21 +57,20 @@ const App = () => {
                 <NavBar loggedIn={loggedIn} email={loggedIn ? parseSubFromJwt(localStorage.getItem('token')) : null}/>
                 <Switch>
                     {loggedIn ?
-                        <Switch>
-                            <Route exact strict path="/" render={() => <RestaurantList restaurants={restaurants}/>}/>
+                        restaurants !== null ?
+                            <Switch>
+                                <Route exact strict path="/"
+                                       render={() => <RestaurantList restaurants={restaurants}/>}/>
 
-                            <Route exact strict path="/new" render={() => <New/>}/>
+                                <Route exact strict path="/new" render={() => <New/>}/>
 
-                            <Route exact strict path="/restaurant/settings"/>
+                                <Route strict path={restaurants.map(restaurant => "/" + restaurant.name)}
+                                       render={(props) => {
+                                           const restaurant = restaurants.find(restaurant => restaurant.name === props.history.location.pathname.substring(1).split('/')[0]);
+                                           return <RestaurantPage name={restaurant.name} displayName={restaurant.displayName} id={restaurant.id}/>}}/>
 
-                            <Route exact strict path="/menu" render={() => <MenuList/>}/>
-
-                            <Route exact strict path="/categories"/>
-
-                            <Route exact strict path="/design" render={() => <Design/>}/>
-
-                            <Route path="*" render={() => <Redirect to="/"/>}/>
-                        </Switch> :
+                                <Route path="*" render={() => <Redirect to="/"/>}/>
+                            </Switch> : null :
                         <Switch>
                             <Route exact strict path="/sign-in"
                                    render={(props) => <Account {...props} form="sign-in"/>}/>

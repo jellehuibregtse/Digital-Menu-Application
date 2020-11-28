@@ -1,5 +1,5 @@
 import React from 'react';
-import {makeStyles, Typography} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core";
 import SideBar from "./SideBar";
 import Preview from "./Preview";
 
