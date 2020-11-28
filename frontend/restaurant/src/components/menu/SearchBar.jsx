@@ -37,9 +37,9 @@ const MenuProps = {
         },
     },
 };
-const ingredients = [
-    "MEAT", 'SOYA', 'FISH',"MILK"
-];
+// const ingredients = [
+//     "MEAT", 'SOYA', 'FISH',"MILK"
+// ];
 const SearchBar = (props) => {
 
     const [selectedCategory, setSelectedCategory] = useState("All")
@@ -77,7 +77,7 @@ const SearchBar = (props) => {
                     </MenuItem>
                     {props.categories.map(i=>{
                         return(
-                            <MenuItem value={i}>{i}</MenuItem>
+                            <MenuItem key={i} value={i}>{i}</MenuItem>
                         )
                     })}
                     {/* <MenuItem value={"SALAD"}>Salads</MenuItem>

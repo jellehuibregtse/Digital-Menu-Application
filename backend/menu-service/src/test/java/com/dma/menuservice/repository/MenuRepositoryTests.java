@@ -60,13 +60,13 @@ public class MenuRepositoryTests {
         testMenu.setName("TestMenu");
         testMenu.setRestaurantId(testRestaurant.getId());
         testMenu.setCategories(Arrays.asList(categoryOne,categoryTwo));
-        testMenu.setIngredients(Arrays.asList(ingredientOne));
+
 
         //Init Menu Items
         MenuItem testItemOne = new MenuItem();
         testItemOne.setName("Steak");
         testItemOne.setCategory(testMenu.getCategories().get(0));
-        testItemOne.setIngredients(Arrays.asList(testMenu.getIngredients().get(0)));
+        testItemOne.setIngredients(Arrays.asList(ingredientOne));
 
         MenuItem testItemTwo = new MenuItem();
         testItemTwo.setName("Coca Cola 330ml");

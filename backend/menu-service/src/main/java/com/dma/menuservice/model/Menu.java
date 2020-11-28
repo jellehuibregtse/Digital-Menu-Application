@@ -29,8 +29,6 @@ public class Menu {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Category> categories;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Ingredient> ingredients;
 
     public Menu() {}
 
@@ -80,12 +78,4 @@ public class Menu {
         this.categories = categories;
     }
 
-    public List<Ingredient> getIngredients() {
-        return this.ingredients;
-    }
-
-    public void setIngredients(List<Ingredient> ingredients) {
-
-        this.ingredients = ingredients;
-    }
 }

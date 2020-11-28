@@ -29,7 +29,19 @@ const Menu = (props) => {
     const onCheckedIngredientOption = (selectedIngredients) => {
         setIngredients(selectedIngredients);
     }
-    
+
+    let ingredients;
+    if (props.menu !== null) {
+        ingredients = props.menu.items
+            .filter(item => item.ingredients.length > 0)
+            .map(item => item.ingredients)
+            .map(ingredient => ingredient.map(item => item.name))
+        ingredients = ingredients.flat(1);
+        ingredients = new Set(ingredients)
+        ingredients = Array.from(ingredients);
+    }
+
+
     //First map the items according to selected category
     let filteredItems = typeof props.menu !== 'undefined' ?
         props.menu.items
@@ -57,15 +69,16 @@ const Menu = (props) => {
             </>
         )
     })
+    console.log(ingredients);
     
     return (
         <>
             <div className={classes.root}>
-                <SearchBar 
-                categories={props.menu.categories.map(i=>i.name)}
-                ingredients={props.menu.ingredients.map(i=>i.name)} 
-                category={selectedCategory} 
-                onSelect={onSelectedCategoryOption}
+                <SearchBar
+                    categories={props.menu.categories.map(i => i.name)}
+                    ingredients={ingredients}
+                    category={selectedCategory}
+                    onSelect={onSelectedCategoryOption}
                     onCheck={onCheckedIngredientOption} />
                 <Grid key={1} container spacing={3}>
                     {itemsList}

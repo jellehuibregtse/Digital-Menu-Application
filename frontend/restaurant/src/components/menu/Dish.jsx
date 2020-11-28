@@ -37,9 +37,12 @@ const Dish = (props) => {
         </ListItem>
       </List> */}
         <Button id={props.id} onClick={onClickHandler} variant="outlined">Add to order</Button>
-        <Typography variant="body2" component="p">
-          includes: {props.ingredients.map(i=>i.name)}
-        </Typography>
+        {
+          props.ingredients.length>0?
+          <Typography variant="body2" component="p">
+            includes: {props.ingredients.map(i => i.name).join(",")}
+          </Typography>:null
+        }
       </CardContent>
     </Card>
   );

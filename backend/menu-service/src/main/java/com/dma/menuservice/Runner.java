@@ -44,14 +44,13 @@ public class Runner implements CommandLineRunner {
         testMenu.setName("TestMenu");
         testMenu.setRestaurantId(testRestaurant.getId());
         testMenu.setCategories(Arrays.asList(categoryOne, categoryTwo));
-        testMenu.setIngredients(Arrays.asList(ingredientOne,ingredientTwo));
 
         //Init Menu Items
         MenuItem testItemOne = new MenuItem();
         testItemOne.setName("Steak");
         testItemOne.setPrice(12.99);
         testItemOne.setCategory(testMenu.getCategories().get(0));
-        testItemOne.setIngredients(Arrays.asList(testMenu.getIngredients().get(0)));
+        testItemOne.setIngredients(Arrays.asList(ingredientOne));
 
         MenuItem testItemTwo = new MenuItem();
         testItemTwo.setName("Fanta 330ml");
@@ -62,7 +61,7 @@ public class Runner implements CommandLineRunner {
         testItemThree.setName("Salmon with fries");
         testItemThree.setPrice(15.99);
         testItemThree.setCategory(testMenu.getCategories().get(0));
-        testItemThree.setIngredients(Arrays.asList(testMenu.getIngredients().get(1)));
+        testItemThree.setIngredients(Arrays.asList(ingredientTwo));
 
         MenuItem testItemFour = new MenuItem();
         testItemFour.setName("Lipton 330ml");

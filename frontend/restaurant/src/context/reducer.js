@@ -66,26 +66,23 @@ export const initialState = {
         //     }
 
         //]
-        "items": [
-            {
-                "id": 6,
+        "items": [{
+                "id": 4,
                 "name": "Steak",
-                "price": 10.0,
+                "price": 12.99,
                 "category": {
                     "id": 2,
                     "name": "Main Dishes"
                 },
-                "ingredients": [
-                    {
-                        "id": 4,
-                        "name": "Meat"
-                    }
-                ]
+                "ingredients": [{
+                    "id": 5,
+                    "name": "Meat"
+                }]
             },
             {
-                "id": 7,
-                "name": "Coca Cola 330ml",
-                "price": 2.5,
+                "id": 6,
+                "name": "Fanta 330ml",
+                "price": 1.99,
                 "category": {
                     "id": 3,
                     "name": "Beverages"
@@ -93,39 +90,37 @@ export const initialState = {
                 "ingredients": []
             },
             {
-                "id": 8,
+                "id": 7,
                 "name": "Salmon with fries",
-                "price": 11.0,
+                "price": 15.99,
                 "category": {
                     "id": 2,
                     "name": "Main Dishes"
                 },
-                "ingredients": [
-                    {
-                        "id": 5,
-                        "name": "Fish"
-                    }
-                ]
+                "ingredients": [{
+                    "id": 8,
+                    "name": "Fish"
+                }]
+            },
+            {
+                "id": 9,
+                "name": "Lipton 330ml",
+                "price": 1.99,
+                "category": {
+                    "id": 3,
+                    "name": "Beverages"
+                },
+                "ingredients": []
             }
         ],
-        "categories": [
-            {
+
+        "categories": [{
                 "id": 2,
                 "name": "Main Dishes"
             },
             {
                 "id": 3,
                 "name": "Beverages"
-            }
-        ],
-        "ingredients": [
-            {
-                "id": 4,
-                "name": "Meat"
-            },
-            {
-                "id": 5,
-                "name": "Fish"
             }
         ]
     }
@@ -142,21 +137,21 @@ const reducer = (state, action) => {
             }
 
 
-        case "Remove from cart":
-            let index = state.order.findIndex(item => item.name === action.item.name)
+            case "Remove from cart":
+                let index = state.order.findIndex(item => item.name === action.item.name)
 
-            state.order.splice(index, 1);
-            return {
-                 ...state
-            }
-            
-        case "Clear cart":
-            state.order = [];
-            return{
-                ...state,
-            }
-        default:
-            return state;
+                state.order.splice(index, 1);
+                return {
+                    ...state
+                }
+
+                case "Clear cart":
+                    state.order = [];
+                    return {
+                        ...state,
+                    }
+                    default:
+                        return state;
     }
 
 }
