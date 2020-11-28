@@ -11,8 +11,8 @@ import { grey, deepOrange } from "@material-ui/core/colors";
 import { useStateValue } from './context/stateProvider';
 
 const App = () => {
-    // const [state] = useStateValue();
-    const [state] = useState(JSON.parse(sessionStorage.getItem("session")) != null? JSON.parse(sessionStorage.getItem("session")) : []);
+    const [state] = useStateValue();
+    //const [state] = useState(JSON.parse(sessionStorage.getItem("session")) != null? JSON.parse(sessionStorage.getItem("session")) : []);
 
     const theme = createMuiTheme({
         palette: {

@@ -1,10 +1,8 @@
 package com.dma.menuservice.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.*;
 
 /**
  * The MenuItem entity.
@@ -21,6 +19,14 @@ public class MenuItem {
     @NotNull
     private String name;
 
+    private double price;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Category category;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Ingredient> ingredients;
+    
     public MenuItem() {
 
     }
@@ -35,5 +41,29 @@ public class MenuItem {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return this.ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients =ingredients;
     }
 }

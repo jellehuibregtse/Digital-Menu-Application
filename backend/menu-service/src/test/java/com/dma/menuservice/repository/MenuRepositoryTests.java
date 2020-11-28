@@ -1,8 +1,6 @@
 package com.dma.menuservice.repository;
 
-import com.dma.menuservice.model.Menu;
-import com.dma.menuservice.model.MenuItem;
-import com.dma.menuservice.model.Restaurant;
+import com.dma.menuservice.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -40,25 +39,65 @@ public class MenuRepositoryTests {
      */
     @BeforeEach
     public void init() {
-        MenuItem testItemOne = new MenuItem();
-        testItemOne.setName("Steak");
-
-        MenuItem testItemTwo = new MenuItem();
-        testItemOne.setName("Coca Cola 330ml");
-
+        //Init Restaurant
         Restaurant testRestaurant = new Restaurant();
         testRestaurant.setName("Test Restaurant 1");
         testRestaurant.setId(1L);
 
+        //Init Categories
+        Category categoryOne = new Category();
+        categoryOne.setName("Main Dishes");
+
+        Category categoryTwo = new Category();
+        categoryTwo.setName("Beverages");
+
+        //Init Ingredients
+        Ingredient ingredientOne = new Ingredient();
+        ingredientOne.setName("Meat");
+        
+        //Init Menu
         testMenu = new Menu();
         testMenu.setName("TestMenu");
         testMenu.setRestaurantId(testRestaurant.getId());
+        testMenu.setCategories(Arrays.asList(categoryOne,categoryTwo));
+
+
+        //Init Menu Items
+        MenuItem testItemOne = new MenuItem();
+        testItemOne.setName("Steak");
+        testItemOne.setCategory(testMenu.getCategories().get(0));
+        testItemOne.setIngredients(Arrays.asList(ingredientOne));
+
+        MenuItem testItemTwo = new MenuItem();
+        testItemTwo.setName("Coca Cola 330ml");
+        testItemTwo.setCategory(testMenu.getCategories().get(1));
+
         List<MenuItem> testItems = Arrays.asList(testItemOne, testItemTwo);
         testMenu.setItems(testItems);
-
         entityManager.persist(testMenu);
     }
 
+    @Test
+    public void should_get_menu_categories(){
+        Long id = (Long) entityManager.getId(testMenu);
+        var menu = repository.findById(id);
+        assertThat(menu.get().getItems().size()).isEqualTo(2);
+
+        assertThat(menu.get().getCategories().size()).isEqualTo(2);
+
+        assertThat(menu.get().getItems().get(0).getCategory().getName()).isEqualTo("Main Dishes");
+        assertThat(menu.get().getItems().get(1).getCategory().getName()).isEqualTo("Beverages");
+    }
+
+    @Test
+    public void should_get_menuitem_ingredients(){
+        Long id = (Long) entityManager.getId(testMenu);
+        var menu = repository.findById(id);
+        var menuItem = menu.get().getItems().get(0);
+
+        assertThat(menuItem.getIngredients().get(0).getName()).isEqualTo("Meat");
+
+    }
     @Test
     public void should_get_single_menu() {
         Long id = (Long) entityManager.getId(testMenu);
@@ -67,7 +106,6 @@ public class MenuRepositoryTests {
         Assertions.assertTrue(menu.isPresent());
         assertThat(menu.get().getName()).isEqualTo("TestMenu");
         assertThat(menu.get().getRestaurantId()).isEqualTo(1L);
-        assertThat(menu.get().getItems().size()).isEqualTo(2);
     }
 
     @Test

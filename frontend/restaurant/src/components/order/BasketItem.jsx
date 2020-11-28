@@ -29,7 +29,7 @@ const BasketItem = (props) => {
                 <ListItemText primary={props.item.name} />
                 <ListItemText primary={"€ " + price + " x " + props.item.quantity} />
                 <div>
-                    {/*amount */}
+                    {/*aamount */}
                     {/*<Select labelId="demo-customized-select-label" variant="outlined" color="primary">*/}
                     {/*    <MenuItem value={1}>1</MenuItem>*/}
                     {/*</Select>*/}
