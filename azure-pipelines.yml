@@ -37,3 +37,10 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Docker Hub'
+    repository: 'raresasd/dmakitchenfrontend'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+    tags: 'latest'
