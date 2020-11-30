@@ -24,7 +24,7 @@ public class MenuItem {
     @OneToOne(cascade = CascadeType.ALL)
     private Category category;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Ingredient> ingredients;
     
     public MenuItem() {

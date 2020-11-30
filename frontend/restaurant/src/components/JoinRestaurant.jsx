@@ -13,6 +13,7 @@ const JoinRestaurant = (props) => {
         if (restaurantId >= 0 && tableId >= 0) {
             // Get restaurant by id
             MessagingService.fetchHandler('GET','/restaurant-service/restaurants/' + restaurantId).then(
+                
                 (restaurant) => {
                     // Get menu from restaurant
                     MessagingService.fetchHandler('GET','/menu-service/menus/' + restaurant.menuIDs[0]).then(
