@@ -1,4 +1,7 @@
 FROM node:10-alpine as build-step
+
+EXPOSE 3000
+
 RUN mkdir /app
 WORKDIR /app
 COPY package.json /app
