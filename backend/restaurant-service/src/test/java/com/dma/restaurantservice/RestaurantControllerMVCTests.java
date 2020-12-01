@@ -1,6 +1,7 @@
 package com.dma.restaurantservice;
 
 import com.dma.restaurantservice.models.Restaurant;
+import com.dma.restaurantservice.models.Styling;
 import com.dma.restaurantservice.repositories.RestaurantRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -36,23 +37,25 @@ public class RestaurantControllerMVCTests {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    private String token = "Bearer: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJpYXQiOjE1MTYyMzkwMjJ9.VC5mhoa3GYXBu8t0rMg8NFRGmCJHpSrlQa4vRD-630w";
+    private String token = "Bearer: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAifQ.7PqHgIx5g4M-zFeXjJI6TLfJkpoombDZ9M6-OtEP2f4";
 
     @BeforeEach
     public void setup() {
         Restaurant restaurant1 = new Restaurant();
         restaurant1.setName("Test1");
         restaurant1.setDisplayName("Test1");
-        restaurant1.setUserId(1);
-        restaurant1.setTableCount(11);
+        restaurant1.setUserId(0);
+        restaurant1.setTableCount(10);
         restaurant1.setMenuIDs(new ArrayList<>());
+        restaurant1.setStyling(new Styling());
 
         Restaurant restaurant2 = new Restaurant();
         restaurant2.setName("Test2");
         restaurant2.setDisplayName("Test2");
-        restaurant2.setUserId(2);
+        restaurant2.setUserId(0);
         restaurant2.setTableCount(9);
         restaurant2.setMenuIDs(new ArrayList<>());
+        restaurant2.setStyling(new Styling());
 
         repository.saveAll(Arrays.asList(restaurant1, restaurant2));
     }
@@ -98,7 +101,7 @@ public class RestaurantControllerMVCTests {
         restaurant.setTableCount(11);
         restaurant.setMenuIDs(new ArrayList<>());
         this.mockMvc.perform(MockMvcRequestBuilders.post("/restaurants/")
-                .header("Authorization","Bearer: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJpYXQiOjE1MTYyMzkwMjJ9.VC5mhoa3GYXBu8t0rMg8NFRGmCJHpSrlQa4vRD-630w")
+                .header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(restaurant)))
                 .andDo(print())
@@ -112,16 +115,16 @@ public class RestaurantControllerMVCTests {
     public void updateRestaurant_andReturnStatus200() throws Exception {
         Restaurant foundRestaurant = repository.findByName("Test1").orElseThrow();
 
-        Restaurant restaurant = new Restaurant();
-        restaurant.setName("UpdatedTest2");
-        restaurant.setDisplayName("UpdatedTest2");
-        restaurant.setUserId(0);
-        restaurant.setTableCount(11);
-        restaurant.setMenuIDs(new ArrayList<>());
+        foundRestaurant.setName("UpdatedTest2");
+        foundRestaurant.setDisplayName("UpdatedTest2");
+        foundRestaurant.setUserId(2);
+        foundRestaurant.setTableCount(11);
+        foundRestaurant.setMenuIDs(new ArrayList<>());
 
-        this.mockMvc.perform(MockMvcRequestBuilders.put("/restaurants/")
+        this.mockMvc.perform(MockMvcRequestBuilders.put("/restaurants")
+                .header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(restaurant)))
+                .content(mapper.writeValueAsString(foundRestaurant)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$",
@@ -138,6 +141,7 @@ public class RestaurantControllerMVCTests {
         restaurant.setTableCount(11);
         restaurant.setMenuIDs(new ArrayList<>());
         this.mockMvc.perform(MockMvcRequestBuilders.put("/restaurants/")
+                .header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(restaurant)))
                 .andDo(print())
@@ -148,7 +152,8 @@ public class RestaurantControllerMVCTests {
     public void deleteRestaurant_andReturnStatus200() throws Exception {
         Restaurant restaurantOne = repository.findByName("Test1").orElseThrow();
 
-        this.mockMvc.perform(MockMvcRequestBuilders.delete("/restaurants/{id}", restaurantOne.getId()))
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/restaurants/{id}", restaurantOne.getId())
+                .header("Authorization", token))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$",
@@ -159,7 +164,8 @@ public class RestaurantControllerMVCTests {
     @Test
     public void deleteUnknownRestaurant_andReturnStatus404() throws Exception {
 
-        this.mockMvc.perform(MockMvcRequestBuilders.delete("/restaurants/222"))
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/restaurants/222")
+                .header("Authorization", token))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
