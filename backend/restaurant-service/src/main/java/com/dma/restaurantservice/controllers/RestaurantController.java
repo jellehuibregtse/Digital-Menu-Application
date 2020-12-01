@@ -37,7 +37,8 @@ public class RestaurantController {
      */
     @GetMapping("/user")
     public ResponseEntity<List<Restaurant>> getAllRestaurantsForUser(@RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(repository.findAllByUserId((long) parseJwtToken(token).get("id")).orElse(new ArrayList<>()));
+        long id = Long.parseLong(parseJwtToken(token).get("id").toString());
+        return ResponseEntity.ok(repository.findAllByUserId(id).orElse(new ArrayList<>()));
     }
 
     /**
@@ -71,7 +72,8 @@ public class RestaurantController {
      */
     @PostMapping
     public ResponseEntity<String> createRestaurant(@RequestBody Restaurant restaurant, @RequestHeader("Authorization") String token) {
-        restaurant.setUserId((long) parseJwtToken(token).get("id"));
+        long id = Long.parseLong(parseJwtToken(token).get("id").toString());
+        restaurant.setUserId(id);
         repository.save(restaurant);
 
         return ResponseEntity.ok(String.format("Restaurant with name: %s has been successfully created!",
@@ -81,22 +83,26 @@ public class RestaurantController {
     /**
      * Update a single restaurant.
      *
-     * @param restaurant that needs to be updated
+     * @param updatedRestaurant
      * @return message and HTTP status OK.
      */
     @PutMapping
-    public ResponseEntity<String> updateRestaurant(@RequestBody Restaurant restaurant) {
-        Restaurant updatedRestaurant =
-                repository.findById(restaurant.getId()).orElseThrow(() -> new ResourceNotFoundException("not found"));
+    public ResponseEntity<String> updateRestaurant(@RequestBody Restaurant updatedRestaurant, @RequestHeader("Authorization") String token) {
+        long id = Long.parseLong(parseJwtToken(token).get("id").toString());
+        Restaurant restaurant = repository.findById(updatedRestaurant.getId()).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
-        updatedRestaurant.setName(restaurant.getName());
-        updatedRestaurant.getStyling().setColorScheme(restaurant.getStyling().getColorScheme());
-        updatedRestaurant.getStyling().setLogoURL(restaurant.getStyling().getLogoURL());
-        updatedRestaurant.setMenuIDs(restaurant.getMenuIDs());
-        repository.save(updatedRestaurant);
+        if(restaurant.getUserId() == id) {
+            restaurant.setName(updatedRestaurant.getName());
+            restaurant.getStyling().setColorScheme(updatedRestaurant.getStyling().getColorScheme());
+            restaurant.getStyling().setLogoURL(updatedRestaurant.getStyling().getLogoURL());
+            restaurant.setMenuIDs(updatedRestaurant.getMenuIDs());
+            repository.save(restaurant);
 
-        return ResponseEntity.ok(String.format("Restaurant with id: %d has been successfully updated!",
-                                               restaurant.getId()));
+            return ResponseEntity.ok(String.format("Restaurant with id: %d has been successfully updated!",
+                    updatedRestaurant.getId()));
+        }
+        else
+            return ResponseEntity.badRequest().body("You do not have permission to update this restaurant!");
     }
 
     /**
@@ -106,16 +112,16 @@ public class RestaurantController {
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRestaurant(@PathVariable long id, @RequestHeader("Authorization") String token) throws Exception {
+    public ResponseEntity<String> deleteRestaurant(@PathVariable long id, @RequestHeader("Authorization") String token) {
         Restaurant restaurant = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
-        if(restaurant.getUserId() == (long) parseJwtToken(token).get("id")) {
+        if(restaurant.getUserId() == Long.parseLong(parseJwtToken(token).get("id").toString())) {
 
             repository.delete(restaurant);
 
             return ResponseEntity.ok(String.format("Restaurant with id: %d has been successfully deleted!", id));
         }
         else
-            throw new Exception("You do not have permission to delete this restaurant!");
+            return ResponseEntity.badRequest().body("You do not have permission to delete this restaurant!");
     }
 
     private JSONObject parseJwtToken(String token) {

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -34,8 +33,19 @@ public class RestaurantRepositoryTests {
      */
     @BeforeEach
     public void init() {
-        Restaurant restaurant1 = new Restaurant(1L, "test1", "Test1", 0, 10, null, new ArrayList<>());
-        Restaurant restaurant2 = new Restaurant(2L, "test2", "Test2", 0, 10, null, new ArrayList<>());
+        Restaurant restaurant1 = new Restaurant();
+        restaurant1.setName("Test1");
+        restaurant1.setDisplayName("Test1");
+        restaurant1.setUserId(1);
+        restaurant1.setTableCount(11);
+        restaurant1.setMenuIDs(new ArrayList<>());
+
+        Restaurant restaurant2 = new Restaurant();
+        restaurant2.setName("Test2");
+        restaurant2.setDisplayName("Test2");
+        restaurant2.setUserId(2);
+        restaurant2.setTableCount(9);
+        restaurant2.setMenuIDs(new ArrayList<>());
 
         entityManager.persist(restaurant1);
         entityManager.persist(restaurant2);
@@ -77,8 +87,14 @@ public class RestaurantRepositoryTests {
      */
     @Test
     public void should_save_new_restaurant() {
-        Restaurant savedRestaurant =
-                repository.save(new Restaurant(3L, "test3", "Test3", 0, 10, null, new ArrayList<>()));
+        Restaurant savedRestaurant = new Restaurant();
+        savedRestaurant.setName("Test3");
+        savedRestaurant.setDisplayName("Test3");
+        savedRestaurant.setUserId(0);
+        savedRestaurant.setTableCount(11);
+        savedRestaurant.setMenuIDs(new ArrayList<>());
+
+        repository.save(savedRestaurant);
 
         assertThat(savedRestaurant.getName()).isEqualTo("Test3");
     }
