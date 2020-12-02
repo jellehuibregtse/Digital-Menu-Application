@@ -2,7 +2,7 @@
   "name": "kitchen",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8762/",
+  "proxy": "https://dma-gateway.radiationservers.com/",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
