@@ -46,9 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/actuator/health/**", "/actuator/routes/**")
             .permitAll()
             // Allow certain methods for customer.
-            .antMatchers(HttpMethod.GET, "/token", "/api/restaurant-service/restaurants/*", "/api/menu-service/menus/*", "/api/auth-service/users")
+            .antMatchers(HttpMethod.GET, "/token", "/api/restaurant-service/restaurants/*", "/api/menu-service/menus/*", "/api/auth-service/users/*")
             .permitAll()
-            .antMatchers(HttpMethod.POST, "/api/order-service/orders", "/api/auth-service/users")
+            .antMatchers(HttpMethod.POST, "/api/order-service/orders/*", "/api/auth-service/users/*")
             .permitAll()
             .antMatchers("/api/order-service/websockets/**")
             .permitAll()
