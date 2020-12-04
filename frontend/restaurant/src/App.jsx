@@ -52,8 +52,9 @@ const App = () => {
                             <Redirect to={"/"} />
                         </Route>
                     </Switch> : null}
-
-                    <Route path="*"><Redirect to="/" /></Route>
+                    
+                    <Route exact strict path="/"><h1>No restaurant selected</h1></Route>
+                    <Route path="*"><Redirect to="/"/></Route>
                 </Switch>
             </ThemeProvider>
         </Router>
