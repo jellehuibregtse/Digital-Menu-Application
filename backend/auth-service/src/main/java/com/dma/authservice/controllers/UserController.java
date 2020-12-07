@@ -41,7 +41,7 @@ public class UserController {
      */
     @GetMapping
     public ResponseEntity<Boolean> emailTaken(@RequestParam String email) {
-        return ResponseEntity.ok(applicationUserRepository.findByEmail(email).isPresent());
+        return ResponseEntity.ok(isEmailTaken(email));
     }
 
     /**
@@ -54,10 +54,13 @@ public class UserController {
     public ResponseEntity<String> createApplicationUser(@RequestBody ApplicationUser user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+        if (isEmailTaken(user.getEmail())) {
+            return ResponseEntity.ok(String.format("Email %s is already taken.", user.getEmail()));
+        }
+
         applicationUserRepository.save(user);
 
-        return ResponseEntity.ok(String.format("User with email: %s has been successfully created!",
-                                               user.getEmail()));
+        return ResponseEntity.ok(String.format("User with email: %s has been successfully created!", user.getEmail()));
     }
 
     /**
@@ -70,8 +73,12 @@ public class UserController {
     public ResponseEntity<String> updateApplicationUser(@RequestBody ApplicationUser user) {
         var principal = getPrincipal();
         var updatedApplicationUser = applicationUserRepository.findByEmail(principal)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Not found."));
+                                                              .orElseThrow(() -> new ResourceNotFoundException(
+                                                                      "Not found."));
+
+        if (isEmailTaken(user.getEmail())) {
+            return ResponseEntity.ok(String.format("Email %s is already taken.", user.getEmail()));
+        }
 
         updatedApplicationUser.setPassword(user.getPassword());
         updatedApplicationUser.setEmail(user.getEmail());
@@ -106,5 +113,9 @@ public class UserController {
      */
     private String getPrincipal() {
         return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    private boolean isEmailTaken(String email) {
+        return applicationUserRepository.findByEmail(email).isPresent();
     }
 }
