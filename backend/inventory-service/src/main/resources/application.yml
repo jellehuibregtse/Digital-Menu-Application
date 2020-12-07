@@ -8,7 +8,6 @@ eureka:
   instance:
     instance-id: ${spring.application.name}:${instanceId:${random.value}}
 
-
 management:
   endpoints:
     web:
