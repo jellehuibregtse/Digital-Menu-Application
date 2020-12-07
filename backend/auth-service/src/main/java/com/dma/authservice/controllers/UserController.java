@@ -77,10 +77,10 @@ public class UserController {
                                                                       "Not found."));
 
         if (isEmailTaken(user.getEmail())) {
-            return ResponseEntity.ok(String.format("Email %s is already taken.", user.getEmail()));
+            return ResponseEntity.badRequest().body(String.format("Email %s is already taken.", user.getEmail()));
         }
 
-        updatedApplicationUser.setPassword(user.getPassword());
+        updatedApplicationUser.setPassword(passwordEncoder.encode(user.getPassword()));
         updatedApplicationUser.setEmail(user.getEmail());
 
         applicationUserRepository.save(updatedApplicationUser);
