@@ -15,11 +15,13 @@ export default class {
             }
         })
             .then((response) => {
+                console.log(response);
                 if (response.headers.get("Authorization") != null) {
                     result = response.headers.get("Authorization");
                 }
             })
             .catch(error => {
+                console.log(error);
                 throw new Error(error.message)
             });
         return result;
