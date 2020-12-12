@@ -45,7 +45,7 @@ const App = () => {
 
     useEffect(() => {
         if (loggedIn) {
-            MessagingService.fetchHandler('GET', '/api/restaurant-service/restaurants/user')
+            MessagingService.fetchHandler('GET', process.env.REACT_APP_GATEWAY_URL + '/api/restaurant-service/restaurants/user')
                 .then(r => setRestaurants(r))
                 .catch(() => setRestaurants([]));
         }

@@ -27,7 +27,7 @@ export default () => {
         e.preventDefault();
         const transformedName = transformName(name);
         if (Validate.isValidName(name) && nameAvailable) {
-            await MessagingService.fetchHandler('POST', '/api/restaurant-service/restaurants', {
+            await MessagingService.fetchHandler('POST', process.env.REACT_APP_GATEWAY_URL + '/api/restaurant-service/restaurants', {
                 name: transformedName,
                 displayName: name,
                 tableCount: 10

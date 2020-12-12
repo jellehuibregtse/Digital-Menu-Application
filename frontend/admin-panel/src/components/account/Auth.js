@@ -4,7 +4,7 @@ export default class {
 
     static async handleSignIn(email, password) {
         let result = null;
-        await fetch("/api/auth-service/auth", {
+        await fetch(process.env.REACT_APP_GATEWAY_URL + "/api/auth-service/auth", {
             method: 'POST',
             body: JSON.stringify({email: email, password: password}),
             headers: {
@@ -15,7 +15,9 @@ export default class {
             }
         })
             .then((response) => {
-                console.log(response);
+                console.log("THIS IS THA TOKEN: " + response.headers.get("Authorization"));
+                console.log(response.headers.has("Authorization"))
+                console.log("TYPE: "+ response.status);
                 if (response.headers.get("Authorization") != null) {
                     result = response.headers.get("Authorization");
                 }
@@ -29,7 +31,7 @@ export default class {
 
     static async handleSignUp(email, password) {
         let result = null;
-        await MessagingService.fetchHandler('POST', '/api/auth-service/users', {email: email, password: password}).then(() => result = true).catch(r => result = r);
+        await MessagingService.fetchHandler('POST', process.env.REACT_APP_GATEWAY_URL + '/api/auth-service/users', {email: email, password: password}).then(() => result = true).catch(r => result = r);
         return result;
     }
 }
