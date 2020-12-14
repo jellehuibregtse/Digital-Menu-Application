@@ -82,7 +82,7 @@ const App = () => {
                     <Switch>
                         <Route exact strict path="/"
                                render={() => <RestaurantList restaurants={restaurants}/>}/>
-                        <Route strict path={restaurants.map(restaurant => "/" + restaurant.name + "/orders")}
+                        <Route strict path={restaurants.map(restaurant => "/" + restaurant.name)}
                                render={(props) => {
                                    setRestaurant(restaurants.find(restaurant => restaurant.name === props.history.location.pathname.substring(1).split('/')[0]));
                                    return <OrderView orders={orders}/>}}/>
