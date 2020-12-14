@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import "./css/App.css";
 import Navbar from "./components/fragments/NavBar";
 import OrderView from "./components/OrderView";
-import LoginPage from "./components/LoginPage";
 import MessagingService from "./services/MessagingService";
 import {BrowserRouter as Router,Switch,Route, Redirect} from "react-router-dom";
+import Account from "../../admin-panel/src/components/account/Account";
 
 // Hardcoded restaurant id
 const RESTAURANT_ID = 0;
 
 const App = () => {
+  const loggedIn = localStorage.getItem('token');
+
   const [restaurant, setRestaurant] = useState({});
   const [orders, setOrders] = useState([]);
   const [user] = useState({ name: "user" });
@@ -44,13 +46,21 @@ const App = () => {
     <>
       <Router>
         <Navbar restaurantName={restaurant.name} userName={user.name}/>
-        <Switch>
-          <Route path="/" exact render={() => (<OrderView orders={orders} count={1}/>)}/>
+        {loggedIn?
+            <Switch>
+                <Route path="/" exact render={() => (<OrderView orders={orders} count={1}/>)}/>
 
-          <Route path="/login" render={() => (<LoginPage />)}/>
+                <Route path="*"><Redirect to="/"/></Route>
+            </Switch> :
+            <Switch>
+                <Route exact strict path="/sign-in"
+                       render={(props) => <Account {...props} form="sign-in"/>}/>
 
-          <Route path="*"><Redirect to="/"/></Route>
-        </Switch>
+                <Route exact strict path="/sign-up"
+                       render={(props) => <Account {...props} form="sign-up"/>}/>
+
+                <Route path="*" render={() => <Redirect to="/sign-in"/>}/>
+            </Switch>}
       </Router>
     </>
   );
