@@ -15,9 +15,6 @@ export default class {
             }
         })
             .then((response) => {
-                console.log("THIS IS THA TOKEN: " + response.headers.get("Authorization"));
-                console.log(response.headers.has("Authorization"))
-                console.log("TYPE: "+ response.status);
                 if (response.headers.get("Authorization") != null) {
                     result = response.headers.get("Authorization");
                 }
