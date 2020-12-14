@@ -15,7 +15,7 @@ class MessagingService {
                 "accept": "*/*",
                 "Accept-Encoding": "gzip, deflate, br",
                 "Connection": "keep-alive",
-                "Authorization": sessionStorage.getItem("Bearer")
+                "Authorization": localStorage.getItem('token')
             }
 
         })

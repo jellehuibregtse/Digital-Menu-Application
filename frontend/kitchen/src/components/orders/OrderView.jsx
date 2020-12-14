@@ -12,7 +12,6 @@ const OrderStatus = {
 };
 
 const OrderView = (props) => {
-
   const {orders} = props;
 
   // Get all menu items from all open orders
