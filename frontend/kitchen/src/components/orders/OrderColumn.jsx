@@ -1,7 +1,7 @@
 import React from "react";
-import OrderCard from "./fragments/OrderCard";
+import OrderCard from "./OrderCard";
 import styled from 'styled-components';
-import '../css/columns.css';
+import '../../css/columns.css';
 
 const Background = styled.div`
     background-color: #f9f3ed;

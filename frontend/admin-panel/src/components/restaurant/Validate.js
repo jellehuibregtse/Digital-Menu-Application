@@ -18,7 +18,7 @@ export default class {
     static async nameAvailable(name) {
         if (name !== null) {
             let response = '';
-            await MessagingService.fetchHandler('GET', process.env.REACT_APP_GATEWAY_URL + '/api/restaurant-service/restaurants?name=' + name).then(r => response = r).catch();
+            await MessagingService.fetchHandler('GET', '/api/restaurant-service/restaurants?name=' + name).then(r => response = r).catch();
             if(response === 'true')
                 return false;
         }

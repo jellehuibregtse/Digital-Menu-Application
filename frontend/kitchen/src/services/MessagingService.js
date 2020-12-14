@@ -5,35 +5,9 @@ import Stomp from 'stompjs';
 class MessagingService {
 
     // This is where you can get/post/put/delete messages
-    static async auth(message) {
-        console.log(message);
-        let result = null;
-        await fetch("/api/auth-service/auth", {
-            method: 'POST',
-            body: JSON.stringify(message),
-            headers: {
-                "Content-Type": "application/json",
-                "accept": "*/*",
-                "Accept-Encoding": "gzip, deflate, br",
-                "Connection": "keep-alive"
-            }
-
-        })
-        .then((response) => {
-            if(response.headers.get("Authorization") != null) {
-                result = response.headers.get("Authorization");
-            }
-        })
-        .catch(error => {
-            throw new Error(error.message)
-        });
-        return result
-    }
-
-    // This is where you can get/post/put/delete messages
     static async fetchHandler(method, route, message) {
         let result = null;
-        await fetch("/api" + route, {
+        await fetch(process.env.REACT_APP_GATEWAY_URL + "/api" + route, {
             method: method,
             body: JSON.stringify(message),
             headers: {
@@ -41,7 +15,7 @@ class MessagingService {
                 "accept": "*/*",
                 "Accept-Encoding": "gzip, deflate, br",
                 "Connection": "keep-alive",
-                "Authorization": sessionStorage.getItem("Bearer")
+                "Authorization": localStorage.getItem('token')
             }
 
         })

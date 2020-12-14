@@ -4,7 +4,7 @@ class MessagingService {
     // This is where you can get/post/put/delete messages
     static async fetchHandler(method, route, message) {
         let result = null;
-        await fetch(route, {
+        await fetch(process.env.REACT_APP_GATEWAY_URL + route, {
             method: method,
             body: JSON.stringify(message),
             headers: {
