@@ -101,7 +101,7 @@ const NavBar = (props) => {
             <Toolbar className={classes.toolBar}>
                 <div className={classes.subFlex}>
                     <Link className={classes.link} to="/">
-                        <Typography variant="h6">Digital Menu Application</Typography>
+                        <Typography variant="h6">Digital Menu Application - Admin</Typography>
                     </Link>
                 </div>
 

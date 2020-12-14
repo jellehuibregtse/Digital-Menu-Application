@@ -41,6 +41,7 @@ const App = () => {
 
     const [restaurant, setRestaurant] = useState({});
     const [orders, setOrders] = useState([]);
+    const [restaurants, setRestaurants] = useState(null);
 
     useEffect(() => {
         if (restaurant.id != null) {
@@ -52,7 +53,7 @@ const App = () => {
                 () => {
                 },
                 () => {
-                    MessagingService.fetchHandler("GET", "/order-service/orders/restaurant/" + restaurant.id)
+                    MessagingService.fetchHandler("GET", "/api/order-service/orders/restaurant/" + restaurant.id)
                         .then((res) => {
                             setOrders(res);
                         })
@@ -63,11 +64,9 @@ const App = () => {
         }
     }, [restaurant]);
 
-    const [restaurants, setRestaurants] = useState(null);
-
     useEffect(() => {
         if (loggedIn) {
-            MessagingService.fetchHandler('GET', '/restaurant-service/restaurants/user')
+            MessagingService.fetchHandler('GET', '/api/restaurant-service/restaurants/user')
                 .then(r => setRestaurants(r))
                 .catch(() => setRestaurants([]));
         }
@@ -76,19 +75,19 @@ const App = () => {
     return (
         <Router>
             <ThemeProvider theme={theme}>
-                <NavBar loggedIn={loggedIn} restaurantName={restaurant.name}
-                        email={loggedIn ? parseSubFromJwt(localStorage.getItem('token')) : null}/>
-                {loggedIn ?
+                <NavBar loggedIn={loggedIn} email={loggedIn ? parseSubFromJwt(localStorage.getItem('token')) : null}/>
+                {loggedIn?
+                    restaurants !== null ?
                     <Switch>
                         <Route exact strict path="/"
                                render={() => <RestaurantList restaurants={restaurants}/>}/>
                         <Route strict path={restaurants.map(restaurant => "/" + restaurant.name)}
                                render={(props) => {
                                    setRestaurant(restaurants.find(restaurant => restaurant.name === props.history.location.pathname.substring(1).split('/')[0]));
-                                   return <OrderView orders={orders}/>}}/>
+                                   return <OrderView restaurantName={restaurant.displayName} orders={orders}/>}}/>
 
                         <Route path="*"><Redirect to="/"/></Route>
-                    </Switch> :
+                    </Switch> : null :
                     <Switch>
                         <Route exact strict path="/sign-in"
                                render={(props) => <Account {...props} form="sign-in"/>}/>
