@@ -3,7 +3,7 @@ import {DragDropContext, Droppable} from "react-beautiful-dnd";
 import DishColumn from "./DishColumn";
 import OrderColumn from "./OrderColumn";
 import MessagingService from "../../services/MessagingService";
-import {Container, Divider, IconButton, makeStyles, Toolbar, Typography} from "@material-ui/core";
+import {Box, Container, Divider, Grid, IconButton, makeStyles, Toolbar, Typography} from "@material-ui/core";
 import {ArrowBack} from "@material-ui/icons";
 import {useHistory} from "react-router-dom";
 
@@ -25,11 +25,6 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center'
     },
-    content: {
-        background: theme.palette.primary.light,
-        height: ' 100%',
-        overflow: 'hidden'
-    },
     backButton: {
         minWidth: 0,
         position: 'absolute',
@@ -37,6 +32,12 @@ const useStyles = makeStyles((theme) => ({
     },
     header: {
         marginRight: theme.spacing(1)
+    },
+    content: {
+        background: theme.palette.primary.light,
+        height: ' 100%',
+        overflow: 'hidden',
+        padding: theme.spacing(0, 5)
     },
     view: {
         display: 'flex',
@@ -118,7 +119,7 @@ const OrderView = (props) => {
             </Container>
             <Divider/>
             <div className={classes.content}>
-                <Container className={classes.view}>
+                <Grid className={classes.view}>
                     <DragDropContext onDragEnd={onDragEnd}>
                         <Droppable droppableId={"newDishes"}>
                             {(provided) => (
@@ -182,7 +183,7 @@ const OrderView = (props) => {
                             )}
                         </Droppable>
                     </DragDropContext>
-                </Container>
+                </Grid>
             </div>
         </>
     );
