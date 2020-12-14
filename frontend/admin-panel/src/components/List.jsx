@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Divider,
     List,
-    Button, ListItemAvatar, Avatar, ListItemText, ListItemSecondaryAction, IconButton
+    Button, ListItemAvatar, Avatar, ListItemText,
 } from "@material-ui/core";
-import {AddCircle, Create, Search} from "@material-ui/icons";
-import {makeStyles} from "@material-ui/core/styles";
+import { AddCircle, Create, Search } from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import Popup from "reactjs-popup";
+
 import ListItem from "@material-ui/core/ListItem";
 import { useHistory } from "react-router-dom";
 
@@ -60,15 +60,18 @@ const Item = (props) => {
     return (
         <>
             <ListItem className={classes.head} button
-                      onClick={() => history.push(props.href)}>
+                onClick={(e) => {
+                    e.preventDefault()
+                    history.push(props.href)
+                }}>
                 <ListItemAvatar>
                     <Avatar>
                         {props.icon}
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={props.name} secondary={props.info}/>
+                <ListItemText primary={props.name} secondary={props.info} />
             </ListItem>
-            {props.divider? <Divider/> : null}
+            {props.divider ? <Divider /> : null}
         </>
     )
 }
@@ -87,12 +90,13 @@ export default (props) => {
         setItems(props.items.filter(item => item.primary.toLowerCase().includes(input.toLowerCase())));
     }
 
+    console.log(window.location)
     return (
         <div>
             <div className={classes.head}>
                 <div className={classes.search}>
                     <div className={classes.searchIcon}>
-                        <Search/>
+                        <Search />
                     </div>
                     <TextField
                         className={classes.searchBar}
@@ -100,22 +104,24 @@ export default (props) => {
                         fullWidth
                         variant="outlined"
                         placeholder={"Find a " + props.type + "…"}
-                        inputProps={{'aria-label': 'search'}}
+                        inputProps={{ 'aria-label': 'search' }}
                         onChange={e => filter(e.target.value)}
                     />
                 </div>
 
-                <Button variant="contained" color="secondary" onClick={() => history.push("/new")}>
-                    <AddCircle className={classes.buttonIcon}/>
+                <Button variant="contained" color="secondary" onClick={() => {
+                    props.type !== "menu" ? history.push("/new") : window.location.href = `/${props.restaurantName}/newmenu`
+                }}>
+                    <AddCircle className={classes.buttonIcon} />
                     New
                 </Button>
             </div>
             <List>
                 {
-                    items.length > 0?
-                    items.map(item =>
-                        <Item divider={items.length > 1} key={item.href} name={item.primary} icon={props.icon} info={item.secondary} href={item.href}/>
-                    ) :
+                    items.length > 0 ?
+                        items.map(item =>
+                            <Item divider={items.length > 1} key={item.href} name={item.primary} icon={props.icon} info={item.secondary} href={item.href} />
+                        ) :
                         <ListItem>It seems like you don't have any restaurants yet.</ListItem>
                 }
             </List>
