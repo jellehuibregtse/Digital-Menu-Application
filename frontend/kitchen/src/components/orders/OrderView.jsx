@@ -39,8 +39,7 @@ const useStyles = makeStyles((theme) => ({
     view: {
         display: 'flex',
         width: '100%',
-        paddingTop: theme.spacing(3),
-        textAlign: 'center'
+        padding: theme.spacing(2, 0, 0)
     }
 }))
 
