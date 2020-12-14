@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
-import "../css/orderview.css";
+import "../../css/orderview.css";
 import {DragDropContext, Droppable} from "react-beautiful-dnd";
 import DishColumn from "./DishColumn";
 import OrderColumn from "./OrderColumn";
-import MessagingService from "../services/MessagingService";
+import MessagingService from "../../services/MessagingService";
 
 const OrderStatus = {
   NEW: "NEW",

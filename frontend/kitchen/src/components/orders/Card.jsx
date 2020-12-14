@@ -1,7 +1,6 @@
 import React from "react";
 import "../../css/card.css";
 import { Draggable } from "react-beautiful-dnd";
-import styled from 'styled-components'
 
 const Card = (props) => {
   return (
