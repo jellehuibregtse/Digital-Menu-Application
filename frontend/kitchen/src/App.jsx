@@ -1,51 +1,64 @@
 import React, { useEffect, useState } from "react";
 import "./css/App.css";
-import Navbar from "./components/fragments/NavBar";
+import Navbar from "./components/NavBar";
 import OrderView from "./components/OrderView";
 import MessagingService from "./services/MessagingService";
 import {BrowserRouter as Router,Switch,Route, Redirect} from "react-router-dom";
 import Account from "../../admin-panel/src/components/account/Account";
+import NavBar from "../../admin-panel/src/components/NavBar";
 
-// Hardcoded restaurant id
-const RESTAURANT_ID = 0;
+const parseSubFromJwt = (token) => {
+    try {
+        let base64Url = token.split('.')[1];
+        let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        let jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload).sub;
+    } catch (e) {
+        return null;
+    }
+};
 
 const App = () => {
   const loggedIn = localStorage.getItem('token');
 
   const [restaurant, setRestaurant] = useState({});
   const [orders, setOrders] = useState([]);
-  const [user] = useState({ name: "user" });
 
   // Run once at runtime
   useEffect(() => {
-    async function fetchOrders() {
-      await MessagingService.fetchHandler("GET", "/restaurant-service/restaurants/" + RESTAURANT_ID)
-          .then((res) => {
-            setRestaurant(res);
-          })
-          .catch(() => {});
+      if(restaurant.id != null) {
+          async function fetchOrders() {
+              await MessagingService.fetchHandler("GET", "/restaurant-service/restaurants/" + restaurant.id)
+                  .then((res) => {
+                      setRestaurant(res);
+                  })
+                  .catch(() => {});
 
-      await MessagingService.register(
-          "/orders/" + RESTAURANT_ID,
-          (m) => {setOrders(JSON.parse(m.body))},
-          () => {},
-          () => {
-            MessagingService.fetchHandler("GET", "/order-service/orders/restaurant/" + RESTAURANT_ID)
-                .then((res) => {
-                  setOrders(res);
-                })
-                .catch(() => {
-                });
+              await MessagingService.register(
+                  "/orders/" + restaurant.id,
+                  (m) => {setOrders(JSON.parse(m.body))},
+                  () => {},
+                  () => {
+                      MessagingService.fetchHandler("GET", "/orders/restaurant/" + restaurant.id)
+                          .then((res) => {
+                              setOrders(res);
+                          })
+                          .catch(() => {
+                          });
+                  }
+              );
           }
-      );
-    }
-    fetchOrders();
-  }, []);
+          fetchOrders();
+      }
+  }, [restaurant]);
 
   return (
     <>
       <Router>
-        <Navbar restaurantName={restaurant.name} userName={user.name}/>
+        <NavBar loggedIn={loggedIn} restaurantName={restaurant.name} email={loggedIn ? parseSubFromJwt(localStorage.getItem('token')) : null}/>
         {loggedIn?
             <Switch>
                 <Route path="/" exact render={() => (<OrderView orders={orders} count={1}/>)}/>
