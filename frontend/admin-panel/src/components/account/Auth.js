@@ -28,7 +28,7 @@ export default class {
 
     static async handleSignUp(email, password) {
         let result = null;
-        await MessagingService.fetchHandler('POST', process.env.REACT_APP_GATEWAY_URL + '/api/auth-service/users', {email: email, password: password}).then(() => result = true).catch(r => result = r);
+        await MessagingService.fetchHandler('POST', '/api/auth-service/users', {email: email, password: password}).then(() => result = true).catch(r => result = r);
         return result;
     }
 }

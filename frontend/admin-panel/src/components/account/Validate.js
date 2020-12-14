@@ -24,7 +24,7 @@ export default class {
     static async emailAvailable(email) {
         if (email !== null) {
             let response = '';
-            await MessagingService.fetchHandler('GET', process.env.REACT_APP_GATEWAY_URL + '/api/auth-service/users?email=' + email).then(r => response = r).catch();
+            await MessagingService.fetchHandler('GET', '/api/auth-service/users?email=' + email).then(r => response = r).catch();
             if(response === 'true')
                 return false;
         }

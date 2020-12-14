@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const deleteRestaurant = (id) => {
-    MessagingService.fetchHandler('DELETE', process.env.REACT_APP_GATEWAY_URL + '/api/restaurant-service/restaurants/' + id)
+    MessagingService.fetchHandler('DELETE', '/api/restaurant-service/restaurants/' + id)
         .then(() => document.location.href = "/");
 }
 
