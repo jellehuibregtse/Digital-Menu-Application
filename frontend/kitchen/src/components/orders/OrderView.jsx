@@ -26,7 +26,9 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center'
     },
     content: {
-        marginTop: theme.spacing(3)
+        background: theme.palette.primary.light,
+        height: ' 100%',
+        overflow: 'hidden'
     },
     backButton: {
         minWidth: 0,
@@ -39,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     view: {
         display: 'flex',
         width: '100%',
-        padding: theme.spacing(2, 0, 0)
+        height: '100%'
     }
 }))
 
@@ -115,71 +117,73 @@ const OrderView = (props) => {
                 </Toolbar>
             </Container>
             <Divider/>
-            <Container className={classes.view}>
-                <DragDropContext onDragEnd={onDragEnd}>
-                    <Droppable droppableId={"newDishes"}>
-                        {(provided) => (
-                            <DishColumn
-                                key={1}
-                                id={"newDishes"}
-                                name="New Dishes"
-                                items={newItems}
-                                innerRef={provided.innerRef}
-                                {...provided.droppableProps}
-                            >
-                                {provided.placeholder}
-                            </DishColumn>
-                        )}
-                    </Droppable>
+            <div className={classes.content}>
+                <Container className={classes.view}>
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        <Droppable droppableId={"newDishes"}>
+                            {(provided) => (
+                                <DishColumn
+                                    key={1}
+                                    id={"newDishes"}
+                                    name="New Dishes"
+                                    items={newItems}
+                                    innerRef={provided.innerRef}
+                                    {...provided.droppableProps}
+                                >
+                                    {provided.placeholder}
+                                </DishColumn>
+                            )}
+                        </Droppable>
 
-                    <Droppable droppableId={"processingDishes"}>
-                        {(provided) => (
-                            <DishColumn
-                                key={2}
-                                id={"processingDishes"}
-                                name="Preparing Dishes"
-                                items={processingItems}
-                                innerRef={provided.innerRef}
-                                {...provided.droppableProps}
-                            >
-                                {provided.placeholder}
-                            </DishColumn>
-                        )}
-                    </Droppable>
+                        <Droppable droppableId={"processingDishes"}>
+                            {(provided) => (
+                                <DishColumn
+                                    key={2}
+                                    id={"processingDishes"}
+                                    name="Preparing Dishes"
+                                    items={processingItems}
+                                    innerRef={provided.innerRef}
+                                    {...provided.droppableProps}
+                                >
+                                    {provided.placeholder}
+                                </DishColumn>
+                            )}
+                        </Droppable>
 
-                    <Droppable droppableId={"completeDishes"}>
-                        {(provided) => (
-                            <DishColumn
-                                key={3}
-                                id={"completeDishes"}
-                                name="Completed Dishes"
-                                items={completeItems}
-                                innerRef={provided.innerRef}
-                                {...provided.droppableProps}
-                            >
-                                {provided.placeholder}
-                            </DishColumn>
-                        )}
-                    </Droppable>
-                </DragDropContext>
+                        <Droppable droppableId={"completeDishes"}>
+                            {(provided) => (
+                                <DishColumn
+                                    key={3}
+                                    id={"completeDishes"}
+                                    name="Completed Dishes"
+                                    items={completeItems}
+                                    innerRef={provided.innerRef}
+                                    {...provided.droppableProps}
+                                >
+                                    {provided.placeholder}
+                                </DishColumn>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
 
-                <DragDropContext>
-                    <Droppable droppableId={"orders"}>
-                        {(provided) => (
-                            <OrderColumn
-                                key={4}
-                                id={"orders"}
-                                name="Orders"
-                                items={orders}
-                                innerRef={provided.innerRef}
-                                {...provided.droppableProps}
-                            >
-                                {provided.placeholder}
-                            </OrderColumn>
-                        )}
-                    </Droppable>
-                </DragDropContext>
-            </Container>
+                    <DragDropContext>
+                        <Droppable droppableId={"orders"}>
+                            {(provided) => (
+                                <OrderColumn
+                                    key={4}
+                                    id={"orders"}
+                                    name="Orders"
+                                    items={orders}
+                                    innerRef={provided.innerRef}
+                                    {...provided.droppableProps}
+                                >
+                                    {provided.placeholder}
+                                </OrderColumn>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
+                </Container>
+            </div>
         </>
     );
 };
