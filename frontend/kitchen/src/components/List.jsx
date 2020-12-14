@@ -103,11 +103,6 @@ export default (props) => {
                         onChange={e => filter(e.target.value)}
                     />
                 </div>
-
-                <Button variant="contained" color="secondary" onClick={() => history.push("/new")}>
-                    <AddCircle className={classes.buttonIcon}/>
-                    New
-                </Button>
             </div>
             <List>
                 {
@@ -115,7 +110,9 @@ export default (props) => {
                     items.map(item =>
                         <Item divider={items.length > 1} key={item.href} name={item.primary} icon={props.icon} info={item.secondary} href={item.href}/>
                     ) :
-                        <ListItem>It seems like you don't have any restaurants yet.</ListItem>
+                        <ListItem>
+                            <ListItemText>It seems like you don't have any restaurants yet go to <a href="https://dma-frontend-admin.radiationservers.com/">admin panel</a> to create one.</ListItemText>
+                        </ListItem>
                 }
             </List>
         </div>
