@@ -1,8 +1,9 @@
 import MessagingService from "../services/MessagingService";
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
+import {Typography} from "@material-ui/core";
 
 const JoinRestaurant = (props) => {
-    const [error, setError] = useState([''])
+    const [error, setError] = useState('')
 
     // Run once at runtime
     useEffect(() => {
@@ -12,12 +13,13 @@ const JoinRestaurant = (props) => {
 
         if (restaurantId >= 0 && tableId >= 0) {
             // Get restaurant by id
-            MessagingService.fetchHandler('GET','/restaurant-service/restaurants/' + restaurantId).then(
-                
+            MessagingService.fetchHandler('GET', '/api/restaurant-service/restaurants/' + restaurantId).then(
                 (restaurant) => {
+                    console.log(restaurant)
                     // Get menu from restaurant
-                    MessagingService.fetchHandler('GET','/menu-service/menus/' + restaurant.menuIDs[0]).then(
+                    MessagingService.fetchHandler('GET', '/api/menu-service/menus/' + restaurant.menuIDs[0]).then(
                         (menu) => {
+                            console.log(menu)
                             // Set session to restaurant, menu and tableNumber
                             sessionStorage.setItem('session', JSON.stringify({
                                 restaurant: restaurant,
@@ -27,18 +29,18 @@ const JoinRestaurant = (props) => {
                             document.location.href = "/";
                         }
                     ).catch((e) => {
-                        setError(e)
+                        setError('No menu available for restaurant')
                     });
                 }
             ).catch((e) => {
-                setError(e)
+                setError(e.message)
             });
         }
-    },[])
+    }, [])
 
-    return(
+    return (
         <>
-            <h1>{error}</h1>
+            <Typography variant={"h5"} align={"center"}><strong>{error}</strong></Typography>
         </>
     )
 }
