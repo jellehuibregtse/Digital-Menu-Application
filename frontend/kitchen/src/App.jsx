@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react";
-import OrderView from "./components/OrderView";
+import OrderView from "./components/orders/OrderView";
 import MessagingService from "./services/MessagingService";
 import {BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
 import Account from "./components/account/Account";
 import NavBar from "./components/NavBar";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core";
 import deepOrange from "@material-ui/core/colors/deepOrange";
+import RestaurantList from "./components/RestaurantList";
 
 const theme = createMuiTheme({
     palette: {
@@ -41,38 +42,36 @@ const App = () => {
     const [restaurant, setRestaurant] = useState({});
     const [orders, setOrders] = useState([]);
 
-    // Run once at runtime
     useEffect(() => {
         if (restaurant.id != null) {
-            async function fetchOrders() {
-                await MessagingService.fetchHandler("GET", "/restaurant-service/restaurants/" + restaurant.id)
-                    .then((res) => {
-                        setRestaurant(res);
-                    })
-                    .catch(() => {
-                    });
-
-                await MessagingService.register(
-                    "/orders/" + restaurant.id,
-                    (m) => {
-                        setOrders(JSON.parse(m.body))
-                    },
-                    () => {
-                    },
-                    () => {
-                        MessagingService.fetchHandler("GET", "/orders/restaurant/" + restaurant.id)
-                            .then((res) => {
-                                setOrders(res);
-                            })
-                            .catch(() => {
-                            });
-                    }
-                );
-            }
-
-            fetchOrders().then();
+            MessagingService.register(
+                "/orders/" + restaurant.id,
+                (m) => {
+                    setOrders(JSON.parse(m.body))
+                },
+                () => {
+                },
+                () => {
+                    MessagingService.fetchHandler("GET", "/order-service/orders/restaurant/" + restaurant.id)
+                        .then((res) => {
+                            setOrders(res);
+                        })
+                        .catch(() => {
+                        });
+                }
+            );
         }
     }, [restaurant]);
+
+    const [restaurants, setRestaurants] = useState(null);
+
+    useEffect(() => {
+        if (loggedIn) {
+            MessagingService.fetchHandler('GET', '/restaurant-service/restaurants/user')
+                .then(r => setRestaurants(r))
+                .catch(() => setRestaurants([]));
+        }
+    }, [loggedIn])
 
     return (
         <Router>
@@ -81,7 +80,12 @@ const App = () => {
                         email={loggedIn ? parseSubFromJwt(localStorage.getItem('token')) : null}/>
                 {loggedIn ?
                     <Switch>
-                        <Route path="/" exact render={() => (<OrderView orders={orders} count={1}/>)}/>
+                        <Route exact strict path="/"
+                               render={() => <RestaurantList restaurants={restaurants}/>}/>
+                        <Route strict path={restaurants.map(restaurant => "/" + restaurant.name + "/orders")}
+                               render={(props) => {
+                                   setRestaurant(restaurants.find(restaurant => restaurant.name === props.history.location.pathname.substring(1).split('/')[0]));
+                                   return <OrderView orders={orders}/>}}/>
 
                         <Route path="*"><Redirect to="/"/></Route>
                     </Switch> :
