@@ -1,11 +1,5 @@
 import React from "react";
 import Card from "./Card";
-import styled from 'styled-components'
-
-
-const Background = styled.div`
-    background-color: #f9f3ed;
-`
 
 const DishColumn = (props) => {
 
@@ -23,12 +17,12 @@ const DishColumn = (props) => {
     });
 
     return (
-        <Background>
+        <div>
             <div className="main" {...props} ref={props.innerRef}>
                 <h2> {props.name}</h2>
                 <div className="items">{items}</div>
             </div>
-        </Background>
+        </div>
     );
 };
 

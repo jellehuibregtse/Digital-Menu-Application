@@ -1,11 +1,5 @@
 import React from "react";
 import OrderCard from "./OrderCard";
-import styled from 'styled-components';
-import '../../css/columns.css';
-
-const Background = styled.div`
-    background-color: #f9f3ed;
-`
 
 const OrderColumn = (props) => {
 
@@ -23,12 +17,12 @@ const OrderColumn = (props) => {
     });
 
   return (
-    <Background>
+    <div>
         <div className="main" {...props} ref={props.innerRef}>
           <h2> {props.name}</h2>
           <div className="items">{items}</div>
         </div>
-    </Background>
+    </div>
   );
 };
 
