@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from "react";
-import "./css/App.css";
 import OrderView from "./components/OrderView";
 import MessagingService from "./services/MessagingService";
 import {BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
-import Account from "../../admin-panel/src/components/account/Account";
-import NavBar from "../../admin-panel/src/components/NavBar";
+import Account from "./components/account/Account";
+import NavBar from "./components/NavBar";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core";
 import deepOrange from "@material-ui/core/colors/deepOrange";
 
