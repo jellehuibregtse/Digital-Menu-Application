@@ -1,12 +1,32 @@
 import React, {useEffect, useState} from 'react';
 import {Container, makeStyles, Typography} from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import ButtonBase from "@material-ui/core/ButtonBase";
+import Button from "@material-ui/core/Button";
 
 
 const useStyles = makeStyles((theme) => ({
     content: {
         width: '100%',
-        padding: theme.spacing(3)
+        padding: theme.spacing(3),
+        flexGrow: 1
+    },
+    paper: {
+        padding: theme.spacing(2),
+        margin: 'auto',
+        maxWidth: 500,
+    },
+    image: {
+        width: 128,
+        height: 128,
+    },
+    img: {
+        margin: 'auto',
+        display: 'block',
+        maxWidth: '100%',
+        maxHeight: '100%',
     }
 }))
 
@@ -41,10 +61,37 @@ export default (props) => {
 
     return (
         <Container className={classes.content}>
-            <Typography variant="h5">QR Code</Typography>
             {loading ?
                 <CircularProgress/> :
-                <img alt="home" src={image}/>
+                <Paper className={classes.paper}>
+                    <Grid container spacing={2}>
+                        <Grid item>
+                            <ButtonBase className={classes.image}>
+                                <img className={classes.img} alt="complex" src={image}/>
+                            </ButtonBase>
+                        </Grid>
+                        <Grid item xs={12} sm container>
+                            <Grid item xs container direction="column" spacing={2}>
+                                <Grid item xs>
+                                    <Typography gutterBottom variant="subtitle1">
+                                        <strong>{props.name}</strong>
+                                    </Typography>
+                                    <Typography variant="body2" gutterBottom>
+                                        Table 1
+                                    </Typography>
+                                    <Typography variant="body2" color="textSecondary">
+                                        {process.env.REACT_APP_RESTAURANT_URL + "/qr?restaurantId=" + props.id + "&tableId=1"}
+                                    </Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Button variant="primary">
+                                        Download
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Paper>
             }
         </Container>
     )

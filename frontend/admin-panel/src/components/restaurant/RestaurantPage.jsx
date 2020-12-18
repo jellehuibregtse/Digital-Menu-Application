@@ -76,7 +76,7 @@ export default (props) => {
                         <ListPage type="menu" icon={<MenuBook/>} items={[{primary: 'Menu1', secondary: '20 dishes'}]}/>
                     </Container>}/>
                 <Route exact strict path={"/" + props.name + "/design"} render={() => <Design/>}/>
-                <Route exact strict path={"/" + props.name + "/qr"} render={() => <QR id={props.id}/>}/>
+                <Route exact strict path={"/" + props.name + "/qr"} render={() => <QR id={props.id} name={props.name}/>}/>
                 <Route exact strict path={"/" + props.name + "/settings"} render={() => <SettingsPage id={props.id}/>}/>
                 <Route path="*" render={() => <Redirect to={"/" + props.name + "/menu"}/>}/>
             </Switch>
