@@ -18,11 +18,13 @@ const useStyles = makeStyles((theme) => ({
 export default (props) => {
     const classes = useStyles();
 
-    const [tableNumbers, setTableNumbers] = useState("");
+    const [tableNumbers, setTableNumbers] = useState(null);
     const [items, setItems] = useState([]);
 
     const isValidTableNumbers = (e) => {
-        return /^([0-9](-[0-9])?)+(,[0-9](-[0-9])?)*$/.test(e);
+        if(e == null)
+            return true
+        return /^([0-9]+(-[0-9]+)?)(,[0-9]+(-[0-9]+)?)*$/.test(e);
     }
 
     const updateTableNumbers = event => {
@@ -31,30 +33,33 @@ export default (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        setItems(handleInput(tableNumbers));
+        if(tableNumbers != null && isValidTableNumbers(tableNumbers)) {
+            setItems(handleInput(tableNumbers));
+        }
+        else if(tableNumbers != null) {
+            setTableNumbers("")
+        }
     }
 
     const handleInput = (expression) => {
         let result = [];
-        const terms = expression.split(/,/);
-        for (const t in terms) {
+        let terms = expression.split(/,/);
+        for (let t in terms) {
             result = result.concat(expandTerm(terms[t]));
         }
-
         return result;
     }
 
     function getFactors(term) {
-        const matches = term.match(/(-?[0-9]+)-(-?[0-9]+)/);
-        if (!matches) return {first:Number(term)};
+        let matches = term.match(/([0-9]+)-([0-9]+)/);
+        if (!matches) return {first:Number(term), last:Number(term)};
         return {first:Number(matches[1]), last:Number(matches[2])};
     }
 
     function expandTerm(term) {
-        const factors = getFactors(term);
+        let factors = getFactors(term);
         if (factors.length < 2) return [factors.first];
-        const range = [];
+        let range = [];
         for (let n = factors.first; n <= factors.last; n++) {
             range.push(n);
         }
@@ -75,7 +80,7 @@ export default (props) => {
                                 isValidTableNumbers(tableNumbers);
                             }} id="outlined-basic"
                                        label="Table numbers" variant="outlined" required autoFocus
-                                       error={isValidTableNumbers(tableNumbers)}
+                                       error={!isValidTableNumbers(tableNumbers)}
                                        helperText={isValidTableNumbers(tableNumbers)? '' : 'Invalid Input'}
                             />
                         </Grid>
