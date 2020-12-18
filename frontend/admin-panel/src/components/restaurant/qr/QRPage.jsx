@@ -21,6 +21,10 @@ export default (props) => {
     const [tableNumbers, setTableNumbers] = useState("");
     const [items, setItems] = useState([]);
 
+    const isValidTableNumbers = (e) => {
+        return /^([0-9](-[0-9])?)+(,[0-9](-[0-9])?)*$/.test(e);
+    }
+
     const updateTableNumbers = event => {
         setTableNumbers(event.target.value);
     }
@@ -66,8 +70,14 @@ export default (props) => {
                 <form onSubmit={handleSubmit}>
                     <Grid container justify="flex-start" alignItems="center">
                         <Grid item>
-                            <TextField value={tableNumbers} onChange={updateTableNumbers} id="outlined-basic"
-                                       label="Table numbers" variant="outlined" required autoFocus/>
+                            <TextField value={tableNumbers} onChange={(e) => {
+                                updateTableNumbers(e);
+                                isValidTableNumbers(tableNumbers);
+                            }} id="outlined-basic"
+                                       label="Table numbers" variant="outlined" required autoFocus
+                                       error={isValidTableNumbers(tableNumbers)}
+                                       helperText={isValidTableNumbers(tableNumbers)? '' : 'Invalid Input'}
+                            />
                         </Grid>
                         <Grid item>
                             <Box ml={1}>
