@@ -25,7 +25,7 @@ export default (props) => {
         await fetch(process.env.REACT_APP_GATEWAY_URL + "/api/qr-service/qr-codes",
             {
                 method: 'POST',
-                body: "google.com",
+                body: process.env.REACT_APP_RESTAURANT_URL + "/qr?restaurantId=" + props.id + "&tableId=1",
                 headers: {
                     "Content-Type": "text/plain",
                     "accept": "*/*",
