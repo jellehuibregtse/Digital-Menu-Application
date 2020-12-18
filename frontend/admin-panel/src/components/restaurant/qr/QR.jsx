@@ -1,18 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {Container, makeStyles, Typography} from "@material-ui/core";
+import {makeStyles, Typography} from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import Button from "@material-ui/core/Button";
+import Box from "@material-ui/core/Box";
 
 
 const useStyles = makeStyles((theme) => ({
-    content: {
-        width: '100%',
-        padding: theme.spacing(3),
-        flexGrow: 1
-    },
     paper: {
         padding: theme.spacing(2),
         margin: 'auto',
@@ -60,44 +56,53 @@ export default (props) => {
     }
 
     return (
-        <Container className={classes.content}>
+        <div>
             {loading ?
                 <CircularProgress/> :
                 <Paper className={classes.paper}>
-                    <Grid container spacing={2}>
-                        <Grid item>
-                            <ButtonBase className={classes.image}>
-                                <img className={classes.img} alt="complex" src={image}/>
-                            </ButtonBase>
-                        </Grid>
-                        <Grid item xs={12} sm container>
-                            <Grid item xs container direction="column" spacing={2}>
-                                <Grid item xs>
-                                    <Typography gutterBottom variant="subtitle1">
-                                        <strong>{props.name}</strong>
-                                    </Typography>
-                                    <Typography variant="body2" gutterBottom>
-                                        Table 1
-                                    </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        {process.env.REACT_APP_RESTAURANT_URL + "/qr?restaurantId=" + props.id + "&tableId=1"}
-                                    </Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Button variant="primary" onClick={() => {
-                                        let tempLink = document.createElement('a');
-                                        tempLink.href = image;
-                                        tempLink.setAttribute('download', 'qr.png');
-                                        tempLink.click();
-                                    }}>
-                                        Download
-                                    </Button>
+                    <Grid container direction="column" justify="center" alignItems="center" spacing={1}>
+                        <Grid container justify="center" alignItems="center" spacing={2}>
+                            <Grid item>
+                                <ButtonBase className={classes.image}>
+                                    <img className={classes.img} alt="complex" src={image}/>
+                                </ButtonBase>
+                            </Grid>
+                            <Grid item xs={12} sm container>
+                                <Grid item xs container direction="column" spacing={2}>
+                                    <Grid item xs>
+                                        <Typography gutterBottom variant="subtitle1">
+                                            <strong>{props.name}</strong>
+                                        </Typography>
+                                        <Typography variant="body2" gutterBottom>
+                                            Table 1
+                                        </Typography>
+                                        <Typography variant="body2" color="textSecondary">
+                                            {process.env.REACT_APP_RESTAURANT_URL + "/qr?restaurantId=" + props.id + "&tableId=1"}
+                                        </Typography>
+                                    </Grid>
+
                                 </Grid>
                             </Grid>
-                        </Grid>
+                            <Grid container justify="center" alignItems="center" spacing={2}>
+                                <Grid item>
+                                    <Box mb={2}>
+                                        <Button variant="primary" onClick={() => {
+                                            let tempLink = document.createElement('a');
+                                            tempLink.href = image;
+                                            tempLink.setAttribute('download', 'qr.png');
+                                            tempLink.click();
+                                        }}>
+                                            Download
+                                        </Button>
+                                    </Box>
+                                </Grid>
+                            </Grid>
+                    </Grid>
+
+
                     </Grid>
                 </Paper>
             }
-        </Container>
+        </div>
     )
 }

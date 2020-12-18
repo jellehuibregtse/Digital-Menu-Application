@@ -1,21 +1,11 @@
 import React from 'react';
-import {
-    Button,
-    Container,
-    makeStyles,
-    Typography,
-    Toolbar,
-    Divider,
-    IconButton
-} from "@material-ui/core";
+import {Container, Divider, IconButton, makeStyles, Toolbar, Typography} from "@material-ui/core";
 import ListPage from "../List";
-import {ArrowBack, MenuBook, People, Settings} from "@material-ui/icons";
-import Popup from "reactjs-popup";
-import {useHistory, Route, Switch, Link, Redirect} from "react-router-dom";
-import MessagingService from "../../services/MessagingService";
+import {ArrowBack, MenuBook} from "@material-ui/icons";
+import {Link, Redirect, Route, Switch, useHistory} from "react-router-dom";
 import SettingsPage from './Settings';
 import Design from "./design/Design";
-import QR from "./qr/QR";
+import QRPage from "./qr/QRPage";
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -76,7 +66,8 @@ export default (props) => {
                         <ListPage type="menu" icon={<MenuBook/>} items={[{primary: 'Menu1', secondary: '20 dishes'}]}/>
                     </Container>}/>
                 <Route exact strict path={"/" + props.name + "/design"} render={() => <Design/>}/>
-                <Route exact strict path={"/" + props.name + "/qr"} render={() => <QR id={props.id} name={props.name}/>}/>
+                <Route exact strict path={"/" + props.name + "/qr"}
+                       render={() => <QRPage id={props.id} name={props.name}/>}/>
                 <Route exact strict path={"/" + props.name + "/settings"} render={() => <SettingsPage id={props.id}/>}/>
                 <Route path="*" render={() => <Redirect to={"/" + props.name + "/menu"}/>}/>
             </Switch>
