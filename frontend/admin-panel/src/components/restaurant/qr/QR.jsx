@@ -84,7 +84,12 @@ export default (props) => {
                                     </Typography>
                                 </Grid>
                                 <Grid item>
-                                    <Button variant="primary">
+                                    <Button variant="primary" onClick={() => {
+                                        let tempLink = document.createElement('a');
+                                        tempLink.href = image;
+                                        tempLink.setAttribute('download', 'qr.png');
+                                        tempLink.click();
+                                    }}>
                                         Download
                                     </Button>
                                 </Grid>
