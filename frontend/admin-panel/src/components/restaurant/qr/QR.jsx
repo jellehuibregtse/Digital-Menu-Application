@@ -41,7 +41,7 @@ export default (props) => {
         await fetch(process.env.REACT_APP_GATEWAY_URL + "/api/qr-service/qr-codes",
             {
                 method: 'POST',
-                body: process.env.REACT_APP_RESTAURANT_URL + "/qr?restaurantId=" + props.id + "&tableId=1",
+                body: process.env.REACT_APP_RESTAURANT_URL + "/qr?restaurantId=" + props.id + "&tableId=" + props.table,
                 headers: {
                     "Content-Type": "text/plain",
                     "accept": "*/*",
@@ -74,10 +74,10 @@ export default (props) => {
                                             <strong>{props.name}</strong>
                                         </Typography>
                                         <Typography variant="body2" gutterBottom>
-                                            Table 1
+                                            Table {props.table}
                                         </Typography>
                                         <Typography variant="body2" color="textSecondary">
-                                            {process.env.REACT_APP_RESTAURANT_URL + "/qr?restaurantId=" + props.id + "&tableId=1"}
+                                            {process.env.REACT_APP_RESTAURANT_URL + "/qr?restaurantId=" + props.id + "&tableId=" + props.table}
                                         </Typography>
                                     </Grid>
 
