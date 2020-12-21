@@ -74,7 +74,7 @@ export default (props) => {
                      <MenuList restaurantId={props.id} restaurantName={props.name} type="menu" menus={[]}/>
                 }/>
                
-                <Route exact strict path={"/" + props.name + "/newmenu"} render={() => <NewMenu restaurantName={props.name}/>}/>
+                <Route exact strict path={"/" + props.name + "/newmenu"} render={() => <NewMenu restaurantId={props.id} restaurantName={props.name}/>}/>
                 <Route exact strict path={"/" + props.name + "/design"} render={() => <Design/>}/>
                 <Route exact strict path={"/" + props.name + "/settings"} render={() => <SettingsPage id={props.id}/>}/>
                 <Route exact strict path={"/" + props.name + "/newitem/:id"} render={() => <NewMenuItem id={props.id}/>}/>

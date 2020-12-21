@@ -11,13 +11,14 @@ import { Container, makeStyles, Typography } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
 import { useHistory } from "react-router-dom";
 import MessagingService from '../../../services/MessagingService';
+import EditMenuDialog from './EditMenuDialog';
 const useStyles = makeStyles((theme) => ({
     content: {
         marginTop: theme.spacing(2)
     },
     head: {
         display: 'flex',
-        flex:1,
+        flex: 1,
         justifyContent: "space-between",
         padding: theme.spacing(1, 0)
     },
@@ -54,45 +55,66 @@ const useStyles = makeStyles((theme) => ({
     },
     listItem: {
         padding: theme.spacing(1, 2)
+    },
+    btn: {
+        height: "50%",
+        marginTop: "2%"
     }
 }))
+
+const getMenusByRestaurantId = (id) => {
+    return MessagingService.fetchHandler("GET", `/api/menu-service/menus/byRestaurantId/${id}`)
+}
 
 const Item = (props) => {
     const classes = useStyles();
     //const history = useHistory();
 
+    const editClickHandler =(e)=>{
+        props.openDialog(props.menu.id)
+    }
     return (
-        <>
-            <ListItem onClick={(e)=>window.location.href=`./menu/${props.menu.id}`} className={classes.head} button>
+        <div style={{ display: "flex", flex: 1 }}>
+            <ListItem key={props.index} onClick={(e) => window.location.href = `./menu/${props.menu.id}`} className={classes.head} button>
                 <ListItemAvatar>
                     <Avatar>
                         <MenuBookIcon />
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={props.menu.name} secondary={"Items: " + props.menu.items.length} />
+
             </ListItem>
-            {props.divider ? <Divider /> : null}
-        </>
+            <Button key={props.index + 1 * 17}
+                color="primary" className={classes.btn} variant="contained"
+                onClick={editClickHandler}>
+                Edit Menu</Button>
+        </div>
     )
 }
-const getMenusByRestaurantId = (id) => {
-    return MessagingService.fetchHandler("GET", `/api/menu-service/menus/byRestaurantId/${id}`)
-}
+
 export default (props) => {
     const classes = useStyles();
 
     const [menus, setMenus] = useState([]);
+    const [input, setInput] = useState("")
+    const [isOpen,setIsOpen] = useState(false)
+    const [editedMenuId,setEditedMenuId] = useState(-1);
 
-
+    const openDialog = (menuId) => {
+        setIsOpen(true)
+        setEditedMenuId(menuId)
+    }
+    const closeDialog = () => {
+        setIsOpen(false)
+        
+    }
     useEffect(() => {
-        
-        getMenusByRestaurantId(props.restaurantId).then(r=>setMenus(r))
-        
+        getMenusByRestaurantId(props.restaurantId).then(r => r.length!==0?setMenus(r):setMenus([]))
     }, [])
 
-    console.log(menus)
+    console.log(editedMenuId)
+    let items = menus.filter(item => item.name.toLowerCase().includes(input.toLowerCase()));
     return (
-
         <Container className={classes.content}>
             <div>
                 <div className={classes.head}>
@@ -107,6 +129,7 @@ export default (props) => {
                             variant="outlined"
                             placeholder={"Find a " + props.type + "…"}
                             inputProps={{ 'aria-label': 'search' }}
+                            onChange={(e) => setInput(e.target.value)}
                         />
                     </div>
 
@@ -119,8 +142,9 @@ export default (props) => {
                 </div>
             </div>
             <Typography variant="h5">Menus</Typography>
+            <EditMenuDialog closeDialog={closeDialog} isOpen={isOpen} menuId = {editedMenuId}/>
             <List>
-                {menus.length !== 0 ? menus.map(item => <Item menu={item} />) : "This restaurant has no menu created yet."}
+                {items.length !== 0 ? items.map((item, index) => <Item  openDialog={openDialog} index={index} menu={item} />) : "This restaurant has no such menu created yet."}
             </List>
         </Container>
     )

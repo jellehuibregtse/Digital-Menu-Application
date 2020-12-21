@@ -13,6 +13,8 @@ import BallotIcon from '@material-ui/icons/Ballot';
 import { useHistory } from "react-router-dom";
 import MessagingService from '../../../services/MessagingService';
 import { useParams } from 'react-router-dom';
+import MenuItemDialog from './MenuItemDialog'
+
 const useStyles = makeStyles((theme) => ({
     content: {
         marginTop: theme.spacing(2)
@@ -84,8 +86,12 @@ const Item = (props) => {
                 <div className={classes.listItem}>
                     <ListItemText className={classes.textField} primary={props.item.name} secondary={"Price: €" + props.item.price} />
                     <ListItemText className={classes.textField} primary={"Category: " + props.item.category.name} secondary={"Ingredients: " + props.item.ingredients.map(item => item.name).join(",")} />
-                    <Button className={classes.button} variant="contained" color="primary">Edit</Button>
-                    <Button className={classes.button} variant="contained" color="secondary">Delete</Button>
+                    <Button
+                    onClick={(e)=>props.openDialog(props.item.id,"EDIT")}
+                    className={classes.button} variant="contained" color="primary">Edit</Button>
+                    <Button 
+                    onClick={(e)=>props.openDialog(props.item.id,"DELETE")}
+                    className={classes.button} variant="contained" color="secondary">Delete</Button>
                 </div>
             </ListItem>
             <Divider />
@@ -97,11 +103,26 @@ const getMenuById = (id) => {
 }
 const DetailsList = (props) => {
     let { id } = useParams();
-    const [menu, setMenu] = useState(null)
-    const [input,setInput]= useState("")
     const classes = useStyles();
 
-    useEffect(() => { getMenuById(id).then(r => setMenu(r)) }, [])
+    const [menu, setMenu] = useState(null)
+    const [input,setInput]= useState("")
+    const [isOpen,setIsOpen] = useState(false)
+    const [itemId,setItemId] = useState(-1);
+    const [type,setType] = useState("");
+
+    const openDialog = (id,type) => {
+        setIsOpen(true)
+        setItemId(id)
+        setType(type)
+    }
+
+    const closeDialog = () => {
+        setIsOpen(false)
+        setItemId(-1)
+    }
+
+    useEffect(() => { getMenuById(id).then(r => setMenu(r)) }, [props])
     console.log(menu)
 
     const onInputChangeHandler = (e)=>{
@@ -140,8 +161,14 @@ const DetailsList = (props) => {
                     </div>
                 </div>
                 <Typography variant="h5">{menu.name}</Typography>
+                <MenuItemDialog 
+                closeDialog={closeDialog} 
+                isOpen={isOpen} 
+                type={type}
+                itemId={itemId}
+                categories={menu.categories}/>
                 <List>
-                    {items !== null ? items.map(item => <Item item={item} />) : "This restaurant has no menu created yet."}
+                    {items !== null ? items.map(item => <Item openDialog={openDialog} item={item} />) : "This restaurant has no menu created yet."}
                 </List>
             </Container>);
     }

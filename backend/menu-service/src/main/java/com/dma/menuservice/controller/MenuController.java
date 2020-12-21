@@ -1,7 +1,9 @@
 package com.dma.menuservice.controller;
 
 
+import com.dma.menuservice.model.Category;
 import com.dma.menuservice.model.Menu;
+import com.dma.menuservice.model.MenuItem;
 import com.dma.menuservice.repository.MenuRepository;
 import com.dma.menuservice.service.RestaurantService;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -71,6 +73,14 @@ public class MenuController {
      */
     @PostMapping
     public ResponseEntity<String> createMenu(@RequestBody Menu menu) {
+
+        List<Category> categories = new ArrayList<>();
+        if(menu.getCategories()!=null) {
+            for (var c : menu.getCategories()){
+                categories.add(new Category(c.getName()));
+            }
+        }
+
         repository.save(menu);
 
         return ResponseEntity.ok(String.format("Menu with name: %s has been successfully created!", menu.getName()));
@@ -110,4 +120,22 @@ public class MenuController {
         return ResponseEntity.ok(String.format("Restaurant with id: %d has been successfully deleted!", id));
     }
 
+
+    @GetMapping("/menuitem/{id}")
+    public ResponseEntity<?> getMenuItem(@PathVariable long id) {
+        MenuItem result = repository.findMenuItemByItemId(id).orElse(null);
+
+
+        return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/addMenuItem/{menuId}")
+    public ResponseEntity<?> addMenuItemToMenu(@RequestBody MenuItem item,@PathVariable long menuId) {
+       Menu menu =repository.findById(menuId).orElse(null);
+       var items = menu.getItems();
+       items.add(item);
+
+       repository.save(menu);
+        return ResponseEntity.ok("Sucessfully updated");
+    }
 }

@@ -5,6 +5,9 @@ import { Button } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import MessagingService from '../../../services/MessagingService';
 const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
@@ -20,79 +23,88 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(2),
     },
 }));
-
+const getMenuCategories = (id)=>{
+    return MessagingService.fetchHandler("GET", `/api/menu-service/menus/${id}`)
+}
+const addMenuItem=(id,item)=>{
+    return MessagingService.fetchHandler("PUT",`/api/menu-service/menus/addMenuItem/${id}`,item)
+}
 const NewMenuItem = (props) => {
     const classes = useStyles();
 
-    const [item,setItem] = useState({});
+    const { id } = useParams();
+    const [item, setItem] = useState({});
+
+    const [menuCategories,setMenuCategories] = useState([]);
+    const [category, setCategory] = useState("");
+
+    const handleChange = (event) => {
+        setCategory(event.target.value);
+    };
+   
+
+    
+    
+    useEffect(() => {
+        getMenuCategories(id).then(r=>setMenuCategories(r.categories))
+    }, id)
 
 
-    // const [category, setCategory] = useState("");
-    // const handleChange = (event) => {
-    //     setCategory(event.target.value);
-    // };
-    // console.log(category)
-
-    let menu =props.menu
-    console.log(menu);
-    //console.log(item)
-   // console.log(props.menu)
+    console.log(category)
+    if(menuCategories===[]){
+        return <h2>Loading...</h2>
+    }else{
+        
     return (
         <form className={classes.root} noValidate autoComplete="off">
-            <TextField onChange={(e)=>{
-                let i= item;
+            <TextField onChange={(e) => {
+                let i = item;
                 i.name = e.target.value;
                 setItem(i);
                 //console.log(item)
             }} id="outlined-basic" label="Name" variant="outlined" />
-            <TextField onChange={(e)=>{
-                let i= item;
+            <TextField onChange={(e) => {
+                let i = item;
                 i.price = e.target.value
                 setItem(i);
                 //console.log(item)
             }}
-             id="outlined-basic" label="Price" variant="outlined" />
-            {/* <TextField  onChange={(e)=>{
-                let i= item;
-                i.category = e.target.value
-                setItem(i);
-                //console.log(item)
-            }}
-             id="outlined-basic" label="Category" variant="outlined" /> */}
-            {/* <FormControl className={classes.formControl}>
+                id="outlined-basic" label="Price" variant="outlined" />
+             <FormControl className={classes.formControl}>
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={"Select category"}
+                    value={category}
                     onChange={(e)=>{
                         let i= item;
-                i.category = e.target.value
-                setItem(i)
+                i.category = menuCategories.find(item=>item.name===e.target.value)
+
+                setCategory(e.target.value)
                     }}
                 >
-                    {menu.hasOwnProperty("categories")?menu.categories.map((item,index)=><MenuItem key={index} value={item}>{item}</MenuItem>):<MenuItem  value={"No categories"}>No categories</MenuItem>} 
+                    {menuCategories.map((item,index)=><MenuItem key={index} value={item.name}>{item.name}</MenuItem>)} 
                 </Select>
-            </FormControl> */}
-            <TextField 
-                 onChange={(e)=>{
-                let i= item;
-                i.img = URL.createObjectURL(e.target.files[0])
-                setItem(i);
-                //console.log(item)
-            }}
-             type="file" />
-            <Button 
-            onClick={(e)=>{
-                e.preventDefault()
-                menu.items.push(item)
-                sessionStorage.setItem("menu",JSON.stringify(menu))
-                props.refreshMenu(menu)
-               }}
-            type="submit"
-                    variant="contained"
-                    color="primary">Save</Button>
+            </FormControl> 
+            <TextField
+                onChange={(e) => {
+                    let i = item;
+                    i.img = URL.createObjectURL(e.target.files[0])
+                    setItem(i);
+                    //console.log(item)
+                }}
+                type="file" />
+            <Button
+                onClick={(e) => {
+                    e.preventDefault()
+                   
+                    addMenuItem(id,item)
+                }}
+                type="submit"
+                variant="contained"
+                color="primary">Save</Button>
         </form>
     );
+            }
 }
 
 

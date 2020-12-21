@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from "@material-ui/core/styles";
+import MessagingService from '../../../services/MessagingService';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -12,18 +13,33 @@ const useStyles = makeStyles((theme) => ({
         color: "red"
     }
 }))
+const createNewMenu = (menu) => {
+    return MessagingService.fetchHandler("POST", "/api/menu-service/menus", menu)
+}
+
 export default (props) => {
-    // const history = useHistory();
+    const history = useHistory();
+
     const classes = useStyles();
-    const [menu, setMenu] = useState({ categories: [], items: [], name: "" })
+
+    const [menu, setMenu] = useState({ categories: [], items: [], name: "", restaurantId: -1 })
+
     const [error, setError] = useState("");
+
+    useEffect(() => {
+        let m = menu;
+        m.restaurantId = props.restaurantId;
+        setMenu(m);
+    }, [props.id])
+
     const onClickHandler = (e) => {
-        if (menu.name === "" || menu.categories.length === 0) {
+        (menu.name === "" || menu.categories.length === 0) ?
             setError("Set menu name and category list")
-        } else {
-            console.log(menu)
-        }
+            : createNewMenu(menu).then(r => {
+                history.goBack()
+            });
     }
+
     return (
         <>
             <Grid container justify="space-around">
@@ -48,17 +64,20 @@ export default (props) => {
                     variant="outlined"
                     margin="normal"
                     required
-                    label="category1,category2"
+                    label="Menu categories"
                     helperText="type your category names separated by comma"
                     autoFocus
                     onChange={(e) => {
                         let categories = e.target.value.split(",")
+                        let c = categories.map(item => {
+                            return { id: 0, name: item }
+                        })
                         let m = menu;
-                        m.categories = categories;
+                        m.categories = c;
                         setMenu(m)
                     }}
                 />
-                <Button onClick={onClickHandler} className={classes.button} type="submit" variant="outlined" color="primary">
+                <Button onClick={onClickHandler} className={classes.button} type="submit" variant="contained" color="primary">
                     Create menu
                 </Button>
             </Grid>
