@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.ResourceAccessException;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -33,6 +34,15 @@ public class InventoryController {
         repository.save(inv);
         return ResponseEntity.ok(String.format("Inventory with name : %s created!",inv.getName()));
     }
+
+//    @PostMapping
+//    public ResponseEntity<String> createMenu(@RequestBody long id, long restaurantId, String name)
+//    {
+//        List<InventoryItem> empty = new LinkedList<>();
+//        Inventory placeholder = new Inventory(id,restaurantId,name,empty);
+//        repository.save(placeholder);
+//        return ResponseEntity.ok(String.format("Inventory with name : %s created!",placeholder.getName()));
+//    }
 
     
     @PutMapping
