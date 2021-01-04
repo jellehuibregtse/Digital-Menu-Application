@@ -8,6 +8,11 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+/**
+ * The entity class for images.
+ *
+ * @author Jelle Huibregtse
+ */
 @Entity
 @Getter
 @Setter

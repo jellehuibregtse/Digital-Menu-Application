@@ -1,5 +1,10 @@
 package com.dma.menuservice.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.lang.reflect.Array;
@@ -11,6 +16,10 @@ import java.util.*;
  * @author Jelle Huibregtse
  */
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Menu {
 
     @Id
@@ -29,53 +38,9 @@ public class Menu {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Category> categories;
 
-
-    public Menu() {}
-
     public Menu(@NotNull long restaurantId, @NotNull String name, List<MenuItem> items) {
         this.restaurantId = restaurantId;
         this.name = name;
         this.items = items;
     }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public long getRestaurantId() {
-        return restaurantId;
-    }
-
-    public void setRestaurantId(long restaurantId) {
-        this.restaurantId = restaurantId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<MenuItem> getItems() {
-        return items;
-    }
-
-    public void setItems(List<MenuItem> items) {
-        this.items = items;
-    }
-
-    public List<Category> getCategories() {
-        return this.categories;
-    }
-
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
-
 }
