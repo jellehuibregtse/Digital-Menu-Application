@@ -20,17 +20,7 @@ public class InventoryController {
         this.repository = repository;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Inventory>> getAllInventories()
-    {
-        List<Inventory> result = new ArrayList<>();
-        repository.findAll().forEach(result::add);
-
-        return ResponseEntity.ok(result);
-    }
-
-
-    @GetMapping
+    @GetMapping("{id}")
     public ResponseEntity<Inventory> getInventory(@PathVariable long id)
     {
         Inventory result = repository.findById(id).orElseThrow(() -> new ResourceAccessException("Not found."));
@@ -44,7 +34,9 @@ public class InventoryController {
         return ResponseEntity.ok(String.format("Inventory with name : %s created!",inv.getName()));
     }
 
-    @PutMapping ResponseEntity<String> updateInventory(@RequestBody Inventory inv, @PathVariable long id)
+    
+    @PutMapping
+    public ResponseEntity<String> updateInventory(@RequestBody Inventory inv, @PathVariable long id)
     {
         Inventory updatedInv =  repository.findById(id).orElseThrow(() -> new ResourceAccessException("Not found."));
         updatedInv.setRestaurantId(inv.getRestaurantId());
@@ -55,7 +47,8 @@ public class InventoryController {
 
     }
 
-    @DeleteMapping ResponseEntity<Inventory> deleteInventory(@PathVariable long id)
+    @DeleteMapping
+    public ResponseEntity<Inventory> deleteInventory(@PathVariable long id)
     {
         Inventory deletedInv = repository.findById(id).orElseThrow(() -> new ResourceAccessException("Not found."));
         repository.delete(deletedInv);
