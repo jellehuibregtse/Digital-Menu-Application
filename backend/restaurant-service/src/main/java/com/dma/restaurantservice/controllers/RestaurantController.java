@@ -93,6 +93,7 @@ public class RestaurantController {
 
         if(restaurant.getUserId() == id) {
             restaurant.setName(updatedRestaurant.getName());
+            restaurant.setDisplayName(updatedRestaurant.getDisplayName());
             restaurant.getStyling().setColorScheme(updatedRestaurant.getStyling().getColorScheme());
             restaurant.getStyling().setLogoURL(updatedRestaurant.getStyling().getLogoURL());
             restaurant.setMenuIDs(updatedRestaurant.getMenuIDs());

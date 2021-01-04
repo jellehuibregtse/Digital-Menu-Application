@@ -8,6 +8,7 @@ import Select from '@material-ui/core/Select';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import MessagingService from '../../../services/MessagingService';
+import {useHistory} from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
@@ -31,6 +32,7 @@ const addMenuItem=(id,item)=>{
 }
 const NewMenuItem = (props) => {
     const classes = useStyles();
+    const history = useHistory();
 
     const { id } = useParams();
     const [item, setItem] = useState({});
@@ -98,6 +100,7 @@ const NewMenuItem = (props) => {
                     e.preventDefault()
                    
                     addMenuItem(id,item)
+                    history.goBack();
                 }}
                 type="submit"
                 variant="contained"
