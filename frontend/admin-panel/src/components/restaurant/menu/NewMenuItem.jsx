@@ -28,6 +28,7 @@ const getMenuCategories = (id)=>{
     return MessagingService.fetchHandler("GET", `/api/menu-service/menus/${id}`)
 }
 const addMenuItem=(id,item)=>{
+    console.log(item)
     return MessagingService.fetchHandler("PUT",`/api/menu-service/menus/addMenuItem/${id}`,item)
 }
 const NewMenuItem = (props) => {

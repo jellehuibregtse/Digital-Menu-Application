@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -13,35 +13,49 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MessagingService from '../../../services/MessagingService'
+import { useParams } from 'react-router-dom';
 
 const getItemById = (id) => {
     return MessagingService.fetchHandler("GET", `/api/menu-service/menus/menuitem/${id}`)
 }
+
+const updateMenuItem = (menuId, item) => {
+console.log(item)
+    return MessagingService.fetchHandler("PUT", `/api/menu-service/menus/updateMenuItem/${menuId}`, item);
+
+}
+const deleteMenuItem = (menuId, item) => {
+
+    return MessagingService.fetchHandler("PUT", `/api/menu-service/menus/deleteMenuItem/${menuId}`, item);
+
+}
 const useStyles = makeStyles((theme) => ({
     formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
+        margin: theme.spacing(1),
+        minWidth: 120,
     },
     selectEmpty: {
-      marginTop: theme.spacing(2),
+        marginTop: theme.spacing(2),
     },
-  }));
+}));
 
 export default function MenuItemDialog(props) {
     const classes = useStyles();
 
-    const [open, setOpen] = useState(props.isOpen);
-    const [menuItem,setMenuItem] = useState({})
-    const [editedItem,setEditedItem] = useState({});
+    const { id } = useParams();
 
-    const [category,setCategory] = useState("")
+    const [open, setOpen] = useState(props.isOpen);
+    const [menuItem, setMenuItem] = useState({})
+    const [editedItem, setEditedItem] = useState({});
+
+    const [category, setCategory] = useState("")
     useEffect(() => {
         props.itemId !== -1 ? getItemById(props.itemId).then(r => setMenuItem(r)) : setMenuItem({})
-   }, [props.itemId])
+    }, [props.itemId])
 
-   useEffect(() => {
-       props.isOpen ? setOpen(true) : setOpen(false)
-   }, [props.isOpen])
+    useEffect(() => {
+        props.isOpen ? setOpen(true) : setOpen(false)
+    }, [props.isOpen])
 
 
     const handleClose = () => {
@@ -50,19 +64,24 @@ export default function MenuItemDialog(props) {
         setCategory("")
     };
 
-    const handleChange = (e)=>{
+    const handleChange = (e) => {
         setCategory(e.target.value)
     }
-    
-    
-   const saveChanges = (e)=>{
-       let i = editedItem;
-       i.category = category===""?menuItem.category:props.categories.find(k=>k.name===category)
-       
-       console.log(i)
-   }
-    
-    if (menuItem.hasOwnProperty("name")&& props.type==="EDIT") {
+
+    const saveChanges =  (e) => {
+        let i = menuItem;
+        i.category =  props.categories.find(k => k.name === category)
+        console.log(i)
+        updateMenuItem(id, i)
+            .then(r => window.location.href = "./");
+    }
+    const onDeleteClick = (e) => {
+
+        deleteMenuItem(id, menuItem)
+            .then(r => window.location.reload());
+    }
+    console.log(props)
+    if (menuItem.hasOwnProperty("name") && props.type === "EDIT") {
 
         return (
             <div>
@@ -90,20 +109,20 @@ export default function MenuItemDialog(props) {
                         />
                         <TextField
                             id="picture" size="small" variant="outlined"
-                            margin="normal" type="file" required autoFocus/>
+                            margin="normal" type="file" required autoFocus />
 
                         <FormControl className={classes.formControl}>
-        <InputLabel id="demo-simple-select-label">Category</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={category}
-          onChange={handleChange}
-        >
-            {props.categories.map(item=><MenuItem value={item.name}>{item.name}</MenuItem>)}
-          
-        </Select>
-      </FormControl>
+                            <InputLabel id="demo-simple-select-label">Category</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={category}
+                                onChange={handleChange}
+                            >
+                                {props.categories.map(item => <MenuItem value={item.name}>{item.name}</MenuItem>)}
+
+                            </Select>
+                        </FormControl>
                         <TextField
                             id="price"
                             size="small"
@@ -132,7 +151,7 @@ export default function MenuItemDialog(props) {
                 </Dialog>
             </div>
         );
-    } else if (menuItem.hasOwnProperty("name")&& props.type==="DELETE") {
+    } else if (menuItem.hasOwnProperty("name") && props.type === "DELETE") {
         console.log(props)
         return (
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -141,8 +160,8 @@ export default function MenuItemDialog(props) {
                     <Button onClick={handleClose} variant="contained" color="primary">
                         Exit
                     </Button>
-                    <Button onClick={(e) => props.open} variant="contained" color="secondary">
-                       Delete
+                    <Button onClick={onDeleteClick} variant="contained" color="secondary">
+                        Delete
                      </Button>
                 </DialogActions>
             </Dialog>

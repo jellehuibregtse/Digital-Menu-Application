@@ -100,6 +100,7 @@ public class MenuController {
         updatedMenu.setRestaurantId(menu.getRestaurantId());
         updatedMenu.setName(menu.getName());
         updatedMenu.setItems(menu.getItems());
+        updatedMenu.setCategories(menu.getCategories());
         repository.save(updatedMenu);
 
         return ResponseEntity.ok(String.format("Restaurant with id: %d has been successfully updated!", menu.getId()));
@@ -121,6 +122,12 @@ public class MenuController {
     }
 
 
+    /**
+     * Get menu item by ID.
+     *
+     * @param id of the menu.
+     * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
+     */
     @GetMapping("/menuitem/{id}")
     public ResponseEntity<?> getMenuItem(@PathVariable long id) {
         MenuItem result = repository.findMenuItemByItemId(id).orElse(null);
@@ -129,13 +136,88 @@ public class MenuController {
         return ResponseEntity.ok(result);
     }
 
+    /**
+     * Add menu item to ID.
+     *
+     * @param menuId - id of the menu.
+     * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
+     */
     @PutMapping("/addMenuItem/{menuId}")
     public ResponseEntity<?> addMenuItemToMenu(@RequestBody MenuItem item,@PathVariable long menuId) {
        Menu menu =repository.findById(menuId).orElse(null);
        var items = menu.getItems();
-       items.add(item);
 
+       Category category = menu.getCategories()
+               .stream().filter(c->c.getId()==item.getCategory().getId())
+               .findFirst().get();
+
+       MenuItem newItem = new MenuItem();
+       newItem.setName(item.getName());
+       newItem.setPrice(item.getPrice());
+       newItem.setCategory(category);
+
+       items.add(newItem);
        repository.save(menu);
         return ResponseEntity.ok("Sucessfully updated");
+    }
+
+    /**
+     * Add menu item to ID.
+     *
+     * @param menuId - id of the menu.
+     * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
+     */
+    @PutMapping("/updateMenuItem/{menuId}")
+    public ResponseEntity<?> updateMenuItem(@RequestBody MenuItem item,@PathVariable long menuId) {
+
+       Menu menu = repository.findById(menuId).get();
+       MenuItem selectedItem = menu.getItems()
+               .stream()
+               .filter(i ->i.getId()==item.getId())
+               .findFirst()
+               .get();
+
+       int index = menu.getItems().indexOf(selectedItem);
+
+        long updatedCategoryId = item.getCategory().getId();
+       Category updatedCategory  = menu.getCategories()
+               .stream()
+               .filter(c->c.getId()==updatedCategoryId)
+               .findFirst()
+               .get();
+
+       selectedItem.setPrice(item.getPrice());
+       selectedItem.setCategory(updatedCategory);
+       selectedItem.setName(item.getName());
+       selectedItem.setIngredients(item.getIngredients());
+
+       menu.getItems().set(index,selectedItem);
+       repository.save(menu);
+
+       return ResponseEntity.ok("Sucessfully updated");
+    }
+
+    /**
+     * Delete item in menu.
+     *
+     * @param menuId - id of the menu.
+     * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.
+     */
+    @PutMapping("/deleteMenuItem/{menuId}")
+    public ResponseEntity<?> deleteMenuItem(@RequestBody MenuItem item,@PathVariable long menuId) {
+
+        Menu menu = repository.findById(menuId).get();
+        MenuItem selectedItem = menu.getItems()
+                .stream()
+                .filter(i ->i.getId()==item.getId())
+                .findFirst()
+                .get();
+
+        int index = menu.getItems().indexOf(selectedItem);
+
+        menu.getItems().remove(index);
+        repository.save(menu);
+
+        return ResponseEntity.ok("Sucessfully deleted");
     }
 }

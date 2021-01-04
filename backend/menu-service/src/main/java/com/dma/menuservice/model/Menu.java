@@ -26,7 +26,7 @@ public class Menu {
     @OneToMany(cascade = CascadeType.ALL)
     private List<MenuItem> items;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.MERGE)
     private List<Category> categories;
 
 

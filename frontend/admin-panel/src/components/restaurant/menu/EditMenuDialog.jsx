@@ -11,6 +11,9 @@ import MessagingService from '../../../services/MessagingService'
 const getMenuById = (id) => {
     return MessagingService.fetchHandler("GET", `/api/menu-service/menus/${id}`)
 }
+const updateMenu = (menu)=>{
+    return MessagingService.fetchHandler("PUT", `/api/menu-service/menus/${menu.id}`,menu).then(r=>window.location.href="./")
+}
 export default function EditMenuDialog(props) {
     const [open, setOpen] = useState(props.isOpen);
     const [menu, setMenu] = useState({})
@@ -20,7 +23,7 @@ export default function EditMenuDialog(props) {
         props.closeDialog();
     };
 
-    console.log(props)
+   
 
     useEffect(() => {
         props.menuId !== -1 ? getMenuById(props.menuId).then(r => setMenu(r)) : setMenu({})
@@ -48,7 +51,7 @@ export default function EditMenuDialog(props) {
                             margin="normal"
                             required
                             helperText="type your menu name"
-                            placeholder={menu.name}
+                            defaultValue={menu.name}
                             autoFocus
                             onChange={(e) => {
                                 let name = e.target.value;
@@ -63,8 +66,7 @@ export default function EditMenuDialog(props) {
                             variant="outlined"
                             margin="normal"
                             required
-                            placeholder={menu.categories.map(item=>item.name).join(",")}
-                            
+                            defaultValue={menu.categories.map(item=>item.name).join(",")}
                             helperText="type your category names separated by comma"
                             autoFocus
                             onChange={(e) => {
@@ -82,7 +84,7 @@ export default function EditMenuDialog(props) {
                         <Button onClick={handleClose} variant="contained" color="secondary">
                             Exit
           </Button>
-                        <Button onClick={(e)=>console.log(menu)} variant="contained" color="primary">
+                        <Button onClick={(e)=>updateMenu(menu)} variant="contained" color="primary">
                             Save Changes
           </Button>
                     </DialogActions>
