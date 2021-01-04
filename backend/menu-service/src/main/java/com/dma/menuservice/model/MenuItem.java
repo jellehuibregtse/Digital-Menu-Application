@@ -24,6 +24,9 @@ public class MenuItem {
     @OneToOne(cascade = CascadeType.ALL)
     private Category category;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private MenuImage photo;
+
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Ingredient> ingredients;
     
