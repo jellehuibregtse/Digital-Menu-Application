@@ -7,11 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.lang.reflect.Array;
-import java.util.*;
 
 /**
- * The menu entity.
+ * The entity class for images.
  *
  * @author Jelle Huibregtse
  */
@@ -20,27 +18,24 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Menu {
+public class MenuImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @NotNull
-    private long restaurantId;
-
-    @NotNull
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<MenuItem> items;
+    @NotNull
+    private String type;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Category> categories;
+    @Lob
+    private byte[] imageBytes;
 
-    public Menu(@NotNull long restaurantId, @NotNull String name, List<MenuItem> items) {
-        this.restaurantId = restaurantId;
+    public MenuImage(@NotNull String name, @NotNull String type, byte[] image) {
         this.name = name;
-        this.items = items;
+        this.type = type;
+        this.imageBytes = image;
     }
 }
