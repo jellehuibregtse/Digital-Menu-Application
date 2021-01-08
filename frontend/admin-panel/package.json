@@ -2,7 +2,6 @@
   "name": "admin-panel",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://dma-gateway.radiationservers.com/",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
@@ -10,6 +9,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "dotenv": "^8.2.0",
+    "jquery": "^3.5.1",
     "react": "^16.13.1",
     "react-color": "^2.19.3",
     "react-dom": "^16.13.1",

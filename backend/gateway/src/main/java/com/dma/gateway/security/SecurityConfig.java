@@ -1,11 +1,15 @@
 package com.dma.gateway.security;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,7 +30,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http.cors()
+            .and()
+            .csrf()
+            .disable()
             // We want to use a stateless session, since we won't be storing the user's state.
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -46,7 +53,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/actuator/health/**", "/actuator/routes/**")
             .permitAll()
             // Allow certain methods for customer.
-            .antMatchers(HttpMethod.GET, "/token", "/api/restaurant-service/restaurants/**", "/api/menu-service/menus/**", "/api/auth-service/users/**")
+            .antMatchers(HttpMethod.GET,
+                         "/token",
+                         "/api/restaurant-service/restaurants/**",
+                         "/api/menu-service/menus/**",
+                         "/api/auth-service/users/**")
             .permitAll()
             .antMatchers(HttpMethod.POST, "/api/order-service/**", "/api/auth-service/users/**")
             .permitAll()
@@ -55,5 +66,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // Any other request must be authenticated.
             .anyRequest()
             .authenticated();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        final CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addExposedHeader("Authorization");
+        config.addAllowedMethod("OPTIONS");
+        config.addAllowedMethod("HEAD");
+        config.addAllowedMethod("GET");
+        config.addAllowedMethod("PUT");
+        config.addAllowedMethod("POST");
+        config.addAllowedMethod("DELETE");
+        config.addAllowedMethod("PATCH");
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }

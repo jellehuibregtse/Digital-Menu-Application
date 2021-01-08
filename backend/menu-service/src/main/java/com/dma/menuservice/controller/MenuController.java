@@ -54,7 +54,7 @@ public class MenuController {
     }
 
     /**
-     * Get a single men by ID.
+     * Get a single menu by ID.
      *
      * @param id of the menu.
      * @return <code>ResponseEntity</code> with a menu or message and HTTP status OK or BadRequest.

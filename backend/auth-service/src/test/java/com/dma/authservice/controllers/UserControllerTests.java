@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Arrays;
 
@@ -26,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class UserControllerTests {
 
-    String bearer = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWQiOjEsImlhdCI6MTYwNzM0NjcyNiwiZXhwIjoxNjA4MTU5NjAwfQ.I32KK3WYRVwtP-8QULfyUfvPnB8kKwo9-CV4dafnsA-YUFnUZi4u_H8OtZYX3IJ9K6a0WyzDeBM7ZBZyLJfqfA";
+    String bearer = null;
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,6 +41,21 @@ public class UserControllerTests {
         var userOne = new ApplicationUser(0, "test@test.com", "$2a$10$OQfyIap0nR/BKKY5eRjSs.YLrJI6ObwZZb1c0U0ukvqFAlLun7ld6");
 
         saveAll(Arrays.asList(userOne));
+    }
+
+    @BeforeEach
+    public void generateHeader() throws Exception{
+        JSONObject applicationUser = new JSONObject();
+        applicationUser.put("email", "test@test.com");
+        applicationUser.put("password", "ijeXpkxR5HS43Kt");
+
+        MvcResult mvcResult =  mockMvc.perform(post("/auth").contentType(MediaType.APPLICATION_JSON).content(applicationUser.toString()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(header().exists("Authorization"))
+                .andReturn();
+
+        bearer = mvcResult.getResponse().getHeader("Authorization");
     }
 
     @Test
@@ -106,6 +123,8 @@ public class UserControllerTests {
 
     @Test
     public void updateUser_returnStatus200_andMessage() throws Exception {
+        if(bearer == null)
+            throw new Exception("Bearer is not available");
         JSONObject applicationUser = new JSONObject();
         applicationUser.put("email", "test@test2.com");
         applicationUser.put("password", "test");
@@ -129,6 +148,8 @@ public class UserControllerTests {
 
     @Test
     public void deleteUser_returnStatus200_andMessage() throws Exception {
+        if(bearer == null)
+            throw new Exception("Bearer is not available");
 
         this.mockMvc.perform(delete("/users").header("Authorization", bearer))
                 .andDo(print())
