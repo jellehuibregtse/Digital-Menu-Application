@@ -30,7 +30,7 @@ public class MenuItem {
 
     private double price;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Category category;
 
     @OneToOne(cascade = CascadeType.ALL)

@@ -6,6 +6,7 @@ import NavBar from "./components/NavBar";
 import Account from "./components/account/Account";
 import RestaurantList from "./components/restaurant/RestaurantList";
 import New from "./components/restaurant/New";
+import NewMenu from "./components/restaurant/menu/NewMenu";
 import MessagingService from "./services/MessagingService";
 import RestaurantPage from "./components/restaurant/RestaurantPage";
 import Settings from "./components/restaurant/Settings";
@@ -63,11 +64,10 @@ const App = () => {
                                        render={() => <RestaurantList restaurants={restaurants}/>}/>
 
                                 <Route exact strict path="/new" render={() => <New/>}/>
-
                                 <Route strict path={restaurants.map(restaurant => "/" + restaurant.name)}
                                        render={(props) => {
                                            const restaurant = restaurants.find(restaurant => restaurant.name === props.history.location.pathname.substring(1).split('/')[0]);
-                                           return <RestaurantPage name={restaurant.name} displayName={restaurant.displayName} id={restaurant.id}/>}}/>
+                                           return <RestaurantPage id={restaurant.id} name={restaurant.name} displayName={restaurant.displayName} id={restaurant.id}/>}}/>
 
                                 <Route path="*" render={() => <Redirect to="/"/>}/>
                             </Switch> : null :

@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Button, Container, TextField, Typography} from "@material-ui/core";
 import Validate from "../restaurant/Validate";
-import Auth from "../account/Auth";
 import MessagingService from "../../services/MessagingService";
 
 export default () => {

@@ -1,10 +1,5 @@
 package com.dma.menuservice.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,10 +7,6 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Category {
 
     @Id
@@ -24,4 +15,29 @@ public class Category {
 
     @NotNull
     private String name;
+
+    public Category() {
+
+    }
+
+    public Category(long id, @NotNull String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Category(String name){
+        this.name = name;
+    }
+    public long getId() {
+        return id;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
