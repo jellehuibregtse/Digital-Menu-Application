@@ -106,7 +106,7 @@ export default (props) => {
     }
     const closeDialog = () => {
         setIsOpen(false)
-        
+        setEditedMenuId(-1)
     }
     useEffect(() => {
         getMenusByRestaurantId(props.restaurantId).then(r => r.length!==0?setMenus(r):setMenus([]))
