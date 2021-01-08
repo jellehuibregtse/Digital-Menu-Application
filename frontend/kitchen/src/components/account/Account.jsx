@@ -141,7 +141,7 @@ export default (props) => {
                         onChange={async (e) => {
                             setEmail(e.target.value);
                             setEmailAvailable(null);
-                            if(form === 'sign-up' && Validate.isValidEmail(email) !== true && email !== null)
+                            if(form === 'sign-up' && Validate.isValidEmail(email) === true && email !== null)
                                 await Validate.emailAvailable(e.target.value).then(r => setEmailAvailable(r)).catch();
                         }}
                         error={Validate.isValidEmail(email) !== true ? true : form === 'sign-up' && emailAvailable === false}
