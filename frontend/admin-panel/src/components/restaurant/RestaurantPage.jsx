@@ -16,6 +16,7 @@ import NewMenu from './menu/NewMenu';
 import NewMenuItem from './menu/NewMenuItem';
 import MenuList from './menu/MenuList'
 import DetailsList from './menu/DetailsList';
+import QRPage from './qr/QRPage';
 const useStyles = makeStyles((theme) => ({
     button: {
         textTransform: 'none'
@@ -59,6 +60,9 @@ export default (props) => {
                     <Link to={"/" + props.name + "/design"}>
                         Design
                     </Link>
+                    <Link to={"/" + props.name + "/qr"}>
+                        QR Codes
+                    </Link>
                     <Link to={"/" + props.name + "/settings"}>
                         Settings
                     </Link>
@@ -76,6 +80,7 @@ export default (props) => {
                
                 <Route exact strict path={"/" + props.name + "/newmenu"} render={() => <NewMenu restaurantId={props.id} restaurantName={props.name}/>}/>
                 <Route exact strict path={"/" + props.name + "/design"} render={() => <Design/>}/>
+                <Route exact strict path={"/" + props.name + "/qr"} render={() => <QRPage/>}/>=
                 <Route exact strict path={"/" + props.name + "/settings"} render={() => <SettingsPage id={props.id}/>}/>
                 <Route exact strict path={"/" + props.name + "/newitem/:id"} render={() => <NewMenuItem id={props.id}/>}/>
                 <Route exact strict path={"/" + props.name + "/menu/:id"} render={() => <DetailsList restaurantName={props.name} type="menu item"/>}/>
