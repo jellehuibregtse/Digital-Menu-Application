@@ -36,6 +36,4 @@ public class Restaurant {
     private int tableCount;
     @OneToOne(cascade = CascadeType.ALL)
     private Styling styling;
-    @ElementCollection
-    private Collection<Integer> menuIDs;
 }

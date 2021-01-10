@@ -34,8 +34,7 @@ public class CustomerOrder {
     private List<OrderItem> items;
 
     @NotNull
-    private String createdDateTime =
-            LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_TIME);
+    private String createdDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_TIME);
 
     public CustomerOrder() {}
 
