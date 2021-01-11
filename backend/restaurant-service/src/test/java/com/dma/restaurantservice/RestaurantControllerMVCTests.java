@@ -46,7 +46,6 @@ public class RestaurantControllerMVCTests {
         restaurant1.setDisplayName("Test1");
         restaurant1.setUserId(0);
         restaurant1.setTableCount(10);
-        restaurant1.setMenuIDs(new ArrayList<>());
         restaurant1.setStyling(new Styling());
 
         Restaurant restaurant2 = new Restaurant();
@@ -54,7 +53,6 @@ public class RestaurantControllerMVCTests {
         restaurant2.setDisplayName("Test2");
         restaurant2.setUserId(0);
         restaurant2.setTableCount(9);
-        restaurant2.setMenuIDs(new ArrayList<>());
         restaurant2.setStyling(new Styling());
 
         repository.saveAll(Arrays.asList(restaurant1, restaurant2));
@@ -99,7 +97,6 @@ public class RestaurantControllerMVCTests {
         restaurant.setDisplayName("Test3");
         restaurant.setUserId(0);
         restaurant.setTableCount(11);
-        restaurant.setMenuIDs(new ArrayList<>());
         this.mockMvc.perform(MockMvcRequestBuilders.post("/restaurants/")
                 .header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -119,7 +116,6 @@ public class RestaurantControllerMVCTests {
         foundRestaurant.setDisplayName("UpdatedTest2");
         foundRestaurant.setUserId(2);
         foundRestaurant.setTableCount(11);
-        foundRestaurant.setMenuIDs(new ArrayList<>());
 
         this.mockMvc.perform(MockMvcRequestBuilders.put("/restaurants")
                 .header("Authorization", token)
@@ -139,7 +135,6 @@ public class RestaurantControllerMVCTests {
         restaurant.setDisplayName("Unknown");
         restaurant.setUserId(0);
         restaurant.setTableCount(11);
-        restaurant.setMenuIDs(new ArrayList<>());
         this.mockMvc.perform(MockMvcRequestBuilders.put("/restaurants/")
                 .header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
