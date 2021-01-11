@@ -1,7 +1,8 @@
 export const initialState = {
     order: [],
     restaurant: {
-        name: "test"
+        name: "test",
+        id: 0
     },
     tableNumber: 0,
     menu: {

@@ -17,9 +17,10 @@ const JoinRestaurant = (props) => {
                 (restaurant) => {
                     console.log(restaurant)
                     // Get menu from restaurant
-                    MessagingService.fetchHandler('GET', '/api/menu-service/menus/' + restaurant.menuIDs[0]).then(
-                        (menu) => {
-                            console.log(menu)
+                    MessagingService.fetchHandler('GET', '/api/menu-service/menus/byRestaurantId/' + restaurant.id).then(
+                        (menus) => {
+                            let menu = menus[0];
+                            console.log(menu);
                             // Set session to restaurant, menu and tableNumber
                             sessionStorage.setItem('session', JSON.stringify({
                                 restaurant: restaurant,

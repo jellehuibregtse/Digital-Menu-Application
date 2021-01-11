@@ -95,7 +95,6 @@ public class RestaurantController {
             restaurant.setDisplayName(updatedRestaurant.getDisplayName());
             restaurant.getStyling().setColorScheme(updatedRestaurant.getStyling().getColorScheme());
             restaurant.getStyling().setLogoURL(updatedRestaurant.getStyling().getLogoURL());
-            restaurant.setMenuIDs(updatedRestaurant.getMenuIDs());
             repository.save(restaurant);
 
             return ResponseEntity.ok(String.format("Restaurant with id: %d has been successfully updated!",

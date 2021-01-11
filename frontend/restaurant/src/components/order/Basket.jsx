@@ -4,7 +4,7 @@ import { ListItemText, Button, List, ListItem, Divider } from "@material-ui/core
 import { useStateValue } from '../../context/stateProvider';
 import BasketItem from './BasketItem';
 
-const Basket = () => {
+const Basket = (props) => {
 
     const [state, dispatch] = useStateValue();
 
@@ -12,8 +12,13 @@ const Basket = () => {
 
     const sendOrder = () => {
         if (state.order.length > 0) {
-            MessagingService.fetchHandler('POST','/order-service/orders', {
-                restaurantId: state.restaurant.id,
+            console.log({
+                restaurantId: props.id,
+                tableNumber: state.tableNumber,
+                items: order.map((item) =>  ({ name: item.name, quantity: item.quantity, id: item.id }))
+            })
+            MessagingService.fetchHandler('POST','/api/order-service/orders', {
+                restaurantId: props.id,
                 tableNumber: state.tableNumber,
                 items: order.map((item) =>  ({ name: item.name, quantity: item.quantity }))
             }).then(() => {

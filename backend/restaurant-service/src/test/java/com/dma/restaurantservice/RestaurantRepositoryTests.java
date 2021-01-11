@@ -38,14 +38,12 @@ public class RestaurantRepositoryTests {
         restaurant1.setDisplayName("Test1");
         restaurant1.setUserId(1);
         restaurant1.setTableCount(11);
-        restaurant1.setMenuIDs(new ArrayList<>());
 
         Restaurant restaurant2 = new Restaurant();
         restaurant2.setName("Test2");
         restaurant2.setDisplayName("Test2");
         restaurant2.setUserId(2);
         restaurant2.setTableCount(9);
-        restaurant2.setMenuIDs(new ArrayList<>());
 
         entityManager.persist(restaurant1);
         entityManager.persist(restaurant2);
@@ -92,7 +90,6 @@ public class RestaurantRepositoryTests {
         savedRestaurant.setDisplayName("Test3");
         savedRestaurant.setUserId(0);
         savedRestaurant.setTableCount(11);
-        savedRestaurant.setMenuIDs(new ArrayList<>());
 
         repository.save(savedRestaurant);
 

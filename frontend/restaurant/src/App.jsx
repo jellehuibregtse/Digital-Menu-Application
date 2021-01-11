@@ -17,14 +17,15 @@ const App = () => {
     const theme = createMuiTheme({
         palette: {
             primary: {
-                main: grey['800'],
+                main: '#373b41',
+                light: '#f5f7fa',
                 contrastText: '#fff'
             },
             secondary: {
                 main: deepOrange['800'],
                 contrastText: '#fff'
             }
-        },
+        }
     });
 
     return (
@@ -44,7 +45,7 @@ const App = () => {
                             <NavBar />
                             <Banner />
                             <Container>
-                                <Basket />
+                                <Basket id={state.restaurant.id}/>
                             </Container>
                         </Route>
 
