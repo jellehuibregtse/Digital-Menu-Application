@@ -19,8 +19,4 @@ public interface MenuRepository extends CrudRepository<Menu, Long> {
     Optional<Menu> findByName(String name);
     
     Optional<List<Menu>> findByRestaurantId(long id);
-
-    @Query("SELECT i from MenuItem i WHERE i.id = ?1")
-    Optional<MenuItem> findMenuItemByItemId(long id);
-
 }
