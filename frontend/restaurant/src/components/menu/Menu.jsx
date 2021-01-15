@@ -30,6 +30,41 @@ const Menu = (props) => {
         setIngredients(selectedIngredients);
     }
 
+    if(typeof props.menu.items !== 'undefined' && props.menu.items.length === 0) {
+        props.menu.items = [
+            {
+                id: 0,
+                name: 'item 1',
+                price: 1,
+                ingredients: [
+                    {
+                        id: 0,
+                        name: 'ingredient 1'
+                    }
+                ],
+                category: {
+                    id: 0,
+                    name: 'category 1'
+                }
+            },
+            {
+                id: 1,
+                name: 'item 2',
+                price: 1,
+                ingredients: [
+                    {
+                        id: 1,
+                        name: 'ingredient 2'
+                    }
+                ],
+                category: {
+                    id: 1,
+                    name: 'category 2'
+                }
+            }
+        ]
+    }
+
     let ingredients;
     if (props.menu !== null) {
         ingredients = props.menu.items
@@ -41,11 +76,10 @@ const Menu = (props) => {
         ingredients = Array.from(ingredients);
     }
 
-
     //First map the items according to selected category
     let filteredItems = typeof props.menu !== 'undefined' ?
-        props.menu.items
-            .filter(item => item.category.name.includes(selectedCategory)) : null;
+        props.menu.items.filter(item => item.category.name.includes(selectedCategory)) :
+        null;
 
     //Then we filter by selected ingredients
     if (selectedIngredients.length !== 0) {
